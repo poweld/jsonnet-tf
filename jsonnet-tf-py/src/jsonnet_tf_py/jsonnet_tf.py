@@ -33,11 +33,12 @@ def main():
       # subprocess.run(args=["ls"], cwd=tempdir)
       subprocess.run(args=["terraform", "init"], cwd=tempdir)
       with open(f"{tempdir}/schema.json", "w") as schema_file:
-        subprocess.run(args=["terraform", "provers", "schema", "-json"], cwd=tempdir, stdout=schema_file)
+        subprocess.run(args=["terraform", "providers", "schema", "-json"], cwd=tempdir, stdout=schema_file)
+        schema_file.flush()
 
       # os.chdir(project_dir)  # return to this project's dir
 
-      subprocess.run(args=["cp", f"{tempdir}/schema.json", f"{project_dir}/"])
+      subprocess.run(args=["mv", f"{tempdir}/schema.json", f"{project_dir}/"])
 
 
 if __name__ == '__main__':
