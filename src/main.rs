@@ -25,3 +25,6 @@ fn mktemp() -> std::io::Result<String> {
   fs::create_dir(&temp)?;
   Ok(temp)
 }
+
+struct Providers {
+}
