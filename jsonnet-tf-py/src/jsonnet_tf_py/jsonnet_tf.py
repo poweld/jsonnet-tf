@@ -5,46 +5,57 @@ import subprocess
 import tempfile
 import time
 
-from typing import Any, TypedDict, Required
+from dataclasses import dataclass
+from dataclass_wizard import JSONWizard
+from typing import Any, TypedDict
 
 logger = logging.getLogger("jsonnet-tf")
 project_dir = os.getcwd()
 output_dir = f"{project_dir}/output"
 
-class BlockType(TypedDict):
+@dataclass
+class BlockType(JSONWizard):
   nesting_mode: str
   block: 'Block'  # Need forward reference
-  min_items: int
-  max_items: int
+  min_items: int | None = None
+  max_items: int | None = None
 
-class Attribute(TypedDict):
+@dataclass
+class Attribute(JSONWizard):
   type: str
-  description: str
-  required: bool
-  optional: bool
-  computed: bool
-  sensitive: bool
+  description: str | None = None
+  required: bool | None = None
+  optional: bool | None = None
+  computed: bool | None = None
+  sensitive: bool | None = None
 
-class Block(TypedDict):
-  attributes: dict[str, Attribute]
-  block_types: dict[str, BlockType]
+@dataclass
+class Block(JSONWizard):
+  attributes: dict[str, Attribute] | None = None
+  block_types: dict[str, BlockType] | None = None
 
-class Schema(TypedDict):
+@dataclass
+class Schema(JSONWizard):
   version: int
   block: Block
 
-class ProviderSchema(TypedDict):
+@dataclass
+class ProviderSchema(JSONWizard):
   provider: Schema
   resource_schemas: dict[str, Schema]
   data_source_schemas: dict[str, Schema]
 
-class ProvidersSchema(TypedDict):
+@dataclass
+class ProvidersSchema(JSONWizard):
+  class _(JSONWizard.Meta):
+    recursive_classes = True
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
 def main():
   schemas: ProvidersSchema = get_schemas_json()
-  for provider in schemas.get("provider_schemas"):
+  # logging.info(schemas.format_version)
+  for provider in schemas.provider_schemas:
     logger.info(provider)
     path = provider
     provider_name = provider.split("/")[-1]
@@ -83,8 +94,9 @@ def get_schemas_json() -> ProviderSchema:
       subprocess.run(args=["mv", f"{tempdir}/schema.json", f"{project_dir}/"])
 
   with open("schema.json", "r") as schemas_file:
-    schemas = json.load(schemas_file)
-    return schemas
+    # schemas = json.load(schemas_file)
+    return ProvidersSchema.from_json(schemas_file.read())
+    # return schemas
 
 
 if __name__ == '__main__':
