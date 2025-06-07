@@ -5,7 +5,7 @@ import subprocess
 import tempfile
 import time
 
-from typing import Any, TypedDict
+from typing import Any, TypedDict, Required
 
 logger = logging.getLogger("jsonnet-tf")
 project_dir = os.getcwd()
