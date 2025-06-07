@@ -53,17 +53,18 @@ class ProvidersSchema(JSONWizard):
   provider_schemas: dict[str, ProviderSchema]
 
 def main():
-  schemas: ProvidersSchema = get_schemas_json()
+  providers_schema: ProvidersSchema = get_providers_schema()
   # logging.info(schemas.format_version)
-  for provider in schemas.provider_schemas:
-    logger.info(provider)
+  for provider, provider_schema in providers_schema.provider_schemas.items():
+    # logger.info(provider_schema)
     path = provider
     provider_name = provider.split("/")[-1]
     provider_dir = f"{output_dir}/{path}"
     logging.info(provider_dir)
     os.makedirs(provider_dir, exist_ok=True)
+    logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api"))
 
-def get_schemas_json() -> ProviderSchema:
+def get_providers_schema() -> ProviderSchema:
   if os.path.isfile(f"{project_dir}/schema.json"):
     logger.info("schema already exists, skipping download")
   else:
