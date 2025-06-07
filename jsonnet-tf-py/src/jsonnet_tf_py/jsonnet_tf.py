@@ -62,7 +62,8 @@ def main():
     provider_dir = f"{output_dir}/{path}"
     logging.info(provider_dir)
     os.makedirs(provider_dir, exist_ok=True)
-    logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api"))
+    # logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint").type)
+    logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint"))
 
 def get_providers_schema() -> ProviderSchema:
   if os.path.isfile(f"{project_dir}/schema.json"):
