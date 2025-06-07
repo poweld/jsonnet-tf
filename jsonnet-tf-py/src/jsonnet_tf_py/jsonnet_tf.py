@@ -5,17 +5,54 @@ import subprocess
 import tempfile
 import time
 
-from typing import Any
+from typing import Any, TypedDict
 
 logger = logging.getLogger("jsonnet-tf")
+project_dir = os.getcwd()
+output_dir = f"{project_dir}/output"
+
+class BlockType(TypedDict):
+  nesting_mode: str
+  block: 'Block'  # Need forward reference
+  min_items: int
+  max_items: int
+
+class Attribute(TypedDict):
+  type: str
+  description: str
+  required: bool
+  optional: bool
+  computed: bool
+  sensitive: bool
+
+class Block(TypedDict):
+  attributes: dict[str, Attribute]
+  block_types: dict[str, BlockType]
+
+class Schema(TypedDict):
+  version: int
+  block: Block
+
+class ProviderSchema(TypedDict):
+  provider: Schema
+  resource_schemas: dict[str, Schema]
+  data_source_schemas: dict[str, Schema]
+
+class ProvidersSchema(TypedDict):
+  format_version: str
+  provider_schemas: dict[str, ProviderSchema]
 
 def main():
-  schemas = get_schemas_json()
+  schemas: ProvidersSchema = get_schemas_json()
   for provider in schemas.get("provider_schemas"):
     logger.info(provider)
+    path = provider
+    provider_name = provider.split("/")[-1]
+    provider_dir = f"{output_dir}/{path}"
+    logging.info(provider_dir)
+    os.makedirs(provider_dir, exist_ok=True)
 
-def get_schemas_json() -> dict[Any, Any]:
-  project_dir = os.getcwd()
+def get_schemas_json() -> ProviderSchema:
   if os.path.isfile(f"{project_dir}/schema.json"):
     logger.info("schema already exists, skipping download")
   else:
