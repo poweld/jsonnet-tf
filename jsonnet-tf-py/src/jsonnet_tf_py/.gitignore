@@ -1,2 +1,4 @@
 *.json
 output/
+*.pyc
+__pycache__/
