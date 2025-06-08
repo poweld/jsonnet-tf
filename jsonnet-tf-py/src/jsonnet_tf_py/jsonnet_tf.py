@@ -4,56 +4,17 @@ import os
 import subprocess
 import tempfile
 import time
+import tf_schema
 
 from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
-from typing import Any, TypedDict
 
 logger = logging.getLogger("jsonnet-tf")
 project_dir = os.getcwd()
 output_dir = f"{project_dir}/output"
 
-@dataclass
-class BlockType(JSONWizard):
-  nesting_mode: str
-  block: 'Block'  # Need forward reference
-  min_items: int | None = None
-  max_items: int | None = None
-
-@dataclass
-class Attribute(JSONWizard):
-  type: str
-  description: str | None = None
-  required: bool | None = None
-  optional: bool | None = None
-  computed: bool | None = None
-  sensitive: bool | None = None
-
-@dataclass
-class Block(JSONWizard):
-  attributes: dict[str, Attribute] | None = None
-  block_types: dict[str, BlockType] | None = None
-
-@dataclass
-class Schema(JSONWizard):
-  version: int
-  block: Block
-
-@dataclass
-class ProviderSchema(JSONWizard):
-  provider: Schema
-  resource_schemas: dict[str, Schema]
-  data_source_schemas: dict[str, Schema]
-
-@dataclass
-class ProvidersSchema(JSONWizard):
-  class _(JSONWizard.Meta):
-    recursive_classes = True
-  format_version: str
-  provider_schemas: dict[str, ProviderSchema]
-
 def main():
-  providers_schema: ProvidersSchema = get_providers_schema()
+  providers_schema: tf_schema.ProvidersSchema = get_providers_schema()
   # logging.info(schemas.format_version)
   for provider, provider_schema in providers_schema.provider_schemas.items():
     # logger.info(provider_schema)
@@ -63,9 +24,9 @@ def main():
     logging.info(provider_dir)
     os.makedirs(provider_dir, exist_ok=True)
     # logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint").type)
-    logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint"))
+    logger.info(provider_schema.resource_schemas.get("aws_instance"))
 
-def get_providers_schema() -> ProviderSchema:
+def get_providers_schema() -> tf_schema.ProvidersSchema:
   if os.path.isfile(f"{project_dir}/schema.json"):
     logger.info("schema already exists, skipping download")
   else:
@@ -79,7 +40,7 @@ def get_providers_schema() -> ProviderSchema:
               "version": "~> 5.91"
             }
           },
-      
+
           "required_version": ">= 1.12.1"
         }
       }
@@ -97,7 +58,7 @@ def get_providers_schema() -> ProviderSchema:
 
   with open("schema.json", "r") as schemas_file:
     # schemas = json.load(schemas_file)
-    return ProvidersSchema.from_json(schemas_file.read())
+    return tf_schema.ProvidersSchema.from_json(schemas_file.read())
     # return schemas
 
 
