@@ -35,11 +35,11 @@ ENV PATH="${APP_DIR}/.local/bin:${PATH}"
 # RUN curl -sSL https://install.python-poetry.org | python -
 RUN pipx install poetry
 
-COPY poetry.lock pyproject.toml .
+COPY --chown=${UID}:${GID} poetry.lock pyproject.toml .
 RUN poetry install --no-root
 
-COPY src .
+COPY --chown=${UID}:${GID} src .
 
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["poetry", "run", "jsonnet_tf/jsonnet_tf.py"]
+CMD ["poetry", "run", "python", "jsonnet_tf_py/jsonnet_tf.py"]
 
