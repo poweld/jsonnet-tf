@@ -21,6 +21,9 @@ class Attribute(JSONWizard):
   optional: bool | None = None
   computed: bool | None = None
   sensitive: bool | None = None
+  
+  def include_in_new(self) -> bool:
+    return self.required
 
 @dataclass
 class Block(JSONWizard):
@@ -61,9 +64,16 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
       return "{},{},{}".format(provider, resource_schemas, data_source_schemas)
     case Schema():
       logger.info("Schema")
-      return "{}".format(to_jsonnet(obj.block))
+      return "{}".format(to_jsonnet(obj.block, name=name))
     case Block():
       logger.info("Block")
+      attributes_in_new = {
+        name: attribute
+        for name, attribute in obj.attributes.items()
+        if attribute.include_in_new()
+      }
+      new = f"new_{name}"
+      logger.info(attributes_in_new)
       attributes = ",".join([
         to_jsonnet(attribute, name=name)
         for name, attribute in obj.attributes.items()

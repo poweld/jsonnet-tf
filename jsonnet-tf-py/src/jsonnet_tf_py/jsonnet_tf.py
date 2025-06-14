@@ -23,7 +23,7 @@ def main():
     logging.info(provider_dir)
     os.makedirs(provider_dir, exist_ok=True)
     # logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint").type)
-    # logger.info(provider_schema.resource_schemas.get("aws_instance"))
+    logger.info(provider_schema.resource_schemas.get("aws_instance"))
     schema = provider_schema.resource_schemas.get("aws_instance")
     logger.info(tf_schema.to_jsonnet(schema))
 
