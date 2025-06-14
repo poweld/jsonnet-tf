@@ -45,17 +45,39 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType) -> Optional[str]:
+def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, name: Optional[str] = None) -> Optional[str]:
   match obj:
     case ProviderSchema():
       logger.info("ProviderSchema")
+      provider = to_jsonnet(obj.provider)
+      resource_schemas = ",".join([
+        to_jsonnet(resource_schema, name=name)
+        for name, resource_schema in obj.resource_schemas.items()
+      ])
+      data_source_schemas = ",".join([
+        to_jsonnet(data_source_schema, name=name)
+        for name, data_source_schema in obj.data_source_schemas.items()
+      ])
+      return "{},{},{}".format(provider, resource_schemas, data_source_schemas)
     case Schema():
       logger.info("Schema")
+      return "{}".format(to_jsonnet(obj.block))
     case Block():
       logger.info("Block")
+      attributes = ",".join([
+        to_jsonnet(attribute, name=name)
+        for name, attribute in obj.attributes.items()
+      ])
+      block_types = ",".join([
+        to_jsonnet(block_type, name=name)
+        for name, block_type in obj.block_types.items()
+      ])
+      return "{}{}".format(attributes, block_types)
     case Attribute():
       logger.info("Attribute")
+      return "todoAttribute():: {}"
     case BlockType():
       logger.info("BlockType")
+      return "todoBlockType():: {}"
     case _:
       return ""
