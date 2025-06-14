@@ -1,6 +1,10 @@
+import logging
+
 from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
-from typing import Any, TypedDict
+from typing import Optional
+
+logger = logging.getLogger("tf-schema")
 
 @dataclass
 class BlockType(JSONWizard):
@@ -40,3 +44,18 @@ class ProvidersSchema(JSONWizard):
     recursive_classes = True
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
+
+def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType) -> Optional[str]:
+  match obj:
+    case ProviderSchema():
+      logger.info("ProviderSchema")
+    case Schema():
+      logger.info("Schema")
+    case Block():
+      logger.info("Block")
+    case Attribute():
+      logger.info("Attribute")
+    case BlockType():
+      logger.info("BlockType")
+    case _:
+      return ""

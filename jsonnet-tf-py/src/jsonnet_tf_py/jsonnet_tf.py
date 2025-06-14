@@ -10,8 +10,7 @@ from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
 
 logger = logging.getLogger("jsonnet-tf")
-project_dir = os.getcwd()
-output_dir = f"{project_dir}/output"
+artifacts_dir = f"/artifacts"
 
 def main():
   providers_schema: tf_schema.ProvidersSchema = get_providers_schema()
@@ -20,14 +19,16 @@ def main():
     # logger.info(provider_schema)
     path = provider
     provider_name = provider.split("/")[-1]
-    provider_dir = f"{output_dir}/{path}"
+    provider_dir = f"{artifacts_dir}/{path}"
     logging.info(provider_dir)
     os.makedirs(provider_dir, exist_ok=True)
     # logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint").type)
-    logger.info(provider_schema.resource_schemas.get("aws_instance"))
+    # logger.info(provider_schema.resource_schemas.get("aws_instance"))
+    schema = provider_schema.resource_schemas.get("aws_instance")
+    logger.info(tf_schema.to_jsonnet(schema))
 
 def get_providers_schema() -> tf_schema.ProvidersSchema:
-  if os.path.isfile(f"{project_dir}/schema.json"):
+  if os.path.isfile(f"{artifacts_dir}/schema.json"):
     logger.info("schema already exists, skipping download")
   else:
     with tempfile.TemporaryDirectory() as tempdir:
@@ -54,12 +55,10 @@ def get_providers_schema() -> tf_schema.ProvidersSchema:
         subprocess.run(args=["terraform", "providers", "schema", "-json"], cwd=tempdir, stdout=schema_file)
         schema_file.flush()
 
-      subprocess.run(args=["mv", f"{tempdir}/schema.json", f"{project_dir}/"])
+      subprocess.run(args=["mv", f"{tempdir}/schema.json", f"{artifacts_dir}/"])
 
-  with open("schema.json", "r") as schemas_file:
-    # schemas = json.load(schemas_file)
+  with open(f"{artifacts_dir}/schema.json", "r") as schemas_file:
     return tf_schema.ProvidersSchema.from_json(schemas_file.read())
-    # return schemas
 
 
 if __name__ == '__main__':

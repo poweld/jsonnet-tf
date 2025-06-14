@@ -17,9 +17,8 @@ RUN apt-get update \
       pipx \
     && rm -rf /var/lib/apt/lists/*
 
-
-
 ARG APP_DIR="/app"
+ARG ARTIFACT_DIR="/artifacts"
 ARG UID=1000
 ARG GID=1000
 ARG USER="somebody"
@@ -28,11 +27,9 @@ RUN groupadd --gid ${GID} ${GROUP}
 RUN useradd --uid ${UID} --gid ${GID} --shell /bin/bash --home-dir ${APP_DIR} --create-home ${USER}
 
 WORKDIR ${APP_DIR}
-USER somebody
+USER ${USER}
 
 ENV PATH="${APP_DIR}/.local/bin:${PATH}"
-
-# RUN curl -sSL https://install.python-poetry.org | python -
 RUN pipx install poetry
 
 COPY --chown=${UID}:${GID} poetry.lock pyproject.toml .
