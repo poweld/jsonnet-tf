@@ -1,12 +1,33 @@
 ARG REGISTRY="registry.hub.docker.com"
 FROM ${REGISTRY}/library/python:3.12
 
-ARG APP_DIR="/app"
-RUN mkdir -p ${APP_DIR}
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      dumb-init \
+      pipx \
+    && rm -rf /var/lib/apt/lists/*
 
+ARG APP_DIR="/app"
 ARG UID=1000
 ARG GID=1000
-RUN groupadd --gid ${GID} somegroup
-RUN useradd --uid ${UID} --gid ${GID} --shell /bin/bash --home-dir ${APP_DIR} --create-home somebody
+ARG USER="somebody"
+ARG GROUP="somegroup"
+RUN groupadd --gid ${GID} ${GROUP}
+RUN useradd --uid ${UID} --gid ${GID} --shell /bin/bash --home-dir ${APP_DIR} --create-home ${USER}
 
-COPY poetry.lock pyproject.toml ${APP_DIR}/
+WORKDIR ${APP_DIR}
+USER somebody
+
+ENV PATH="${APP_DIR}/.local/bin:${PATH}"
+
+# RUN curl -sSL https://install.python-poetry.org | python -
+RUN pipx install poetry
+
+COPY poetry.lock pyproject.toml .
+RUN poetry install --no-root
+
+COPY src .
+
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["poetry", "run", "src/jsonnet_tf.py"]
+
