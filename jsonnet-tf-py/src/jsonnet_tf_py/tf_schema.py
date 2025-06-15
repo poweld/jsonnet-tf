@@ -72,8 +72,8 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
         for name, attribute in obj.attributes.items()
         if attribute.include_in_new()
       }
-      new = f"new_{name}"
-      logger.info(attributes_in_new)
+      new_fn = jsonnet_new_fn(name, attributes_in_new)
+      logger.info("new fn: " + new_fn)
       attributes = ",".join([
         to_jsonnet(attribute, name=name)
         for name, attribute in obj.attributes.items()
@@ -85,9 +85,32 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
       return "{}{}".format(attributes, block_types)
     case Attribute():
       logger.info("Attribute")
-      return "todoAttribute():: {}"
+      # return "todoAttribute():: {}"
+      return jsonnet_attr_fns(name, obj)
     case BlockType():
       logger.info("BlockType")
       return "todoBlockType():: {}"
     case _:
       return ""
+
+def jsonnet_new_fn(name, attributes):
+  new = f"new_{name}("
+  new = new + ",".join([
+    attr_name
+    for attr_name in attributes.keys()
+  ])
+  new = new + "):: {}"
+  return new
+
+def jsonnet_attr_fns(name, attribute):
+  assertion = None
+  match attribute.type:
+    case "string":
+      assertion = "assert std.isString(value);"
+  return f"""with_{name}(value):: (
+    {assertion}
+    {{
+      {name}: value,
+    }}
+  )"""
+
