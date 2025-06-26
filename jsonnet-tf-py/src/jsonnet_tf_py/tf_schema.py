@@ -1,9 +1,10 @@
 import logging
-import os
 
 from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
-from typing import Any, TypedDict
+from typing import Optional
+
+logger = logging.getLogger("tf-schema")
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,9 @@ class Attribute(JSONWizard):
   optional: bool | None = None
   computed: bool | None = None
   sensitive: bool | None = None
+
+  def include_in_new(self) -> bool:
+    return self.required
 
 @dataclass
 class Block(JSONWizard):
@@ -46,37 +50,69 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def generate_providers_schema(project_dir) -> ProvidersSchema:
-  if os.path.isfile(f"{project_dir}/schema.json"):
-    logger.info("schema already exists, skipping download")
-  else:
-    with tempfile.TemporaryDirectory() as tempdir:
-      # TODO retrieve providers to fetch from user (click, probably)
-      main_tf = {
-        "terraform": {
-          "required_providers": {
-            "aws": {
-              "source":"hashicorp/aws",
-              "version": "~> 5.91"
-            }
-          },
-
-          "required_version": ">= 1.12.1"
-        }
+def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, name: Optional[str] = None) -> Optional[str]:
+  match obj:
+    case ProviderSchema():
+      logger.info("ProviderSchema")
+      provider = to_jsonnet(obj.provider)
+      resource_schemas = ",".join([
+        to_jsonnet(resource_schema, name=name)
+        for name, resource_schema in obj.resource_schemas.items()
+      ])
+      data_source_schemas = ",".join([
+        to_jsonnet(data_source_schema, name=name)
+        for name, data_source_schema in obj.data_source_schemas.items()
+      ])
+      return "{},{},{}".format(provider, resource_schemas, data_source_schemas)
+    case Schema():
+      logger.info("Schema")
+      return "{}".format(to_jsonnet(obj.block, name=name))
+    case Block():
+      logger.info("Block")
+      attributes_in_new = {
+        name: attribute
+        for name, attribute in obj.attributes.items()
+        if attribute.include_in_new()
       }
-      main_tf_json = json.dumps(main_tf)
-      with open(f"{tempdir}/main.tf.json", "w") as main_tf_json_file:
-        main_tf_json_file.write(main_tf_json)
-        main_tf_json_file.flush()
+      new_fn = jsonnet_new_fn(name, attributes_in_new)
+      logger.info("new fn: " + new_fn)
+      attributes = ",".join([
+        to_jsonnet(attribute, name=name)
+        for name, attribute in obj.attributes.items()
+      ])
+      block_types = ",".join([
+        to_jsonnet(block_type, name=name)
+        for name, block_type in obj.block_types.items()
+      ])
+      return "{}{}".format(attributes, block_types)
+    case Attribute():
+      logger.info("Attribute")
+      # return "todoAttribute():: {}"
+      return jsonnet_attr_fns(name, obj)
+    case BlockType():
+      logger.info("BlockType")
+      return "todoBlockType():: {}"
+    case _:
+      return ""
 
-      subprocess.run(args=["terraform", "init"], cwd=tempdir)
-      with open(f"{tempdir}/schema.json", "w") as schema_file:
-        subprocess.run(args=["terraform", "providers", "schema", "-json"], cwd=tempdir, stdout=schema_file)
-        schema_file.flush()
+def jsonnet_new_fn(name, attributes):
+  new = f"new_{name}("
+  new = new + ",".join([
+    attr_name
+    for attr_name in attributes.keys()
+  ])
+  new = new + "):: {}"
+  return new
 
-      subprocess.run(args=["mv", f"{tempdir}/schema.json", f"{project_dir}/"])
+def jsonnet_attr_fns(name, attribute):
+  assertion = None
+  match attribute.type:
+    case "string":
+      assertion = "assert std.isString(value);"
+  return f"""with_{name}(value):: (
+    {assertion}
+    {{
+      {name}: value,
+    }}
+  )"""
 
-  with open("schema.json", "r") as schemas_file:
-    # schemas = json.load(schemas_file)
-    return ProvidersSchema.from_json(schemas_file.read())
-    # return schemas

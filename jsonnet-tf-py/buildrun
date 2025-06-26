@@ -1,0 +1,1 @@
+docker build --quiet -t jsonnet-tf . >/dev/null && docker run --mount type=volume,src=artifacts,dst=/artifacts -it jsonnet-tf
