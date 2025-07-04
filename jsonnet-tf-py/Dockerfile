@@ -32,7 +32,7 @@ USER ${USER}
 ENV PATH="${APP_DIR}/.local/bin:${PATH}"
 RUN pipx install poetry
 
-COPY --chown=${UID}:${GID} poetry.lock pyproject.toml .
+COPY --chown=${UID}:${GID} poetry.lock pyproject.toml ./
 RUN poetry install --no-root
 
 COPY --chown=${UID}:${GID} src .

@@ -13,7 +13,7 @@ logger = logging.getLogger("jsonnet-tf")
 artifacts_dir = f"/artifacts"
 
 def main():
-  providers_schema: tf_schema.ProvidersSchema = tf_schema.generate_providers_schema(project_dir)
+  providers_schema: tf_schema.ProvidersSchema = get_providers_schema()
   # logging.info(schemas.format_version)
   for provider, provider_schema in providers_schema.provider_schemas.items():
     # logger.info(provider_schema)
