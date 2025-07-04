@@ -17,7 +17,7 @@ class BlockType(JSONWizard):
 
 @dataclass
 class Attribute(JSONWizard):
-  type: str
+  type: str | list[str]
   description: str | None = None
   required: bool | None = None
   optional: bool | None = None
@@ -104,13 +104,30 @@ def jsonnet_new_fn(name, attributes):
   new = new + "):: {}"
   return new
 
-def jsonnet_attr_fns(name, attribute):
-  assertion = None
-  match attribute.type:
+def assertion(type):
+  logger.info(f"assertion({type})")
+  match type:
+    case list():
+      logger.info(f"list type: {type}")
+      return assertion(type[0])
     case "string":
-      assertion = "assert std.isString(value);"
+      return "assert std.isString(value);"
+    case "number":
+      return "assert std.isNumber(value);"
+    case "bool":
+      return "assert std.isBoolean(value);"
+    case "list":
+      return "assert std.isList(value);"
+    case "set":
+      return "assert std.isList(value);"  # set is not its own type in jsonnet
+    case "map":
+      return "assert std.isObject(value);"
+  return ""
+
+def jsonnet_attr_fns(name, attribute):
+  _assertion = assertion(attribute.type)
   return f"""with_{name}(value):: (
-    {assertion}
+    {_assertion}
     {{
       {name}: value,
     }}
