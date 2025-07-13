@@ -93,6 +93,7 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
       # return "todoAttribute():: {}"
       return jsonnet_attr_fns(name, obj)
     case BlockType():
+      # TODO handle nesting_mode, min_items, max_items
       logger.info("BlockType")
       block = to_jsonnet(obj.block, name=name)
       return f"{name}:: {{{block}}}"
