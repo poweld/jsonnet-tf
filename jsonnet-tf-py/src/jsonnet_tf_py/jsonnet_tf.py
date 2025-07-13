@@ -25,7 +25,9 @@ def main():
     # logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint").type)
     logger.info(provider_schema.resource_schemas.get("aws_instance"))
     schema = provider_schema.resource_schemas.get("aws_instance")
-    logger.info(tf_schema.to_jsonnet(schema, name="aws_instance"))
+    print("{")
+    print(tf_schema.to_jsonnet(schema, name="aws_instance"))
+    print("}")
 
 def get_providers_schema() -> tf_schema.ProvidersSchema:
   if os.path.isfile(f"{artifacts_dir}/schema.json"):
@@ -38,7 +40,7 @@ def get_providers_schema() -> tf_schema.ProvidersSchema:
           "required_providers": {
             "aws": {
               "source":"hashicorp/aws",
-              "version": "~> 5.91"
+              "version": "~> 6.3.0"
             }
           },
 
@@ -62,6 +64,6 @@ def get_providers_schema() -> tf_schema.ProvidersSchema:
 
 
 if __name__ == '__main__':
-  logging.root.setLevel(logging.INFO)
+  logging.root.setLevel(logging.ERROR)
   logging.basicConfig()
   main()

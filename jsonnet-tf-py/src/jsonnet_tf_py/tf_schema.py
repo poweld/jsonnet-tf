@@ -80,18 +80,22 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
         to_jsonnet(attribute, name=name)
         for name, attribute in obj.attributes.items()
       ])
-      block_types = ",".join([
-        to_jsonnet(block_type, name=name)
-        for name, block_type in obj.block_types.items()
-      ])
-      return "{}{}".format(attributes, block_types)
+      if obj.block_types is not None:
+        block_types = ",".join([
+          to_jsonnet(block_type, name=name)
+          for name, block_type in obj.block_types.items()
+        ])
+      else:
+        block_types = ""
+      return "{},{}".format(attributes, block_types)
     case Attribute():
       logger.info("Attribute")
       # return "todoAttribute():: {}"
       return jsonnet_attr_fns(name, obj)
     case BlockType():
       logger.info("BlockType")
-      return "todoBlockType():: {}"
+      block = to_jsonnet(obj.block, name=name)
+      return f"{name}:: {{{block}}}"
     case _:
       return ""
 
