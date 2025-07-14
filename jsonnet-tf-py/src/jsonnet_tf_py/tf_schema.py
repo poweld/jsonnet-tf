@@ -85,7 +85,7 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
         new_fn = jsonnet_new_fn(name, attributes_in_new)
         logger.info("new fn: " + new_fn)
         # TODO do something with the "new" fn
-        attributes = ",\n".join([
+        attributes = ",\n".join([new_fn] + [
           to_jsonnet(attribute, name=name)
           for name, attribute in obj.attributes.items()
         ])
@@ -119,44 +119,63 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
       return ""
 
 def jsonnet_new_fn(name, attributes):
-  new = f"new_{name}("
-  new = new + ",\n".join([
-    attr_name
-    for attr_name in attributes.keys()
-  ])
-  new = new + "):: {}"
-  return new
+  params = attributes.keys()
+  params_str = ",".join(params)
+  new_parts = [f"new({params_str}):: (", "{}"]
+  for param in params:
+    fn_name = jsonnet_attr_fn_name(param)
+    new_parts.append(f"+ block.{fn_name}({param})")
+  new_parts.append(")")
+  return "\n".join(new_parts)
 
-def assertion(type):
-  logger.info(f"assertion({type})")
+def assertion(type, name):
+  logger.info(f"assertion({type}, {name})")
+  error_message = f'"{name} expected to be of type \\"{type}\\""'
   match type:
     case list():
       logger.info(f"list type: {type}")
-      return assertion(type[0])
+      return assertion(type[0], name)
     case "string":
-      return "assert std.isString(value);"
+      return f"assert std.isString(value) : {error_message};"
     case "number":
-      return "assert std.isNumber(value);"
+      return f"assert std.isNumber(value) : {error_message};"
     case "bool":
-      return "assert std.isBoolean(value);"
+      return f"assert std.isBoolean(value) : {error_message};"
+    # TODO can "list" actually happen, or will it be a list object as above?
     case "list":
-      return "assert std.isList(value);"
+      return f"assert std.isList(value) : {error_message};"
     case "set":
-      return "assert std.isList(value);\nassert std.length(std.set(value)) == std.length(value);"  # set is not its own type in jsonnet
+      # set is not its own type in jsonnet
+      return f"assert (std.isList(value) && std.length(std.set(value)) == std.length(value)) : {error_message};"
     case "map":
-      return "assert std.isObject(value);"
+      return f"assert std.isObject(value) : {error_message};"
   return ""
 
+def jsonnet_attr_fn_name(name):
+  return f"with_{name}"
+
+def jsonnet_attr_fn_mixin_name(name):
+  return f"with_{name}_mixin"
+
 def jsonnet_attr_fns(name, attribute):
-  _assertion = assertion(attribute.type)
+  _assertion = assertion(attribute.type, name)
   if name in RESERVED:
     field = f'"{name}"'
   else:
     field = name
-  return f"""with_{name}(value):: (
+  fn_name = jsonnet_attr_fn_name(name)
+  fns = [f"""{fn_name}(value):: (
     {_assertion}
     {{
       {field}: value,
     }}
-  )"""
+  )"""]
+  # TODO add mixins
+  # match attribute.type:
+  #   case list():
+  #     
+  #   case _:
+  #     pass
+
+  return ",\n".join(fns)
 
