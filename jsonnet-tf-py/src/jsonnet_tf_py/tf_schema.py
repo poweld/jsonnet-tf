@@ -56,19 +56,24 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
   match obj:
     case ProviderSchema():
       logger.info("ProviderSchema")
-      provider = to_jsonnet(obj.provider)
+      provider = to_jsonnet(obj.provider, name=f'"{name}"')
+      body_parts=[provider]
       resource_schemas = ",\n".join([
         to_jsonnet(resource_schema, name=name)
         for name, resource_schema in obj.resource_schemas.items()
       ])
+      if len(obj.resource_schemas) > 0:
+        body_parts.append(f"resources:: {{\n{resource_schemas}\n}}")
       data_source_schemas = ",\n".join([
         to_jsonnet(data_source_schema, name=name)
         for name, data_source_schema in obj.data_source_schemas.items()
       ])
-      return "{},{},{}".format(provider, resource_schemas, data_source_schemas)
+      if len(obj.data_source_schemas) > 0:
+        body_parts.append(f"data:: {{\n{data_source_schemas}\n}}")
+      return ",\n".join(body_parts)
     case Schema():
       logger.info("Schema")
-      return "{}".format(to_jsonnet(obj.block, name=name))
+      return to_jsonnet(obj.block, name=name)
     case Block():
       logger.info("Block")
       if obj.attributes is not None:
@@ -137,7 +142,7 @@ def assertion(type):
     case "list":
       return "assert std.isList(value);"
     case "set":
-      return "assert std.isList(value);"  # set is not its own type in jsonnet
+      return "assert std.isList(value);\nassert std.length(std.set(value)) == std.length(value);"  # set is not its own type in jsonnet
     case "map":
       return "assert std.isObject(value);"
   return ""
