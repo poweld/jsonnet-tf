@@ -8,6 +8,8 @@ logger = logging.getLogger("tf-schema")
 
 logger = logging.getLogger(__name__)
 
+RESERVED = set(["assert", "else", "error", "false", "for", "function", "if", "import", "importstr", "importbin", "in", "local", "null", "tailstrict", "then", "self", "super", "true"])
+
 @dataclass
 class BlockType(JSONWizard):
   nesting_mode: str
@@ -55,11 +57,11 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
     case ProviderSchema():
       logger.info("ProviderSchema")
       provider = to_jsonnet(obj.provider)
-      resource_schemas = ",".join([
+      resource_schemas = ",\n".join([
         to_jsonnet(resource_schema, name=name)
         for name, resource_schema in obj.resource_schemas.items()
       ])
-      data_source_schemas = ",".join([
+      data_source_schemas = ",\n".join([
         to_jsonnet(data_source_schema, name=name)
         for name, data_source_schema in obj.data_source_schemas.items()
       ])
@@ -69,40 +71,51 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
       return "{}".format(to_jsonnet(obj.block, name=name))
     case Block():
       logger.info("Block")
-      attributes_in_new = {
-        name: attribute
-        for name, attribute in obj.attributes.items()
-        if attribute.include_in_new()
-      }
-      new_fn = jsonnet_new_fn(name, attributes_in_new)
-      logger.info("new fn: " + new_fn)
-      attributes = ",".join([
-        to_jsonnet(attribute, name=name)
-        for name, attribute in obj.attributes.items()
-      ])
+      if obj.attributes is not None:
+        attributes_in_new = {
+          name: attribute
+          for name, attribute in obj.attributes.items()
+          if attribute.include_in_new()
+        }
+        new_fn = jsonnet_new_fn(name, attributes_in_new)
+        logger.info("new fn: " + new_fn)
+        # TODO do something with the "new" fn
+        attributes = ",\n".join([
+          to_jsonnet(attribute, name=name)
+          for name, attribute in obj.attributes.items()
+        ])
+      else:
+        attributes = ""
       if obj.block_types is not None:
-        block_types = ",".join([
+        block_types = ",\n".join([
           to_jsonnet(block_type, name=name)
           for name, block_type in obj.block_types.items()
         ])
       else:
         block_types = ""
-      return "{},{}".format(attributes, block_types)
+      # return f"local block = self,\n{attributes},\n{block_types}"
+      body_parts = ["local block = self"]
+      if len(attributes) > 0:
+        body_parts.append(attributes)
+      if len(block_types) > 0:
+        body_parts.append(block_types)
+      body = ",\n".join(body_parts)
+      return f"{name}:: {{\n{body}\n}}"
     case Attribute():
       logger.info("Attribute")
-      # return "todoAttribute():: {}"
       return jsonnet_attr_fns(name, obj)
     case BlockType():
-      # TODO handle nesting_mode, min_items, max_items
+      # TODO needs a "new" fn, handle nesting_mode, min_items, max_items
       logger.info("BlockType")
       block = to_jsonnet(obj.block, name=name)
-      return f"{name}:: {{{block}}}"
+      # return f"{name}:: {{\n{block}\n}}"
+      return block
     case _:
       return ""
 
 def jsonnet_new_fn(name, attributes):
   new = f"new_{name}("
-  new = new + ",".join([
+  new = new + ",\n".join([
     attr_name
     for attr_name in attributes.keys()
   ])
@@ -131,10 +144,14 @@ def assertion(type):
 
 def jsonnet_attr_fns(name, attribute):
   _assertion = assertion(attribute.type)
+  if name in RESERVED:
+    field = f'"{name}"'
+  else:
+    field = name
   return f"""with_{name}(value):: (
     {_assertion}
     {{
-      {name}: value,
+      {field}: value,
     }}
   )"""
 

@@ -25,9 +25,12 @@ def main():
     # logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint").type)
     logger.info(provider_schema.resource_schemas.get("aws_instance"))
     schema = provider_schema.resource_schemas.get("aws_instance")
-    print("{")
+    print("{\naws_instance:: {")
     print(tf_schema.to_jsonnet(schema, name="aws_instance"))
-    print("}")
+    print("}\n}")
+    # print("{\n")
+    # print(tf_schema.to_jsonnet(provider_schema, name=provider))
+    # print("}\n}")
 
 def get_providers_schema() -> tf_schema.ProvidersSchema:
   if os.path.isfile(f"{artifacts_dir}/schema.json"):
