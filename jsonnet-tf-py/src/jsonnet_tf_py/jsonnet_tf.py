@@ -25,12 +25,13 @@ def main():
     # logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint").type)
     logger.info(provider_schema.resource_schemas.get("aws_instance"))
     schema = provider_schema.resource_schemas.get("aws_instance")
-    # print("{\naws_instance:: {")
+    print("{\naws_elasticsearch_domain:: {")
     # print(tf_schema.to_jsonnet(schema, name="aws_instance"))
-    # print("}\n}")
-    print("{")
-    print(tf_schema.to_jsonnet(provider_schema, name=provider))
-    print("}")
+    print(tf_schema.to_jsonnet(schema, name="aws_elasticsearch_domain"))
+    print("}\n}")
+    # print("{")
+    # print(tf_schema.to_jsonnet(provider_schema, name=provider))
+    # print("}")
 
 def get_providers_schema() -> tf_schema.ProvidersSchema:
   if os.path.isfile(f"{artifacts_dir}/schema.json"):
@@ -67,6 +68,6 @@ def get_providers_schema() -> tf_schema.ProvidersSchema:
 
 
 if __name__ == '__main__':
-  logging.root.setLevel(logging.ERROR)
+  logging.root.setLevel(logging.WARN)
   logging.basicConfig()
   main()

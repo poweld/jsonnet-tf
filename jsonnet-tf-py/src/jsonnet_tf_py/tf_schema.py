@@ -133,7 +133,8 @@ def assertion(type, name):
   error_message = f'"{name} expected to be of type \\"{type}\\""'
   match type:
     case list():
-      logger.info(f"list type: {type}")
+      # This case will be hit for both list and set types, which have two elements,
+      # one for the container type, one for the element type
       return assertion(type[0], name)
     case "string":
       return f"assert std.isString(value) : {error_message};"
@@ -141,7 +142,6 @@ def assertion(type, name):
       return f"assert std.isNumber(value) : {error_message};"
     case "bool":
       return f"assert std.isBoolean(value) : {error_message};"
-    # TODO can "list" actually happen, or will it be a list object as above?
     case "list":
       return f"assert std.isList(value) : {error_message};"
     case "set":
@@ -149,7 +149,15 @@ def assertion(type, name):
       return f"assert (std.isList(value) && std.length(std.set(value)) == std.length(value)) : {error_message};"
     case "map":
       return f"assert std.isObject(value) : {error_message};"
-  return ""
+    # TODO: what's the difference between map and object?
+    # seems like map is always <string, string>
+    # whereas object defines a custom object as the second element
+    # also, objects can have depth (objects as values) whereas maps are strictly key/value with no depth
+    case "object":
+      return f"assert std.isObject(value) : {error_message};"
+    case _:
+      logger.warning(f'type "{type}" did not match any known type')
+      return ""
 
 def jsonnet_attr_fn_name(name):
   return f"with_{name}"
