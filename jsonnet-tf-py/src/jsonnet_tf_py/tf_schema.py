@@ -190,6 +190,22 @@ def jsonnet_attr_fns(name, attribute):
       {field}: converted,
     }}
   )"""]
+  match attribute.type:
+    case list():
+      match attribute.type[0]:
+        case "list" | "set":
+          fn_name = jsonnet_attr_fn_mixin_name(name)
+          fns.append(f"""{fn_name}(value):: (
+            {_conversion}
+            {_assertion}
+            {{
+              {field}+: converted,
+            }}
+          )""")
+        case _:
+          pass
+    case _:
+      pass
   # TODO add mixins
   # match attribute.type:
   #   case list():
