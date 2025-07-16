@@ -128,33 +128,43 @@ def jsonnet_new_fn(name, attributes):
   new_parts.append(")")
   return "\n".join(new_parts)
 
-def assertion(type, name):
-  logger.info(f"assertion({type}, {name})")
+def auto_conversion(type, from_localvar, to_localvar):
+  match type:
+    case list():
+      # This case will be hit for both list and set types, which have two elements,
+      # one for the container type, one for the element type
+      return auto_conversion(type[0], from_localvar, to_localvar)
+    case "list" | "set":
+      return f"local {to_localvar} = if std.isArray({from_localvar}) then {from_localvar} else [{from_localvar}];"
+    case _:
+      return f"local {to_localvar} = {from_localvar};"
+
+def assertion(type, name, localvar):
   error_message = f'"{name} expected to be of type \\"{type}\\""'
   match type:
     case list():
       # This case will be hit for both list and set types, which have two elements,
       # one for the container type, one for the element type
-      return assertion(type[0], name)
+      return assertion(type[0], name, localvar)
     case "string":
-      return f"assert std.isString(value) : {error_message};"
+      return f"assert std.isString({localvar}) : {error_message};"
     case "number":
-      return f"assert std.isNumber(value) : {error_message};"
+      return f"assert std.isNumber({localvar}) : {error_message};"
     case "bool":
-      return f"assert std.isBoolean(value) : {error_message};"
+      return f"assert std.isBoolean({localvar}) : {error_message};"
     case "list":
-      return f"assert std.isList(value) : {error_message};"
+      return f"assert std.isList({localvar}) : {error_message};"
     case "set":
       # set is not its own type in jsonnet
-      return f"assert (std.isList(value) && std.length(std.set(value)) == std.length(value)) : {error_message};"
+      return f"assert (std.isList({localvar}) && std.length(std.set({localvar})) == std.length({localvar})) : {error_message};"
     case "map":
-      return f"assert std.isObject(value) : {error_message};"
+      return f"assert std.isObject({localvar}) : {error_message};"
     # TODO: what's the difference between map and object?
     # seems like map is always <string, string>
     # whereas object defines a custom object as the second element
     # also, objects can have depth (objects as values) whereas maps are strictly key/value with no depth
     case "object":
-      return f"assert std.isObject(value) : {error_message};"
+      return f"assert std.isObject({localvar}) : {error_message};"
     case _:
       logger.warning(f'type "{type}" did not match any known type')
       return ""
@@ -166,16 +176,18 @@ def jsonnet_attr_fn_mixin_name(name):
   return f"with_{name}_mixin"
 
 def jsonnet_attr_fns(name, attribute):
-  _assertion = assertion(attribute.type, name)
+  _conversion = auto_conversion(attribute.type, from_localvar="value", to_localvar="converted")
+  _assertion = assertion(attribute.type, name, "converted")
   if name in RESERVED:
     field = f'"{name}"'
   else:
     field = name
   fn_name = jsonnet_attr_fn_name(name)
   fns = [f"""{fn_name}(value):: (
+    {_conversion}
     {_assertion}
     {{
-      {field}: value,
+      {field}: converted,
     }}
   )"""]
   # TODO add mixins
