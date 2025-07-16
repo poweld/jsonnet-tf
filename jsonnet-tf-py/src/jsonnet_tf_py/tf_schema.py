@@ -58,6 +58,7 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
       logger.info("ProviderSchema")
       provider = to_jsonnet(obj.provider, name=f'"{name}"')
       body_parts=[provider]
+      # TODO return these resource_schemas and data_source_schemas to the caller so we can output to different files
       resource_schemas = ",\n".join([
         to_jsonnet(resource_schema, name=name)
         for name, resource_schema in obj.resource_schemas.items()
