@@ -169,6 +169,12 @@ def assertion(type, name, localvar):
       logger.warning(f'type "{type}" did not match any known type')
       return ""
 
+def description(attribute, fn_name):
+  if attribute.description is not None:
+    _description = attribute.description.replace("\n", " ").replace("\"", "'")
+    return f'"#{fn_name}":: "{_description}"'
+  return None 
+
 def jsonnet_attr_fn_name(name):
   return f"with_{name}"
 
@@ -178,23 +184,31 @@ def jsonnet_attr_fn_mixin_name(name):
 def jsonnet_attr_fns(name, attribute):
   _conversion = auto_conversion(attribute.type, from_localvar="value", to_localvar="converted")
   _assertion = assertion(attribute.type, name, "converted")
+  fn_name = jsonnet_attr_fn_name(name)
+  _description = description(attribute, fn_name)
   if name in RESERVED:
     field = f'"{name}"'
   else:
     field = name
-  fn_name = jsonnet_attr_fn_name(name)
-  fns = [f"""{fn_name}(value):: (
+  fns = []
+  if _description is not None:
+    fns.append(_description)
+  fns.append(f"""{fn_name}(value):: (
     {_conversion}
     {_assertion}
     {{
       {field}: converted,
     }}
-  )"""]
+  )""")
+  # add mixins for lists
   match attribute.type:
     case list():
       match attribute.type[0]:
         case "list" | "set":
           fn_name = jsonnet_attr_fn_mixin_name(name)
+          _description = description(attribute, fn_name)
+          if _description is not None:
+            fns.append(_description)
           fns.append(f"""{fn_name}(value):: (
             {_conversion}
             {_assertion}
@@ -206,12 +220,6 @@ def jsonnet_attr_fns(name, attribute):
           pass
     case _:
       pass
-  # TODO add mixins
-  # match attribute.type:
-  #   case list():
-  #     
-  #   case _:
-  #     pass
 
   return ",\n".join(fns)
 
