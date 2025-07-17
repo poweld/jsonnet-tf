@@ -85,21 +85,24 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
         }
         new_fn = jsonnet_new_fn(name, attributes_in_new)
         logger.info("new fn: " + new_fn)
-        # TODO do something with the "new" fn
         attributes = ",\n".join([new_fn] + [
           to_jsonnet(attribute, name=name)
           for name, attribute in obj.attributes.items()
         ])
       else:
-        attributes = ""
+      # TODO need with_ functions for sub-block_types
+        new_fn = jsonnet_new_fn(name, {})
+        attributes = new_fn
       if obj.block_types is not None:
         block_types = ",\n".join([
           to_jsonnet(block_type, name=name)
           for name, block_type in obj.block_types.items()
+        ] + [
+          jsonnet_with_fn(name)
+          for name in obj.block_types.keys()
         ])
       else:
         block_types = ""
-      # return f"local block = self,\n{attributes},\n{block_types}"
       body_parts = ["local block = self"]
       if len(attributes) > 0:
         body_parts.append(attributes)
@@ -124,7 +127,7 @@ def jsonnet_new_fn(name, attributes):
   params_str = ",".join(params)
   new_parts = [f"new({params_str}):: (", "{}"]
   for param in params:
-    fn_name = jsonnet_attr_fn_name(param)
+    fn_name = jsonnet_with_fn_name(param)
     new_parts.append(f"+ block.{fn_name}({param})")
   new_parts.append(")")
   return "\n".join(new_parts)
@@ -154,10 +157,10 @@ def assertion(type, name, localvar):
     case "bool":
       return f"assert std.isBoolean({localvar}) : {error_message};"
     case "list":
-      return f"assert std.isList({localvar}) : {error_message};"
+      return f"assert std.isArray({localvar}) : {error_message};"
     case "set":
       # set is not its own type in jsonnet
-      return f"assert (std.isList({localvar}) && std.length(std.set({localvar})) == std.length({localvar})) : {error_message};"
+      return f"assert (std.isArray({localvar}) && std.length(std.set({localvar})) == std.length({localvar})) : {error_message};"
     case "map":
       return f"assert std.isObject({localvar}) : {error_message};"
     # TODO: what's the difference between map and object?
@@ -176,16 +179,24 @@ def description(attribute, fn_name):
     return f'"#{fn_name}":: "{_description}"'
   return None 
 
-def jsonnet_attr_fn_name(name):
+def jsonnet_with_fn_name(name):
   return f"with_{name}"
 
-def jsonnet_attr_fn_mixin_name(name):
+def jsonnet_with_fn_mixin_name(name):
   return f"with_{name}_mixin"
+
+def jsonnet_with_fn(name):
+  fn_name = jsonnet_with_fn_name(name)
+  return f"""{fn_name}(value):: (
+    {{
+      {name}: value,
+    }}
+  )"""
 
 def jsonnet_attr_fns(name, attribute):
   _conversion = auto_conversion(attribute.type, from_localvar="value", to_localvar="converted")
   _assertion = assertion(attribute.type, name, "converted")
-  fn_name = jsonnet_attr_fn_name(name)
+  fn_name = jsonnet_with_fn_name(name)
   _description = description(attribute, fn_name)
   if name in RESERVED:
     field = f'"{name}"'
@@ -206,7 +217,7 @@ def jsonnet_attr_fns(name, attribute):
     case list():
       match attribute.type[0]:
         case "list" | "set":
-          fn_name = jsonnet_attr_fn_mixin_name(name)
+          fn_name = jsonnet_with_fn_mixin_name(name)
           _description = description(attribute, fn_name)
           if _description is not None:
             fns.append(_description)
