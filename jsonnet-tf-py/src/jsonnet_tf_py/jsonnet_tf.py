@@ -32,9 +32,9 @@ def main():
     # print("}\n}")
     jsonnet_provider_schema = tf_schema.to_jsonnet(provider_schema, name=provider)
     with open(f"{provider_dir}/provider.libsonnet", "w") as f:
-      f.write("{")
+      f.write("{\n")
       f.write(jsonnet_provider_schema["provider"])
-      f.write("}")
+      f.write("\n}")
     for name, resource in jsonnet_provider_schema["resource_schemas"].items():
       with open(f"{resource_dir}/{name}.libsonnet", "w") as f:
         f.write("{")
@@ -62,10 +62,10 @@ def get_providers_schema() -> tf_schema.ProvidersSchema:
               "source": "okta/okta",
               "version": "~> 5.2.0"
             },
-            # "aws": {
-            #   "source": "hashicorp/aws",
-            #   "version": "~> 6.3.0",
-            # },
+            "aws": {
+              "source": "hashicorp/aws",
+              "version": "~> 6.3.0",
+            },
           },
 
           "required_version": ">= 1.12.1"

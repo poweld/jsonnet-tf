@@ -94,13 +94,20 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
         new_fn = jsonnet_new_fn(name, {})
         attributes = new_fn
       if obj.block_types is not None:
-        block_types = ",\n".join([
+        block_type_fns = [
           to_jsonnet(block_type, name=name)
           for name, block_type in obj.block_types.items()
         ] + [
           jsonnet_with_fn(name)
           for name in obj.block_types.keys()
-        ])
+        ] + [
+          jsonnet_with_fn_mixin(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
+          for name, block_type in obj.block_types.items()
+          if obj.block_types[name].nesting_mode in ["set", "list"]
+        ]
+        block_types = ",\n".join(block_type_fns)
+        # TODO need to handle nesting_mode, which can be one of: single, list, set
+        # should add mixin functions if list or set
       else:
         block_types = ""
       body_parts = ["local block = self"]
@@ -144,7 +151,7 @@ def auto_conversion(type, from_localvar, to_localvar):
       return f"local {to_localvar} = {from_localvar};"
 
 def assertion(type, name, localvar):
-  error_message = f'"{name} expected to be of type \\"{type}\\""'
+  error_message = f'"\\"{name}\\" expected to be of type \\"{type}\\""'
   match type:
     case list():
       # This case will be hit for both list and set types, which have two elements,
@@ -190,6 +197,15 @@ def jsonnet_with_fn(name):
   return f"""{fn_name}(value):: (
     {{
       {name}: value,
+    }}
+  )"""
+
+def jsonnet_with_fn_mixin(name, _conversion):
+  fn_name = jsonnet_with_fn_mixin_name(name)
+  return f"""{fn_name}(value):: (
+    {_conversion}
+    {{
+      {name}+: converted,
     }}
   )"""
 
