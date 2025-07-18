@@ -52,26 +52,26 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, name: Optional[str] = None) -> Optional[str]:
+def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, name: Optional[str] = None) -> Optional[str] | dict:
   match obj:
     case ProviderSchema():
       logger.info("ProviderSchema")
       provider = to_jsonnet(obj.provider, name=f'"{name}"')
-      body_parts=[provider]
       # TODO return these resource_schemas and data_source_schemas to the caller so we can output to different files
-      resource_schemas = ",\n".join([
-        to_jsonnet(resource_schema, name=name)
+      # TODO add "terraformObject" field, should be configurable what the key is but that can come later
+      resource_schemas = {
+        name: to_jsonnet(resource_schema, name=name)
         for name, resource_schema in obj.resource_schemas.items()
-      ])
-      if len(obj.resource_schemas) > 0:
-        body_parts.append(f"resources:: {{\n{resource_schemas}\n}}")
-      data_source_schemas = ",\n".join([
-        to_jsonnet(data_source_schema, name=name)
+      }
+      data_source_schemas = {
+        name: to_jsonnet(data_source_schema, name=name)
         for name, data_source_schema in obj.data_source_schemas.items()
-      ])
-      if len(obj.data_source_schemas) > 0:
-        body_parts.append(f"data:: {{\n{data_source_schemas}\n}}")
-      return ",\n".join(body_parts)
+      }
+      return {
+        "provider": provider,
+        "resource_schemas": resource_schemas,
+        "data_source_schemas": data_source_schemas,
+      }
     case Schema():
       logger.info("Schema")
       return to_jsonnet(obj.block, name=name)

@@ -20,17 +20,34 @@ def main():
     path = provider
     provider_name = provider.split("/")[-1]
     provider_dir = f"{artifacts_dir}/{path}"
-    logging.info(provider_dir)
-    os.makedirs(provider_dir, exist_ok=True)
+    resource_dir = f"{provider_dir}/resource"
+    data_source_dir = f"{provider_dir}/data_source"
+    os.makedirs(resource_dir, exist_ok=True)
+    os.makedirs(data_source_dir, exist_ok=True)
     # logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint").type)
-    logger.info(provider_schema.resource_schemas.get("aws_instance"))
-    schema = provider_schema.resource_schemas.get("aws_instance")
+    # logger.info(provider_schema.resource_schemas.get("aws_instance"))
+    # schema = provider_schema.resource_schemas.get("aws_instance")
     # print("{\naws_elasticsearch_domain:: {")
     # print(tf_schema.to_jsonnet(schema, name="aws_elasticsearch_domain"))
     # print("}\n}")
-    print("{")
-    print(tf_schema.to_jsonnet(provider_schema, name=provider))
-    print("}")
+    jsonnet_provider_schema = tf_schema.to_jsonnet(provider_schema, name=provider)
+    with open(f"{provider_dir}/provider.libsonnet", "w") as f:
+      f.write("{")
+      f.write(jsonnet_provider_schema["provider"])
+      f.write("}")
+    for name, resource in jsonnet_provider_schema["resource_schemas"].items():
+      with open(f"{resource_dir}/{name}.libsonnet", "w") as f:
+        f.write("{")
+        f.write(resource)
+        f.write("}")
+    for name, data_source in jsonnet_provider_schema["data_source_schemas"].items():
+      with open(f"{data_source_dir}/{name}.libsonnet", "w") as f:
+        f.write("{\n")
+        f.write(data_source)
+        f.write("\n}\n")
+    # print("{")
+    # print(",\n".join(jsonnet_provider_schema.values()))
+    # print("}")
 
 def get_providers_schema() -> tf_schema.ProvidersSchema:
   if os.path.isfile(f"{artifacts_dir}/schema.json"):
@@ -41,10 +58,14 @@ def get_providers_schema() -> tf_schema.ProvidersSchema:
       main_tf = {
         "terraform": {
           "required_providers": {
-            "aws": {
-              "source":"hashicorp/aws",
-              "version": "~> 6.3.0"
-            }
+            "okta": {
+              "source": "okta/okta",
+              "version": "~> 5.2.0"
+            },
+            # "aws": {
+            #   "source": "hashicorp/aws",
+            #   "version": "~> 6.3.0",
+            # },
           },
 
           "required_version": ">= 1.12.1"
@@ -67,6 +88,6 @@ def get_providers_schema() -> tf_schema.ProvidersSchema:
 
 
 if __name__ == '__main__':
-  logging.root.setLevel(logging.WARN)
+  logging.root.setLevel(logging.ERROR)
   logging.basicConfig()
   main()
