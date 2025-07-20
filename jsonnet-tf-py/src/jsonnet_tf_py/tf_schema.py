@@ -9,6 +9,7 @@ logger = logging.getLogger("tf-schema")
 logger = logging.getLogger(__name__)
 
 RESERVED = set(["assert", "else", "error", "false", "for", "function", "if", "import", "importstr", "importbin", "in", "local", "null", "tailstrict", "then", "self", "super", "true"])
+SYMBOLS = set("{}[],.();")
 
 @dataclass
 class BlockType(JSONWizard):
@@ -52,18 +53,17 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, name: Optional[str] = None) -> Optional[str] | dict:
+def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
   match obj:
     case ProviderSchema():
-      logger.info("ProviderSchema")
-      provider = to_jsonnet(obj.provider, name=f'"{name}"')
+      provider = to_jsonnet(obj.provider, name=name, context=name)
       # TODO add "terraformObject" field, should be configurable what the key is but that can come later
       resource_schemas = {
-        name: to_jsonnet(resource_schema, name=name)
+        name: to_jsonnet(resource_schema, name=name, context=name)
         for name, resource_schema in obj.resource_schemas.items()
       }
       data_source_schemas = {
-        name: to_jsonnet(data_source_schema, name=name)
+        name: to_jsonnet(data_source_schema, name=name, context=name)
         for name, data_source_schema in obj.data_source_schemas.items()
       }
       return {
@@ -72,10 +72,8 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
         "data_source_schemas": data_source_schemas,
       }
     case Schema():
-      logger.info("Schema")
-      return to_jsonnet(obj.block, name=name)
+      return to_jsonnet(obj.block, name=name, context=context)
     case Block():
-      logger.info("Block")
       if obj.attributes is not None:
         attributes_in_new = {
           name: attribute
@@ -83,7 +81,6 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
           if attribute.include_in_new()
         }
         new_fn = jsonnet_new_fn(name, attributes_in_new)
-        logger.info("new fn: " + new_fn)
         attributes = ",\n".join([new_fn] + [
           to_jsonnet(attribute, name=name)
           for name, attribute in obj.attributes.items()
@@ -114,13 +111,20 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
       if len(block_types) > 0:
         body_parts.append(block_types)
       body = ",\n".join(body_parts)
-      return f"{name}:: {{\n{body}\n}}"
+      #return f"{name}:: {{\n{body}\n}}"
+      if context is not None:
+        logger.info([name, context])
+      if name == context:
+        return body
+      else:
+        if any(c in SYMBOLS for c in name):
+          return f"'{name}':: {{\n{body}\n}}"
+        else:
+          return f"{name}:: {{\n{body}\n}}"
     case Attribute():
-      logger.info("Attribute")
       return jsonnet_attr_fns(name, obj)
     case BlockType():
       # TODO needs a "new" fn, handle nesting_mode, min_items, max_items
-      logger.info("BlockType")
       block = to_jsonnet(obj.block, name=name)
       # return f"{name}:: {{\n{block}\n}}"
       return block

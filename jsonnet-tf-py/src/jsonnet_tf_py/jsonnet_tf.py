@@ -37,14 +37,14 @@ def main():
       f.write("\n}")
     for name, resource in jsonnet_provider_schema["resource_schemas"].items():
       with open(f"{resource_dir}/{name}.libsonnet", "w") as f:
-        f.write("{")
+        f.write("{\n")
         f.write(resource)
-        f.write("}")
+        f.write("\n}")
     for name, data_source in jsonnet_provider_schema["data_source_schemas"].items():
       with open(f"{data_source_dir}/{name}.libsonnet", "w") as f:
         f.write("{\n")
         f.write(data_source)
-        f.write("\n}\n")
+        f.write("\n}")
     # print("{")
     # print(",\n".join(jsonnet_provider_schema.values()))
     # print("}")
@@ -88,6 +88,6 @@ def get_providers_schema() -> tf_schema.ProvidersSchema:
 
 
 if __name__ == '__main__':
-  logging.root.setLevel(logging.ERROR)
+  logging.root.setLevel(logging.INFO)
   logging.basicConfig()
   main()
