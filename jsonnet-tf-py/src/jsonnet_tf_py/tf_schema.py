@@ -57,7 +57,6 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
     case ProviderSchema():
       logger.info("ProviderSchema")
       provider = to_jsonnet(obj.provider, name=f'"{name}"')
-      # TODO return these resource_schemas and data_source_schemas to the caller so we can output to different files
       # TODO add "terraformObject" field, should be configurable what the key is but that can come later
       resource_schemas = {
         name: to_jsonnet(resource_schema, name=name)
@@ -90,7 +89,6 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
           for name, attribute in obj.attributes.items()
         ])
       else:
-      # TODO need with_ functions for sub-block_types
         new_fn = jsonnet_new_fn(name, {})
         attributes = new_fn
       if obj.block_types is not None:
@@ -98,8 +96,8 @@ def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, nam
           to_jsonnet(block_type, name=name)
           for name, block_type in obj.block_types.items()
         ] + [
-          jsonnet_with_fn(name)
-          for name in obj.block_types.keys()
+          jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
+          for name, block_type in obj.block_types.items()
         ] + [
           jsonnet_with_fn_mixin(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
           for name, block_type in obj.block_types.items()
@@ -192,9 +190,10 @@ def jsonnet_with_fn_name(name):
 def jsonnet_with_fn_mixin_name(name):
   return f"with_{name}_mixin"
 
-def jsonnet_with_fn(name):
+def jsonnet_with_fn(name, _conversion):
   fn_name = jsonnet_with_fn_name(name)
   return f"""{fn_name}(value):: (
+    {_conversion}
     {{
       {name}: value,
     }}
