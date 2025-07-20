@@ -38,5 +38,5 @@ RUN poetry install --no-root
 COPY --chown=${UID}:${GID} src .
 
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["poetry", "run", "python", "jsonnet_tf.py"]
+CMD ["poetry", "run", "python", "main.py"]
 

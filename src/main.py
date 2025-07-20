@@ -12,42 +12,35 @@ from dataclass_wizard import JSONWizard
 logger = logging.getLogger("jsonnet-tf")
 artifacts_dir = f"/artifacts"
 
+
+def generate_provider(provider, provider_schema):
+  path = provider
+  provider_name = provider.split("/")[-1]
+  provider_dir = f"{artifacts_dir}/{path}"
+  resource_dir = f"{provider_dir}/resource"
+  data_source_dir = f"{provider_dir}/data_source"
+  for dir in [provider_dir, resource_dir, data_source_dir]:
+    os.makedirs(dir, exist_ok=True)
+  jsonnet_provider_schema = tf_schema.to_jsonnet(provider_schema, name=provider)
+  with open(f"{provider_dir}/provider.libsonnet", "w") as f:
+    f.write("{\n")
+    f.write(jsonnet_provider_schema["provider"])
+    f.write("\n}")
+  for name, resource in jsonnet_provider_schema["resource_schemas"].items():
+    with open(f"{resource_dir}/{name}.libsonnet", "w") as f:
+      f.write("{\n")
+      f.write(resource)
+      f.write("\n}")
+  for name, data_source in jsonnet_provider_schema["data_source_schemas"].items():
+    with open(f"{data_source_dir}/{name}.libsonnet", "w") as f:
+      f.write("{\n")
+      f.write(data_source)
+      f.write("\n}")
+
 def main():
   providers_schema: tf_schema.ProvidersSchema = get_providers_schema()
-  # logging.info(schemas.format_version)
   for provider, provider_schema in providers_schema.provider_schemas.items():
-    # logger.info(provider_schema)
-    path = provider
-    provider_name = provider.split("/")[-1]
-    provider_dir = f"{artifacts_dir}/{path}"
-    resource_dir = f"{provider_dir}/resource"
-    data_source_dir = f"{provider_dir}/data_source"
-    os.makedirs(resource_dir, exist_ok=True)
-    os.makedirs(data_source_dir, exist_ok=True)
-    # logger.info(provider_schema.resource_schemas.get("aws_apigatewayv2_api").block.attributes.get("api_endpoint").type)
-    # logger.info(provider_schema.resource_schemas.get("aws_instance"))
-    # schema = provider_schema.resource_schemas.get("aws_instance")
-    # print("{\naws_elasticsearch_domain:: {")
-    # print(tf_schema.to_jsonnet(schema, name="aws_elasticsearch_domain"))
-    # print("}\n}")
-    jsonnet_provider_schema = tf_schema.to_jsonnet(provider_schema, name=provider)
-    with open(f"{provider_dir}/provider.libsonnet", "w") as f:
-      f.write("{\n")
-      f.write(jsonnet_provider_schema["provider"])
-      f.write("\n}")
-    for name, resource in jsonnet_provider_schema["resource_schemas"].items():
-      with open(f"{resource_dir}/{name}.libsonnet", "w") as f:
-        f.write("{\n")
-        f.write(resource)
-        f.write("\n}")
-    for name, data_source in jsonnet_provider_schema["data_source_schemas"].items():
-      with open(f"{data_source_dir}/{name}.libsonnet", "w") as f:
-        f.write("{\n")
-        f.write(data_source)
-        f.write("\n}")
-    # print("{")
-    # print(",\n".join(jsonnet_provider_schema.values()))
-    # print("}")
+    generate_provider(provider, provider_schema)
 
 def get_providers_schema() -> tf_schema.ProvidersSchema:
   if os.path.isfile(f"{artifacts_dir}/schema.json"):
