@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
 
 logger = logging.getLogger("jsonnet-tf")
-artifacts_dir = f"/artifacts"
+artifacts_dir = "/artifacts"
 
 
 def generate_provider(provider, provider_schema):
@@ -21,7 +21,7 @@ def generate_provider(provider, provider_schema):
   data_source_dir = f"{provider_dir}/data_source"
   for dir in [provider_dir, resource_dir, data_source_dir]:
     os.makedirs(dir, exist_ok=True)
-  jsonnet_provider_schema = tf_schema.to_jsonnet(provider_schema, name=provider)
+  jsonnet_provider_schema = provider_schema.to_jsonnet(provider, context=provider)
   with open(f"{provider_dir}/provider.libsonnet", "w") as f:
     f.write("{\n")
     f.write(jsonnet_provider_schema["provider"])

@@ -1,11 +1,16 @@
 build:
 	@set -e
-	@echo "generating..."
+	@echo "building..."
 	docker build --quiet -t jsonnet-tf . &>/dev/null >/dev/null
+	@echo "done"
+
+generate: build
+	@set -e
+	@echo "generating..."
 	docker run --mount type=bind,src=./artifacts,dst=/artifacts -it jsonnet-tf
 	@echo "done"
 
-format: build
+format: generate
 	@set -e
 	@echo "formatting..."
 	find artifacts/ -name "*.*sonnet" -print0 | xargs -0 -P 16 -I {} jsonnetfmt -i {}

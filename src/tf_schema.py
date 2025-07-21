@@ -1,5 +1,6 @@
 import logging
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
 from typing import Optional
@@ -11,15 +12,25 @@ logger = logging.getLogger(__name__)
 RESERVED = set(["assert", "else", "error", "false", "for", "function", "if", "import", "importstr", "importbin", "in", "local", "null", "tailstrict", "then", "self", "super", "true"])
 SYMBOLS = set("{}[],.();")
 
+class JsonnetGeneratorInterface(ABC):
+  @abstractmethod
+  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
+    """Generate the jsonnet for the Terraform object"""
+    raise NotImplemetedError
+
 @dataclass
-class BlockType(JSONWizard):
+class BlockType(JSONWizard, JsonnetGeneratorInterface):
   nesting_mode: str
   block: 'Block'  # Need forward reference
   min_items: int | None = None
   max_items: int | None = None
 
+  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
+    # TODO handle min/max_items
+    return self.block.to_jsonnet(name=name)
+
 @dataclass
-class Attribute(JSONWizard):
+class Attribute(JSONWizard, JsonnetGeneratorInterface):
   type: str | list[str]
   description: str | None = None
   required: bool | None = None
@@ -27,24 +38,129 @@ class Attribute(JSONWizard):
   computed: bool | None = None
   sensitive: bool | None = None
 
-  def include_in_new(self) -> bool:
-    return self.required
+  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
+    _conversion = auto_conversion(self.type, from_localvar="value", to_localvar="converted")
+    _assertion = assertion(self.type, name, "converted")
+    fn_name = jsonnet_with_fn_name(name)
+    _description = description(self, fn_name)
+    if name in RESERVED:
+      field = f'"{name}"'
+    else:
+      field = name
+    fns = []
+    if _description is not None:
+      fns.append(_description)
+    fns.append(f"""{fn_name}(value):: (
+      {_conversion}
+      {_assertion}
+      {{
+        {field}: converted,
+      }}
+    )""")
+    # add mixins for lists
+    match self.type:
+      case list():
+        match self.type[0]:
+          case "list" | "set":
+            fn_name = jsonnet_with_fn_mixin_name(name)
+            _description = description(self, fn_name)
+            if _description is not None:
+              fns.append(_description)
+            fns.append(f"""{fn_name}(value):: (
+              {_conversion}
+              {_assertion}
+              {{
+                {field}+: converted,
+              }}
+            )""")
+          case _:
+            pass
+      case _:
+        pass
+
+    return ",\n".join(fns)
 
 @dataclass
-class Block(JSONWizard):
+class Block(JSONWizard, JsonnetGeneratorInterface):
   attributes: dict[str, Attribute] | None = None
   block_types: dict[str, BlockType] | None = None
 
+  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
+    if self.attributes is not None:
+      attributes_in_new = {
+        name: attribute
+        for name, attribute in self.attributes.items()
+        if attribute.required
+      }
+      new_fn = jsonnet_new_fn(name, attributes_in_new)
+      attributes = ",\n".join([new_fn] + [
+        attribute.to_jsonnet(name)
+        for name, attribute in self.attributes.items()
+      ])
+    else:
+      new_fn = jsonnet_new_fn(name, {})
+      attributes = new_fn
+    if self.block_types is not None:
+      block_type_fns = [
+        block_type.to_jsonnet(name)
+        for name, block_type in self.block_types.items()
+      ] + [
+        jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
+        for name, block_type in self.block_types.items()
+      ] + [
+        jsonnet_with_fn_mixin(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
+        for name, block_type in self.block_types.items()
+        if self.block_types[name].nesting_mode in ["set", "list"]
+      ]
+      block_types = ",\n".join(block_type_fns)
+      # TODO need to handle nesting_mode, which can be one of: single, list, set
+      # should add mixin functions if list or set
+    else:
+      block_types = ""
+    body_parts = ["local block = self"]
+    if len(attributes) > 0:
+      body_parts.append(attributes)
+    if len(block_types) > 0:
+      body_parts.append(block_types)
+    body = ",\n".join(body_parts)
+    # logger.info(f"{name}...{context}")
+    if name == context:
+      return body
+    else:
+      if any(c in SYMBOLS for c in name):
+        return f"'{name}':: {{\n{body}\n}}"
+      else:
+        return f"{name}:: {{\n{body}\n}}"
+
 @dataclass
-class Schema(JSONWizard):
+class Schema(JSONWizard, JsonnetGeneratorInterface):
   version: int
   block: Block
 
+  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
+    return self.block.to_jsonnet(name=name, context=context)
+
 @dataclass
-class ProviderSchema(JSONWizard):
+class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
   provider: Schema
   resource_schemas: dict[str, Schema]
   data_source_schemas: dict[str, Schema]
+
+  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
+    provider = self.provider.to_jsonnet(name, context)
+    resource_schemas = {
+      name: resource_schema.to_jsonnet(name, name)
+      for name, resource_schema in self.resource_schemas.items()
+    }
+    data_source_schemas = {
+      name: data_source_schema.to_jsonnet(name, context)
+      for name, data_source_schema in self.data_source_schemas.items()
+    }
+    return {
+      "provider": provider,
+      "resource_schemas": resource_schemas,
+      "data_source_schemas": data_source_schemas,
+    }
 
 @dataclass
 class ProvidersSchema(JSONWizard):
@@ -52,84 +168,6 @@ class ProvidersSchema(JSONWizard):
     recursive_classes = True
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
-
-def to_jsonnet(obj: ProviderSchema | Schema | Block | Attribute | BlockType, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
-  match obj:
-    case ProviderSchema():
-      provider = to_jsonnet(obj.provider, name=name, context=name)
-      # TODO add "terraformObject" field, should be configurable what the key is but that can come later
-      resource_schemas = {
-        name: to_jsonnet(resource_schema, name=name, context=name)
-        for name, resource_schema in obj.resource_schemas.items()
-      }
-      data_source_schemas = {
-        name: to_jsonnet(data_source_schema, name=name, context=name)
-        for name, data_source_schema in obj.data_source_schemas.items()
-      }
-      return {
-        "provider": provider,
-        "resource_schemas": resource_schemas,
-        "data_source_schemas": data_source_schemas,
-      }
-    case Schema():
-      return to_jsonnet(obj.block, name=name, context=context)
-    case Block():
-      if obj.attributes is not None:
-        attributes_in_new = {
-          name: attribute
-          for name, attribute in obj.attributes.items()
-          if attribute.include_in_new()
-        }
-        new_fn = jsonnet_new_fn(name, attributes_in_new)
-        attributes = ",\n".join([new_fn] + [
-          to_jsonnet(attribute, name=name)
-          for name, attribute in obj.attributes.items()
-        ])
-      else:
-        new_fn = jsonnet_new_fn(name, {})
-        attributes = new_fn
-      if obj.block_types is not None:
-        block_type_fns = [
-          to_jsonnet(block_type, name=name)
-          for name, block_type in obj.block_types.items()
-        ] + [
-          jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
-          for name, block_type in obj.block_types.items()
-        ] + [
-          jsonnet_with_fn_mixin(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
-          for name, block_type in obj.block_types.items()
-          if obj.block_types[name].nesting_mode in ["set", "list"]
-        ]
-        block_types = ",\n".join(block_type_fns)
-        # TODO need to handle nesting_mode, which can be one of: single, list, set
-        # should add mixin functions if list or set
-      else:
-        block_types = ""
-      body_parts = ["local block = self"]
-      if len(attributes) > 0:
-        body_parts.append(attributes)
-      if len(block_types) > 0:
-        body_parts.append(block_types)
-      body = ",\n".join(body_parts)
-      #return f"{name}:: {{\n{body}\n}}"
-      if context is not None:
-        logger.info([name, context])
-      if name == context:
-        return body
-      else:
-        if any(c in SYMBOLS for c in name):
-          return f"'{name}':: {{\n{body}\n}}"
-        else:
-          return f"{name}:: {{\n{body}\n}}"
-    case Attribute():
-      return jsonnet_attr_fns(name, obj)
-    case BlockType():
-      # TODO needs a "new" fn, handle nesting_mode, min_items, max_items
-      block = to_jsonnet(obj.block, name=name)
-      # return f"{name}:: {{\n{block}\n}}"
-      return block
-    case _:
-      return ""
 
 def jsonnet_new_fn(name, attributes):
   params = attributes.keys()
