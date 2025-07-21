@@ -59,6 +59,8 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
     )""")
     # add mixins for lists
     match self.type:
+      # the type for a list or set will be a two element list
+      # the container type is the first element, the element type is the second
       case list():
         match self.type[0]:
           case "list" | "set":
@@ -211,10 +213,7 @@ def assertion(type, name, localvar):
       return f"assert (std.isArray({localvar}) && std.length(std.set({localvar})) == std.length({localvar})) : {error_message};"
     case "map":
       return f"assert std.isObject({localvar}) : {error_message};"
-    # TODO: what's the difference between map and object?
-    # seems like map is always <string, string>
-    # whereas object defines a custom object as the second element
-    # also, objects can have depth (objects as values) whereas maps are strictly key/value with no depth
+    # map is always <string, string>
     case "object":
       return f"assert std.isObject({localvar}) : {error_message};"
     case _:
