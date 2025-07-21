@@ -14,7 +14,7 @@ SYMBOLS = set("{}[],.();")
 
 class JsonnetGeneratorInterface(ABC):
   @abstractmethod
-  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
+  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
     """Generate the jsonnet for the Terraform object"""
     raise NotImplemetedError
 
@@ -25,7 +25,7 @@ class BlockType(JSONWizard, JsonnetGeneratorInterface):
   min_items: int | None = None
   max_items: int | None = None
 
-  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
+  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
     # TODO handle min/max_items
     return self.block.to_jsonnet(name=name)
 
@@ -38,7 +38,7 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
   computed: bool | None = None
   sensitive: bool | None = None
 
-  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
+  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
     _conversion = auto_conversion(self.type, from_localvar="value", to_localvar="converted")
     _assertion = assertion(self.type, name, "converted")
     fn_name = jsonnet_with_fn_name(name)
@@ -85,7 +85,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
   attributes: dict[str, Attribute] | None = None
   block_types: dict[str, BlockType] | None = None
 
-  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
+  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
     if self.attributes is not None:
       attributes_in_new = {
         name: attribute
@@ -123,10 +123,11 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
     if len(block_types) > 0:
       body_parts.append(block_types)
     body = ",\n".join(body_parts)
-    # logger.info(f"{name}...{context}")
-    if name == context:
+    # if the block is the main block for the library, keep it at the top level
+    if name == library_name:
       return body
     else:
+      # if a symbol is in the key, quote it
       if any(c in SYMBOLS for c in name):
         return f"'{name}':: {{\n{body}\n}}"
       else:
@@ -137,8 +138,8 @@ class Schema(JSONWizard, JsonnetGeneratorInterface):
   version: int
   block: Block
 
-  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
-    return self.block.to_jsonnet(name=name, context=context)
+  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
+    return self.block.to_jsonnet(name, library_name)
 
 @dataclass
 class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
@@ -146,14 +147,14 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
   resource_schemas: dict[str, Schema]
   data_source_schemas: dict[str, Schema]
 
-  def to_jsonnet(self, name: Optional[str] = None, context: Optional[str] = None) -> Optional[str] | dict:
-    provider = self.provider.to_jsonnet(name, context)
+  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
+    provider = self.provider.to_jsonnet(name, library_name)
     resource_schemas = {
       name: resource_schema.to_jsonnet(name, name)
       for name, resource_schema in self.resource_schemas.items()
     }
     data_source_schemas = {
-      name: data_source_schema.to_jsonnet(name, context)
+      name: data_source_schema.to_jsonnet(name, library_name)
       for name, data_source_schema in self.data_source_schemas.items()
     }
     return {
@@ -220,19 +221,19 @@ def assertion(type, name, localvar):
       logger.warning(f'type "{type}" did not match any known type')
       return ""
 
-def description(attribute, fn_name):
+def description(attribute, fn_name) -> Optional[str]:
   if attribute.description is not None:
     _description = attribute.description.replace("\n", " ").replace("\"", "'")
     return f'"#{fn_name}":: "{_description}"'
-  return None 
+  return None
 
-def jsonnet_with_fn_name(name):
+def jsonnet_with_fn_name(name) -> str:
   return f"with_{name}"
 
-def jsonnet_with_fn_mixin_name(name):
+def jsonnet_with_fn_mixin_name(name) -> str:
   return f"with_{name}_mixin"
 
-def jsonnet_with_fn(name, _conversion):
+def jsonnet_with_fn(name, _conversion) -> str:
   fn_name = jsonnet_with_fn_name(name)
   return f"""{fn_name}(value):: (
     {_conversion}
@@ -241,7 +242,7 @@ def jsonnet_with_fn(name, _conversion):
     }}
   )"""
 
-def jsonnet_with_fn_mixin(name, _conversion):
+def jsonnet_with_fn_mixin(name, _conversion) -> str:
   fn_name = jsonnet_with_fn_mixin_name(name)
   return f"""{fn_name}(value):: (
     {_conversion}
@@ -249,46 +250,4 @@ def jsonnet_with_fn_mixin(name, _conversion):
       {name}+: converted,
     }}
   )"""
-
-def jsonnet_attr_fns(name, attribute):
-  _conversion = auto_conversion(attribute.type, from_localvar="value", to_localvar="converted")
-  _assertion = assertion(attribute.type, name, "converted")
-  fn_name = jsonnet_with_fn_name(name)
-  _description = description(attribute, fn_name)
-  if name in RESERVED:
-    field = f'"{name}"'
-  else:
-    field = name
-  fns = []
-  if _description is not None:
-    fns.append(_description)
-  fns.append(f"""{fn_name}(value):: (
-    {_conversion}
-    {_assertion}
-    {{
-      {field}: converted,
-    }}
-  )""")
-  # add mixins for lists
-  match attribute.type:
-    case list():
-      match attribute.type[0]:
-        case "list" | "set":
-          fn_name = jsonnet_with_fn_mixin_name(name)
-          _description = description(attribute, fn_name)
-          if _description is not None:
-            fns.append(_description)
-          fns.append(f"""{fn_name}(value):: (
-            {_conversion}
-            {_assertion}
-            {{
-              {field}+: converted,
-            }}
-          )""")
-        case _:
-          pass
-    case _:
-      pass
-
-  return ",\n".join(fns)
 

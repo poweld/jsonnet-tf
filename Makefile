@@ -1,13 +1,15 @@
+SHELL=bash
+
 build:
 	@set -e
 	@echo "building..."
-	docker build --quiet -t jsonnet-tf . &>/dev/null >/dev/null
+	docker build --quiet -t jsonnet-tf . &>/dev/null
 	@echo "done"
 
 generate: build
 	@set -e
 	@echo "generating..."
-	docker run --mount type=bind,src=./artifacts,dst=/artifacts -it jsonnet-tf
+	docker run --mount type=bind,src=./artifacts,dst=/artifacts -t jsonnet-tf
 	@echo "done"
 
 format: generate

@@ -21,7 +21,7 @@ def generate_provider(provider, provider_schema):
   data_source_dir = f"{provider_dir}/data_source"
   for dir in [provider_dir, resource_dir, data_source_dir]:
     os.makedirs(dir, exist_ok=True)
-  jsonnet_provider_schema = provider_schema.to_jsonnet(provider, context=provider)
+  jsonnet_provider_schema = provider_schema.to_jsonnet(provider, provider)
   with open(f"{provider_dir}/provider.libsonnet", "w") as f:
     f.write("{\n")
     f.write(jsonnet_provider_schema["provider"])
