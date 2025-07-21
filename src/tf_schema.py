@@ -27,7 +27,7 @@ class BlockType(JSONWizard, JsonnetGeneratorInterface):
 
   def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
     # TODO handle min/max_items
-    return self.block.to_jsonnet(name=name)
+    return self.block.to_jsonnet(name, library_name)
 
 @dataclass
 class Attribute(JSONWizard, JsonnetGeneratorInterface):
@@ -94,7 +94,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
       }
       new_fn = jsonnet_new_fn(name, attributes_in_new)
       attributes = ",\n".join([new_fn] + [
-        attribute.to_jsonnet(name)
+        attribute.to_jsonnet(name, library_name)
         for name, attribute in self.attributes.items()
       ])
     else:
@@ -102,7 +102,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
       attributes = new_fn
     if self.block_types is not None:
       block_type_fns = [
-        block_type.to_jsonnet(name)
+        block_type.to_jsonnet(name, library_name)
         for name, block_type in self.block_types.items()
       ] + [
         jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
@@ -154,7 +154,7 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
       for name, resource_schema in self.resource_schemas.items()
     }
     data_source_schemas = {
-      name: data_source_schema.to_jsonnet(name, library_name)
+      name: data_source_schema.to_jsonnet(name, name)
       for name, data_source_schema in self.data_source_schemas.items()
     }
     return {
