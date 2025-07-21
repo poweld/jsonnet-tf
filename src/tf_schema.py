@@ -7,8 +7,6 @@ from typing import Optional
 
 logger = logging.getLogger("tf-schema")
 
-logger = logging.getLogger(__name__)
-
 RESERVED = set(["assert", "else", "error", "false", "for", "function", "if", "import", "importstr", "importbin", "in", "local", "null", "tailstrict", "then", "self", "super", "true"])
 SYMBOLS = set("{}[],.();")
 
