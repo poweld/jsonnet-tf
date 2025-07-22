@@ -135,7 +135,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
 
 @dataclass
 class Schema(JSONWizard, JsonnetGeneratorInterface):
-  version: int
+  version: int  # schema version, not the provider version
   block: Block
 
   def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
