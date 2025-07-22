@@ -12,7 +12,7 @@ SYMBOLS = set("{}[],.();")
 
 class JsonnetGeneratorInterface(ABC):
   @abstractmethod
-  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
+  def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
     """Generate the jsonnet for the Terraform object"""
     raise NotImplemetedError
 
@@ -23,9 +23,9 @@ class BlockType(JSONWizard, JsonnetGeneratorInterface):
   min_items: int | None = None
   max_items: int | None = None
 
-  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
+  def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
     # TODO handle min/max_items
-    return self.block.to_jsonnet(name, library_name)
+    return self.block.to_jsonnet(name, **kwargs)
 
 @dataclass
 class Attribute(JSONWizard, JsonnetGeneratorInterface):
@@ -36,7 +36,7 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
   computed: bool | None = None
   sensitive: bool | None = None
 
-  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
+  def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
     _conversion = auto_conversion(self.type, from_localvar="value", to_localvar="converted")
     _assertion = assertion(self.type, name, "converted")
     fn_name = jsonnet_with_fn_name(name)
@@ -85,7 +85,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
   attributes: dict[str, Attribute] | None = None
   block_types: dict[str, BlockType] | None = None
 
-  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
+  def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
     if self.attributes is not None:
       attributes_in_new = {
         name: attribute
@@ -94,7 +94,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
       }
       new_fn = jsonnet_new_fn(name, attributes_in_new)
       attributes = ",\n".join([new_fn] + [
-        attribute.to_jsonnet(name, library_name)
+        attribute.to_jsonnet(name, **kwargs)
         for name, attribute in self.attributes.items()
       ])
     else:
@@ -102,7 +102,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
       attributes = new_fn
     if self.block_types is not None:
       block_type_fns = [
-        block_type.to_jsonnet(name, library_name)
+        block_type.to_jsonnet(name, **kwargs)
         for name, block_type in self.block_types.items()
       ] + [
         jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
@@ -124,7 +124,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
       body_parts.append(block_types)
     body = ",\n".join(body_parts)
     # if the block is the main block for the library, keep it at the top level
-    if name == library_name:
+    if name == kwargs["library_name"]:
       return body
     else:
       # if a symbol is in the key, quote it
@@ -138,8 +138,8 @@ class Schema(JSONWizard, JsonnetGeneratorInterface):
   version: int  # schema version, not the provider version
   block: Block
 
-  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
-    return self.block.to_jsonnet(name, library_name)
+  def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
+    return self.block.to_jsonnet(name, **kwargs)
 
 @dataclass
 class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
@@ -147,14 +147,15 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
   resource_schemas: dict[str, Schema]
   data_source_schemas: dict[str, Schema]
 
-  def to_jsonnet(self, name: Optional[str] = None, library_name: Optional[str] = None) -> Optional[str] | dict:
-    provider = self.provider.to_jsonnet(name, library_name)
+  def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
+    provider = self.provider.to_jsonnet(name, **kwargs)
+    kwargs.update({"library_name": name})
     resource_schemas = {
-      name: resource_schema.to_jsonnet(name, name)
+      name: resource_schema.to_jsonnet(name, **kwargs)
       for name, resource_schema in self.resource_schemas.items()
     }
     data_source_schemas = {
-      name: data_source_schema.to_jsonnet(name, name)
+      name: data_source_schema.to_jsonnet(name, **kwargs)
       for name, data_source_schema in self.data_source_schemas.items()
     }
     return {

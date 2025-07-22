@@ -2,7 +2,7 @@ SHELL=bash
 
 build:
 	@set -e
-	@mkdir artifacts
+	@mkdir -p artifacts
 	@echo "building..."
 	@docker build --quiet -t jsonnet-tf . &>/dev/null
 	@echo -e "done\n"

@@ -1,5 +1,6 @@
 import logging
 import json
+import _jsonnet
 import os
 import subprocess
 import tempfile
@@ -13,7 +14,7 @@ logger = logging.getLogger("jsonnet-tf")
 artifacts_dir = "/artifacts"
 
 
-def generate_provider(provider, provider_schema):
+def generate_provider(provider, provider_schema, provider_version):
   path = provider
   provider_name = provider.split("/")[-1]
   provider_dir = f"{artifacts_dir}/{path}"
@@ -21,7 +22,7 @@ def generate_provider(provider, provider_schema):
   data_source_dir = f"{provider_dir}/data_source"
   for dir in [provider_dir, resource_dir, data_source_dir]:
     os.makedirs(dir, exist_ok=True)
-  jsonnet_provider_schema = provider_schema.to_jsonnet(provider, provider)
+  jsonnet_provider_schema = provider_schema.to_jsonnet(provider, library_name=provider)
   # write the provider out
   with open(f"{provider_dir}/provider.libsonnet", "w") as f:
     f.write("{\n")
@@ -41,33 +42,39 @@ def generate_provider(provider, provider_schema):
       f.write("\n}")
 
 def main():
-  providers_schema: tf_schema.ProvidersSchema = get_providers_schema()
+  # TODO retrieve providers to fetch from user (click, probably)
+  # providers = {
+  #   "okta/okta": "~> 5.2.0",
+  #   "hashicorp/aws": "~> 6.3.0",
+  # }
+  provider = "okta"
+  provider_source = "okta/okta"
+  provider_version = "~> 5.2.0"
+  terraform_version = ">= 1.12.1"
+  providers_schema = get_providers_schema(provider, provider_source, provider_version, terraform_version)
   for provider, provider_schema in providers_schema.provider_schemas.items():
-    generate_provider(provider, provider_schema)
+    generate_provider(provider, provider_schema, provider_version)
 
-def get_providers_schema() -> tf_schema.ProvidersSchema:
+def get_providers_schema(
+  provider: str,
+  provider_source: str,
+  provider_version: str,
+  terraform_version: str
+) -> tf_schema.ProvidersSchema:
   if os.path.isfile(f"{artifacts_dir}/schema.json"):
     logger.info("schema already exists, skipping download")
   else:
     with tempfile.TemporaryDirectory() as tempdir:
-      # TODO retrieve providers to fetch from user (click, probably)
-      main_tf = {
-        "terraform": {
-          "required_providers": {
-            "okta": {
-              "source": "okta/okta",
-              "version": "~> 5.2.0"
-            },
-            "aws": {
-              "source": "hashicorp/aws",
-              "version": "~> 6.3.0",
-            },
-          },
-
-          "required_version": ">= 1.12.1"
-        }
+      tla_vars = {
+        "provider": provider,
+        "provider_source": provider_source,
+        "provider_version": provider_version,
+        "terraform_version": terraform_version,
       }
-      main_tf_json = json.dumps(main_tf)
+      main_tf_json = _jsonnet.evaluate_file(
+        "terraform_providers.jsonnet",
+        tla_vars=tla_vars,
+      )
       with open(f"{tempdir}/main.tf.json", "w") as main_tf_json_file:
         main_tf_json_file.write(main_tf_json)
         main_tf_json_file.flush()
