@@ -22,7 +22,7 @@ def generate_provider(provider, provider_schema, provider_version):
   data_source_dir = f"{provider_dir}/data_source"
   for dir in [provider_dir, resource_dir, data_source_dir]:
     os.makedirs(dir, exist_ok=True)
-  jsonnet_provider_schema = provider_schema.to_jsonnet(provider, library_name=provider)
+  jsonnet_provider_schema = provider_schema.to_jsonnet(provider, library_name=provider, provider_version=provider_version)
   # write the provider out
   with open(f"{provider_dir}/provider.libsonnet", "w") as f:
     f.write("{\n")

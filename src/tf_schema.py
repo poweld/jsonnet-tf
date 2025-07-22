@@ -148,14 +148,19 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
   data_source_schemas: dict[str, Schema]
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
-    provider = self.provider.to_jsonnet(name, **kwargs)
-    kwargs.update({"library_name": name})
+    #provider = self.provider.to_jsonnet(name, **kwargs)
+    provider_version = kwargs["provider_version"]
+    provider = ",\n".join([
+      f'version:: "{provider_version}"',
+      self.provider.to_jsonnet(name, **kwargs)
+    ])
+    # TODO has to be a better way to handle the overriding of a kwarg :-/
     resource_schemas = {
-      name: resource_schema.to_jsonnet(name, **kwargs)
+      name: resource_schema.to_jsonnet(name, library_name=name, provider_version=kwargs["provider_version"])
       for name, resource_schema in self.resource_schemas.items()
     }
     data_source_schemas = {
-      name: data_source_schema.to_jsonnet(name, **kwargs)
+      name: data_source_schema.to_jsonnet(name, library_name=name, provider_version=kwargs["provider_version"])
       for name, data_source_schema in self.data_source_schemas.items()
     }
     return {
