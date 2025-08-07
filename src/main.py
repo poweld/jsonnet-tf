@@ -14,7 +14,7 @@ logger = logging.getLogger("jsonnet-tf")
 artifacts_dir = "/artifacts"
 
 
-def generate_provider(provider, provider_schema, provider_version):
+def generate_provider(provider, provider_schema, provider_source, provider_version):
   path = provider
   provider_name = provider.split("/")[-1]
   provider_dir = f"{artifacts_dir}/{path}"
@@ -22,7 +22,12 @@ def generate_provider(provider, provider_schema, provider_version):
   data_source_dir = f"{provider_dir}/data_source"
   for dir in [provider_dir, resource_dir, data_source_dir]:
     os.makedirs(dir, exist_ok=True)
-  jsonnet_provider_schema = provider_schema.to_jsonnet(provider, library_name=provider, provider_version=provider_version)
+  jsonnet_provider_schema = provider_schema.to_jsonnet(
+    provider,
+    library_name=provider,
+    provider_source=provider_source,
+    provider_version=provider_version,
+  )
   # write the provider out
   with open(f"{provider_dir}/provider.libsonnet", "w") as f:
     f.write("{\n")
@@ -53,7 +58,7 @@ def main():
   terraform_version = ">= 1.12.1"
   providers_schema = get_providers_schema(provider, provider_source, provider_version, terraform_version)
   for provider, provider_schema in providers_schema.provider_schemas.items():
-    generate_provider(provider, provider_schema, provider_version)
+    generate_provider(provider, provider_schema, provider_source, provider_version)
 
 def get_providers_schema(
   provider: str,
