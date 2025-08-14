@@ -1,4 +1,5 @@
 import logging
+import re
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -232,11 +233,14 @@ def description(attribute, fn_name) -> Optional[str]:
     return f'"#{fn_name}":: "{_description}"'
   return None
 
+def camel_case(s) -> str:
+  return re.sub(r'_([a-z])', lambda match: match.group(1).upper(), s)
+
 def jsonnet_with_fn_name(name) -> str:
-  return f"with_{name}"
+  return camel_case(f"with_{name}")
 
 def jsonnet_with_fn_mixin_name(name) -> str:
-  return f"with_{name}_mixin"
+  return camel_case(f"with_{name}_mixin")
 
 def jsonnet_with_fn(name, _conversion) -> str:
   fn_name = jsonnet_with_fn_name(name)
