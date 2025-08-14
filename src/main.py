@@ -54,7 +54,7 @@ def main():
   # }
   provider = "okta"
   provider_source = "okta/okta"
-  provider_version = "~> 5.2.0"
+  provider_version = "~> 5.3.0"
   terraform_version = ">= 1.12.1"
   providers_schema = get_providers_schema(provider, provider_source, provider_version, terraform_version)
   for provider, provider_schema in providers_schema.provider_schemas.items():

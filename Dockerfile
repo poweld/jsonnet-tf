@@ -1,5 +1,7 @@
 ARG REGISTRY="registry.hub.docker.com"
-FROM ${REGISTRY}/library/python:3.12
+FROM ${REGISTRY}/library/python:3.12-bookworm
+# hashicorp does not support debian trixy release at the moment
+# FROM ${REGISTRY}/library/python:3.12
 
 RUN wget -O- https://apt.releases.hashicorp.com/gpg | \
         gpg --dearmor | \
