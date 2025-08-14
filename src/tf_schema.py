@@ -87,18 +87,13 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
   block_types: dict[str, BlockType] | None = None
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
-    logger.info(kwargs)
     if self.attributes is not None:
       attributes_in_new = {
         name: attribute
         for name, attribute in self.attributes.items()
         if attribute.required
       }
-      try:
-        new_fn = jsonnet_new_fn(name, attributes_in_new, **kwargs)
-      except Exception:
-        logger.exception(kwargs)
-        raise
+      new_fn = jsonnet_new_fn(name, attributes_in_new, **kwargs)
       attributes = ",\n".join([new_fn] + [
         attribute.to_jsonnet(name, **kwargs)
         for name, attribute in self.attributes.items()
@@ -145,7 +140,6 @@ class Schema(JSONWizard, JsonnetGeneratorInterface):
   block: Block
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
-    logger.info(kwargs)
     return self.block.to_jsonnet(name, **kwargs)
 
 @dataclass
