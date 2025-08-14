@@ -87,21 +87,24 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
   block_types: dict[str, BlockType] | None = None
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
+    logger.info(kwargs)
     if self.attributes is not None:
       attributes_in_new = {
         name: attribute
         for name, attribute in self.attributes.items()
         if attribute.required
       }
-      library_name = kwargs["library_name"]
-      # TODO pass down the terraformType as well and embed it?
-      new_fn = jsonnet_new_fn(name, attributes_in_new, library_name)
+      try:
+        new_fn = jsonnet_new_fn(name, attributes_in_new, **kwargs)
+      except Exception:
+        logger.exception(kwargs)
+        raise
       attributes = ",\n".join([new_fn] + [
         attribute.to_jsonnet(name, **kwargs)
         for name, attribute in self.attributes.items()
       ])
     else:
-      new_fn = jsonnet_new_fn(name, {})
+      new_fn = jsonnet_new_fn(name, {}, **kwargs)
       attributes = new_fn
     if self.block_types is not None:
       block_type_fns = [
@@ -142,6 +145,7 @@ class Schema(JSONWizard, JsonnetGeneratorInterface):
   block: Block
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
+    logger.info(kwargs)
     return self.block.to_jsonnet(name, **kwargs)
 
 @dataclass
@@ -151,21 +155,19 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
   data_source_schemas: dict[str, Schema]
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
-    #provider = self.provider.to_jsonnet(name, **kwargs)
     provider_source = kwargs["provider_source"]
     provider_version = kwargs["provider_version"]
     provider = ",\n".join([
       f'version:: "{provider_version}"',
       f'source:: "{provider_source}"',
-      self.provider.to_jsonnet(name, **kwargs)
+      self.provider.to_jsonnet(name, **kwargs, terraform_type="provider")
     ])
-    # TODO has to be a better way to handle the overriding of a kwarg :-/
     resource_schemas = {
-      name: resource_schema.to_jsonnet(name, library_name=name, provider_version=kwargs["provider_version"])
+      name: resource_schema.to_jsonnet(name, library_name=name, terraform_type="resource")
       for name, resource_schema in self.resource_schemas.items()
     }
     data_source_schemas = {
-      name: data_source_schema.to_jsonnet(name, library_name=name, provider_version=kwargs["provider_version"])
+      name: data_source_schema.to_jsonnet(name, library_name=name, terraform_type="data")
       for name, data_source_schema in self.data_source_schemas.items()
     }
     return {
@@ -181,11 +183,15 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def jsonnet_new_fn(name, attributes, library_name):
+def jsonnet_new_fn(name, attributes, **kwargs):
   params = attributes.keys()
   params_str = ",".join(params)
+  library_name = kwargs["library_name"]
+  terraform_type = kwargs["terraform_type"]
+  #terraform_type = "testing123"
   new_body = f"""{{
     terraformObject:: '{library_name}',
+    terraformType:: '{terraform_type}',
   }}"""
   new_parts = [f"new({params_str}):: (", new_body]
   for param in params:
