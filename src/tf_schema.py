@@ -161,11 +161,11 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
     ])
     # TODO has to be a better way to handle the overriding of a kwarg :-/
     resource_schemas = {
-      name: resource_schema.to_jsonnet(name, library_name=name)
+      name: resource_schema.to_jsonnet(name, library_name=name, provider_version=kwargs["provider_version"])
       for name, resource_schema in self.resource_schemas.items()
     }
     data_source_schemas = {
-      name: data_source_schema.to_jsonnet(name, library_name=name)
+      name: data_source_schema.to_jsonnet(name, library_name=name, provider_version=kwargs["provider_version"])
       for name, data_source_schema in self.data_source_schemas.items()
     }
     return {
