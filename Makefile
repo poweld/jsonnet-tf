@@ -16,7 +16,7 @@ generate: build
 format: generate
 	@set -e
 	@echo "formatting..."
-	@find artifacts/ -name "*.*sonnet" -print0 | xargs -0 -P 16 -I {} jsonnetfmt -i {}
+	@find artifacts/ -name "*.*sonnet" -print0 | xargs -0 -P 16 -I {} jsonnetfmt -i --string-style d {}
 	@echo -e "done\n"
 
 run: format
