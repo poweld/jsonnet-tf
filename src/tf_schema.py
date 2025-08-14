@@ -93,7 +93,9 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         for name, attribute in self.attributes.items()
         if attribute.required
       }
-      new_fn = jsonnet_new_fn(name, attributes_in_new)
+      library_name = kwargs["library_name"]
+      # TODO pass down the terraformType as well and embed it?
+      new_fn = jsonnet_new_fn(name, attributes_in_new, library_name)
       attributes = ",\n".join([new_fn] + [
         attribute.to_jsonnet(name, **kwargs)
         for name, attribute in self.attributes.items()
@@ -159,11 +161,11 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
     ])
     # TODO has to be a better way to handle the overriding of a kwarg :-/
     resource_schemas = {
-      name: resource_schema.to_jsonnet(name, library_name=name, provider_version=kwargs["provider_version"])
+      name: resource_schema.to_jsonnet(name, library_name=name)
       for name, resource_schema in self.resource_schemas.items()
     }
     data_source_schemas = {
-      name: data_source_schema.to_jsonnet(name, library_name=name, provider_version=kwargs["provider_version"])
+      name: data_source_schema.to_jsonnet(name, library_name=name)
       for name, data_source_schema in self.data_source_schemas.items()
     }
     return {
@@ -179,10 +181,13 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def jsonnet_new_fn(name, attributes):
+def jsonnet_new_fn(name, attributes, library_name):
   params = attributes.keys()
   params_str = ",".join(params)
-  new_parts = [f"new({params_str}):: (", "{}"]
+  new_body = f"""{{
+    terraformObject:: '{library_name}',
+  }}"""
+  new_parts = [f"new({params_str}):: (", new_body]
   for param in params:
     fn_name = jsonnet_with_fn_name(param)
     new_parts.append(f"+ block.{fn_name}({param})")
