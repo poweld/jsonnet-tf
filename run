@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# build
+set -e
+mkdir -p artifacts
+echo "building..."
+set -x
+docker build --quiet -t jsonnet-tf . &>/dev/null
+set +x
+echo -e "done\n"
+
+# generate
+set -e
+echo "generating..."
+set -x
+docker run --mount type=bind,src=./artifacts,dst=/artifacts -t jsonnet-tf "$@"
+set +x
+echo -e "done\n"
+
+echo -e "run complete\n"
+

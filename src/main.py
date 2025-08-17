@@ -1,3 +1,4 @@
+import click
 import logging
 import json
 import _jsonnet
@@ -46,16 +47,18 @@ def generate_provider(provider, provider_schema, provider_source, provider_versi
       f.write(data_source)
       f.write("\n}")
 
-def main():
-  # TODO retrieve providers to fetch from user (click, probably)
-  # providers = {
-  #   "okta/okta": "~> 5.2.0",
-  #   "hashicorp/aws": "~> 6.3.0",
-  # }
-  provider = "okta"
-  provider_source = "okta/okta"
-  provider_version = "~> 5.3.0"
-  terraform_version = ">= 1.12.1"
+  # format
+  cmd = f'find {provider_dir}/ -name "*.*sonnet" -print0 | xargs -0 -P 16 -I {{}} jsonnetfmt -i --string-style d {{}}'
+  subprocess.Popen(cmd, shell=True)
+  # TODO check results of formatting
+
+@click.command()
+@click.option("--provider", required=True, help="The provider, e.g. hashicorp/aws")
+@click.option("--provider-version", required=True, help="The provider version, e.g. '~> 5.3.0'")
+@click.option("--terraform-version", required=True, help="The terraform version, e.g. '>= 1.12.1'")
+def main(provider, provider_version, terraform_version):
+  provider_source = provider
+  provider = provider_source.split("/")[-1]
   providers_schema = get_providers_schema(provider, provider_source, provider_version, terraform_version)
   for provider, provider_schema in providers_schema.provider_schemas.items():
     generate_provider(provider, provider_schema, provider_source, provider_version)

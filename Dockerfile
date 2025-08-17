@@ -1,5 +1,19 @@
 ARG REGISTRY="registry.hub.docker.com"
+#ARG REGISTRY="docker.io"
+
+FROM ${REGISTRY}/library/golang:1.25 AS jsonnet
+RUN git clone https://github.com/google/go-jsonnet.git \
+  && cd go-jsonnet \
+  && go build ./cmd/jsonnet \
+  && go build ./cmd/jsonnetfmt \
+  && go build ./cmd/jsonnet-deps
+
+RUN mkdir -p /artifacts \
+  && cp go-jsonnet/jsonnet /artifacts \
+  && cp go-jsonnet/jsonnetfmt /artifacts
+
 FROM ${REGISTRY}/library/python:3.12-bookworm
+COPY --from=jsonnet /artifacts/* /bin
 # hashicorp does not support debian trixy release at the moment
 # FROM ${REGISTRY}/library/python:3.12
 
@@ -16,31 +30,19 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
       dumb-init \
       terraform \
-      pipx \
+      # pipx \
     && rm -rf /var/lib/apt/lists/*
 
 ARG APP_DIR="/app"
-ARG ARTIFACT_DIR="/artifacts"
-ARG UID=1000
-ARG GID=1000
-ARG USER="somebody"
-ARG GROUP="somegroup"
-RUN groupadd --gid ${GID} ${GROUP}
-RUN useradd --uid ${UID} --gid ${GID} --shell /bin/bash --home-dir ${APP_DIR} --create-home ${USER}
-
-RUN mkdir -p ${ARTIFACT_DIR} && chown ${UID}:${GID} ${ARTIFACT_DIR}
-
-WORKDIR ${APP_DIR}
-USER ${USER}
 
 ENV PATH="${APP_DIR}/.local/bin:${PATH}"
-RUN pipx install poetry
+RUN pip install poetry
 
-COPY --chown=${UID}:${GID} poetry.lock pyproject.toml ./
+COPY poetry.lock pyproject.toml ./
 RUN poetry install --no-root
 
-COPY --chown=${UID}:${GID} src .
+COPY src .
 
-ENTRYPOINT ["dumb-init", "--"]
-CMD ["poetry", "run", "python", "main.py"]
+# ENTRYPOINT ["dumb-init", "--"]
+ENTRYPOINT ["dumb-init", "--", "poetry", "run", "python", "main.py"]
 
