@@ -1,5 +1,7 @@
 SHELL=bash
 
+.PHONY: build generate format run
+
 build:
 	@set -e
 	@mkdir -p artifacts
