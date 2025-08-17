@@ -13,7 +13,7 @@ RUN mkdir -p /artifacts \
   && cp go-jsonnet/jsonnetfmt /artifacts
 
 FROM ${REGISTRY}/library/python:3.12-bookworm
-COPY --from=jsonnet /artifacts/* /bin
+COPY --from=jsonnet /artifacts/* /bin/
 # hashicorp does not support debian trixy release at the moment
 # FROM ${REGISTRY}/library/python:3.12
 

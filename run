@@ -12,9 +12,9 @@ echo -e "done\n"
 # generate
 set -e
 echo "generating..."
-set -x
+#set -x
 docker run --mount type=bind,src=./artifacts,dst=/artifacts -t jsonnet-tf "$@"
-set +x
+#set +x
 echo -e "done\n"
 
 echo -e "run complete\n"
