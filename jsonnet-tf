@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
 
+dockerfile="Dockerfile.docker"
+
 # build
 set -e
 mkdir -p artifacts
 echo "building..."
 set -x
-docker build --quiet -t jsonnet-tf . &>/dev/null
+docker build --quiet -t jsonnet-tf -f ${dockerfile} . &>/dev/null
 set +x
 echo -e "done\n"
 
 # generate
 set -e
 echo "generating..."
-#set -x
+set -x
 docker run --mount type=bind,src=./artifacts,dst=/artifacts -t jsonnet-tf "$@"
-#set +x
+set +x
 echo -e "done\n"
 
 echo -e "run complete\n"

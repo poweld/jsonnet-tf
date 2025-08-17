@@ -48,9 +48,12 @@ def generate_provider(provider, provider_schema, provider_source, provider_versi
       f.write("\n}")
 
   # format
-  cmd = f'find {provider_dir}/ -name "*.*sonnet" -print0 | xargs -0 -P 16 -I {{}} jsonnetfmt -i --string-style d {{}}'
-  subprocess.Popen(cmd, shell=True)
   # TODO check results of formatting
+  find_cmd = f'find {provider_dir}/ -name "*.*sonnet" -print0'
+  fmt_cmd = "xargs -0 -P 16 -I {} jsonnetfmt -i --string-style d {}"
+  ps = subprocess.Popen(["find", f"{provider_dir}/", "-name", "*.*sonnet", "-print0"], stdout=subprocess.PIPE)
+  output = subprocess.check_output(["xargs", "-0", "-P", "16", "-I", "{}", "jsonnetfmt", "-i", "--string-style", "d", "{}"], stdin=ps.stdout)
+  ps.wait()
 
 @click.command()
 @click.option("--provider", required=True, help="The provider, e.g. hashicorp/aws")
