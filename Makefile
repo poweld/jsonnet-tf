@@ -12,7 +12,7 @@ build:
 generate: build
 	@set -e
 	@echo "generating..."
-	@docker run --mount type=bind,src=./artifacts,dst=/artifacts -t jsonnet-tf
+	@docker run --mount type=bind,src=./artifacts,dst=/artifacts:rw -t jsonnet-tf
 	@echo -e "done\n"
 
 format: generate

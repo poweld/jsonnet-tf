@@ -28,6 +28,8 @@ ARG GROUP="somegroup"
 RUN groupadd --gid ${GID} ${GROUP}
 RUN useradd --uid ${UID} --gid ${GID} --shell /bin/bash --home-dir ${APP_DIR} --create-home ${USER}
 
+RUN mkdir -p ${ARTIFACT_DIR} && chown ${UID}:${GID} ${ARTIFACT_DIR}
+
 WORKDIR ${APP_DIR}
 USER ${USER}
 
