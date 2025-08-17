@@ -56,10 +56,11 @@ def generate_provider(provider, provider_schema, provider_source, provider_versi
 @click.option("--provider", required=True, help="The provider, e.g. hashicorp/aws")
 @click.option("--provider-version", required=True, help="The provider version, e.g. '~> 5.3.0'")
 @click.option("--terraform-version", required=True, help="The terraform version, e.g. '>= 1.12.1'")
-def main(provider, provider_version, terraform_version):
+@click.option("--force", is_flag=True, default=False, help="Force the downloading of the schema even if it already exists")
+def main(provider, provider_version, terraform_version, force):
   provider_source = provider
   provider = provider_source.split("/")[-1]
-  providers_schema = get_providers_schema(provider, provider_source, provider_version, terraform_version)
+  providers_schema = get_providers_schema(provider, provider_source, provider_version, terraform_version, force)
   for provider, provider_schema in providers_schema.provider_schemas.items():
     generate_provider(provider, provider_schema, provider_source, provider_version)
 
@@ -67,9 +68,10 @@ def get_providers_schema(
   provider: str,
   provider_source: str,
   provider_version: str,
-  terraform_version: str
+  terraform_version: str,
+  force: bool
 ) -> tf_schema.ProvidersSchema:
-  if os.path.isfile(f"{artifacts_dir}/schema.json"):
+  if not force and os.path.isfile(f"{artifacts_dir}/schema.json"):
     logger.info("schema already exists, skipping download")
   else:
     with tempfile.TemporaryDirectory() as tempdir:
