@@ -37,6 +37,9 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
   computed: bool | None = None
   sensitive: bool | None = None
 
+  def is_readonly(self) -> bool:
+    return self.computed and not (self.optional or self.required)
+
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
     _conversion = auto_conversion(self.type, from_localvar="value", to_localvar="converted")
     _assertion = assertion(self.type, name, "converted")
@@ -97,6 +100,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
       attributes = ",\n".join([new_fn] + [
         attribute.to_jsonnet(name, **kwargs)
         for name, attribute in self.attributes.items()
+        if not attribute.is_readonly()
       ])
     else:
       new_fn = jsonnet_new_fn(name, {}, **kwargs)
