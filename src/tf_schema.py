@@ -113,10 +113,10 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         block_type.to_jsonnet(name, **kwargs)
         for name, block_type in self.block_types.items()
       ] + [
-        jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"), block_type)
+        jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"), block_type.nesting_mode)
         for name, block_type in self.block_types.items()
       ] + [
-        jsonnet_with_fn_mixin(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"), block_type)
+        jsonnet_with_fn_mixin(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"), block_type.nesting_mode)
         for name, block_type in self.block_types.items()
         if self.block_types[name].nesting_mode in ["set", "list"]
       ]
