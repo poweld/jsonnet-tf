@@ -259,16 +259,14 @@ def jsonnet_with_fn_name(name, type_val) -> str:
   """Generate function name, pluralizing if needed for list types."""
   if type_val is not None and is_list_type(type_val):
     # Pluralize the name for list types
-    pluralized = _p.plural(name)
-    return camel_case(f"with_{pluralized}")
+    name = _p.plural(name)
   return camel_case(f"with_{name}")
 
 def jsonnet_with_fn_mixin_name(name, type_val) -> str:
   """Generate function mixin name, pluralizing if needed for list types."""
   if type_val is not None and is_list_type(type_val):
     # Pluralize the name for list types
-    pluralized = _p.plural(name)
-    return camel_case(f"with_{pluralized}_mixin")
+    name = _p.plural(name)
   return camel_case(f"with_{name}_mixin")
 
 def jsonnet_with_fn(name, _conversion, type_val) -> str:
