@@ -201,7 +201,7 @@ def jsonnet_new_fn(attributes, **kwargs):
     jsonnetTfMetadata:: {{
       terraformObject:: '{library_name}',
       terraformType:: '{terraform_type}',
-      terraformPrefix:: 'terraform_prefix',
+      terraformPrefix:: '{terraform_prefix}',
       terraformName:: name,
     }},
   }}"""
