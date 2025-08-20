@@ -102,7 +102,8 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
       for name, attribute in attributes.items()
       if attribute.required
     }
-    new_fn = jsonnet_new_fn(attributes_in_new, **kwargs)
+    has_native_name = "name" in self.attributes
+    new_fn = jsonnet_new_fn(name, attributes_in_new, has_native_name, **kwargs)
     attributes = ",\n".join([new_fn] + [
       attribute.to_jsonnet(name, **kwargs)
       for name, attribute in attributes.items()
@@ -184,7 +185,7 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def jsonnet_new_fn(attributes, **kwargs):
+def jsonnet_new_fn(name, attributes, has_native_name, **kwargs):
   # ensure name goes first
   params = attributes.keys()
   def key(param):
@@ -197,12 +198,16 @@ def jsonnet_new_fn(attributes, **kwargs):
   library_name = kwargs["library_name"]
   terraform_type = kwargs["terraform_type"]
   terraform_prefix = "data" if terraform_type == "data" else ""
+  tf_attributes = list(attributes.keys())
+  if not has_native_name:
+    tf_attributes.remove("name")
   new_body = f"""{{
     jsonnetTfMetadata:: {{
       terraformObject:: '{library_name}',
       terraformType:: '{terraform_type}',
       terraformPrefix:: '{terraform_prefix}',
       terraformName:: name,
+      terraformAttributes:: {tf_attributes},
     }},
   }}"""
   new_parts = [f"new({params_str}):: (", new_body]
