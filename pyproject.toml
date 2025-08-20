@@ -10,7 +10,8 @@ requires-python = ">=3.12"
 dependencies = [
     "dataclass-wizard (>=0.35.0,<0.36.0)",
     "jsonnet (>=0.21.0,<0.22.0)",
-    "click (>=8.2.1,<9.0.0)"
+    "click (>=8.2.1,<9.0.0)",
+    "inflect (>=7.5.0,<8.0.0)"
 ]
 
 [tool.poetry]
