@@ -103,7 +103,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
       if attribute.required
     }
     has_native_name = "name" in self.attributes
-    new_fn = jsonnet_new_fn(name, attributes_in_new, has_native_name, **kwargs)
+    new_fn = jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs)
     attributes = ",\n".join([new_fn] + [
       attribute.to_jsonnet(name, **kwargs)
       for name, attribute in attributes.items()
@@ -123,7 +123,6 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
       ]
       block_types = ",\n".join(block_type_fns)
       # TODO need to handle nesting_mode, which can be one of: single, list, set
-      # should add mixin functions if list or set
     else:
       block_types = ""
     body_parts = ["local block = self"]
@@ -185,9 +184,9 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def jsonnet_new_fn(name, attributes, has_native_name, **kwargs):
+def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs):
   # ensure name goes first
-  params = attributes.keys()
+  params = attributes_in_new.keys()
   def key(param):
     if param == "name":
       return ""
