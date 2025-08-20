@@ -1,13 +1,10 @@
 import logging
 import re
-import inflect
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
 from typing import Optional
-
-_p = inflect.engine()
 
 logger = logging.getLogger("tf-schema")
 
@@ -48,7 +45,7 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
     _conversion = auto_conversion(self.type, from_localvar="value", to_localvar="converted")
     _assertion = assertion(self.type, name, "converted")
-    fn_name = jsonnet_with_fn_name(name, self.type)
+    fn_name = jsonnet_with_fn_name(name)
     _description = description(self, fn_name)
     if name in RESERVED:
       field = f'"{name}"'
@@ -71,7 +68,7 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
       case list():
         match self.type[0]:
           case "list" | "set":
-            fn_name = jsonnet_with_fn_mixin_name(name, self.type)
+            fn_name = jsonnet_with_fn_mixin_name(name)
             _description = description(self, fn_name)
             if _description is not None:
               fns.append(_description)
@@ -116,10 +113,10 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         block_type.to_jsonnet(name, **kwargs)
         for name, block_type in self.block_types.items()
       ] + [
-        jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"), block_type.nesting_mode)
+        jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
         for name, block_type in self.block_types.items()
       ] + [
-        jsonnet_with_fn_mixin(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"), block_type.nesting_mode)
+        jsonnet_with_fn_mixin(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
         for name, block_type in self.block_types.items()
         if self.block_types[name].nesting_mode in ["set", "list"]
       ]
@@ -210,8 +207,7 @@ def jsonnet_new_fn(attributes, **kwargs):
   }}"""
   new_parts = [f"new({params_str}):: (", new_body]
   for param in params:
-    attribute = attributes[param]
-    fn_name = jsonnet_with_fn_name(param, attribute.type)
+    fn_name = jsonnet_with_fn_name(param)
     new_parts.append(f"+ block.{fn_name}({param})")
   new_parts.append(")")
   return "\n".join(new_parts)
@@ -263,28 +259,14 @@ def description(attribute, fn_name) -> Optional[str]:
 def camel_case(s) -> str:
   return re.sub(r'_([a-z])', lambda match: match.group(1).upper(), s)
 
-def is_list_type(type_val) -> bool:
-  """Check if a type is a list or set type."""
-  if isinstance(type_val, list):
-    return True
-  return type_val in ["list", "set"]
-
-def jsonnet_with_fn_name(name, type_val) -> str:
-  """Generate function name, pluralizing if needed for list types."""
-  if type_val is not None and is_list_type(type_val):
-    # Pluralize the name for list types
-    name = _p.plural(name)
+def jsonnet_with_fn_name(name) -> str:
   return camel_case(f"with_{name}")
 
-def jsonnet_with_fn_mixin_name(name, type_val) -> str:
-  """Generate function mixin name, pluralizing if needed for list types."""
-  if type_val is not None and is_list_type(type_val):
-    # Pluralize the name for list types
-    name = _p.plural(name)
+def jsonnet_with_fn_mixin_name(name) -> str:
   return camel_case(f"with_{name}_mixin")
 
-def jsonnet_with_fn(name, _conversion, type_val) -> str:
-  fn_name = jsonnet_with_fn_name(name, type_val)
+def jsonnet_with_fn(name, _conversion) -> str:
+  fn_name = jsonnet_with_fn_name(name)
   return f"""{fn_name}(value):: (
     {_conversion}
     {{
@@ -292,8 +274,8 @@ def jsonnet_with_fn(name, _conversion, type_val) -> str:
     }}
   )"""
 
-def jsonnet_with_fn_mixin(name, _conversion, type_val) -> str:
-  fn_name = jsonnet_with_fn_mixin_name(name, type_val)
+def jsonnet_with_fn_mixin(name, _conversion) -> str:
+  fn_name = jsonnet_with_fn_mixin_name(name)
   return f"""{fn_name}(value):: (
     {_conversion}
     {{
