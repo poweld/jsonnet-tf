@@ -106,7 +106,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
     new_fn = jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs)
     attributes = ",\n".join([new_fn] + [
       attribute.to_jsonnet(name, **kwargs)
-      for name, attribute in attributes.items()
+      for name, attribute in self.attributes.items()
       if not attribute.is_readonly()
     ])
     if self.block_types is not None:
@@ -186,7 +186,7 @@ class ProvidersSchema(JSONWizard):
 
 def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs):
   # ensure name goes first
-  params = attributes_in_new.keys()
+  params = list(attributes_in_new.keys())
   def key(param):
     if param == "name":
       return ""
@@ -210,6 +210,8 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
     }},
   }}"""
   new_parts = [f"new({params_str}):: (", new_body]
+  if not has_native_name:
+    params.remove("name")
   for param in params:
     fn_name = jsonnet_with_fn_name(param)
     new_parts.append(f"+ block.{fn_name}({param})")
