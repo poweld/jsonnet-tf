@@ -29,7 +29,9 @@ class BlockType(JSONWizard, JsonnetGeneratorInterface):
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
     # TODO handle min/max_items
-    return self.block.to_jsonnet(name, **kwargs)
+    block_kwargs = kwargs.copy()
+    block_kwargs["is_block_type"] = True
+    return self.block.to_jsonnet(name, **block_kwargs)
 
 @dataclass
 class Attribute(JSONWizard, JsonnetGeneratorInterface):
@@ -87,27 +89,28 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
 
     return ",\n".join(fns)
 
+DEFAULT_NAME_ATTRIBUTE = Attribute("string", None, True, None, None, None)
+
 @dataclass
 class Block(JSONWizard, JsonnetGeneratorInterface):
   attributes: dict[str, Attribute] | None = None
   block_types: dict[str, BlockType] | None = None
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
-    if self.attributes is not None:
-      attributes_in_new = {
-        name: attribute
-        for name, attribute in self.attributes.items()
-        if attribute.required
-      }
-      new_fn = jsonnet_new_fn(name, attributes_in_new, **kwargs)
-      attributes = ",\n".join([new_fn] + [
-        attribute.to_jsonnet(name, **kwargs)
-        for name, attribute in self.attributes.items()
-        if not attribute.is_readonly()
-      ])
-    else:
-      new_fn = jsonnet_new_fn(name, {}, **kwargs)
-      attributes = new_fn
+    # must have a name attribute for terraform rendering
+    attributes = { "name": DEFAULT_NAME_ATTRIBUTE, **self.attributes }
+    attributes["name"].required = True
+    attributes_in_new = {
+      name: attribute
+      for name, attribute in attributes.items()
+      if attribute.required
+    }
+    new_fn = jsonnet_new_fn(attributes_in_new, **kwargs)
+    attributes = ",\n".join([new_fn] + [
+      attribute.to_jsonnet(name, **kwargs)
+      for name, attribute in attributes.items()
+      if not attribute.is_readonly()
+    ])
     if self.block_types is not None:
       block_type_fns = [
         block_type.to_jsonnet(name, **kwargs)
@@ -184,15 +187,26 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def jsonnet_new_fn(name, attributes, **kwargs):
+def jsonnet_new_fn(attributes, **kwargs):
+  # ensure name goes first
   params = attributes.keys()
-  params_str = ",".join(params)
+  def key(param):
+    if param == "name":
+      return ""
+    else:
+      return param
+  sorted(params, key=key)
+  params_str = ", ".join(params)
   library_name = kwargs["library_name"]
   terraform_type = kwargs["terraform_type"]
-  #terraform_type = "testing123"
+  terraform_prefix = "data" if terraform_type == "data" else ""
   new_body = f"""{{
-    terraformObject:: '{library_name}',
-    terraformType:: '{terraform_type}',
+    jsonnetTfMetadata:: {{
+      terraformObject:: '{library_name}',
+      terraformType:: '{terraform_type}',
+      terraformPrefix:: 'terraform_prefix',
+      terraformName:: name,
+    }},
   }}"""
   new_parts = [f"new({params_str}):: (", new_body]
   for param in params:
