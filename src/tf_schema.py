@@ -210,11 +210,9 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
     }},
   }}"""
   new_parts = [f"new({params_str}):: (", new_body]
-  if not has_native_name:
+  if not has_native_name or attributes_in_new["name"].is_read_only:
     params.remove("name")
   for param in params:
-    if attributes_in_new[param].is_read_only:
-      continue
     fn_name = jsonnet_with_fn_name(param)
     new_parts.append(f"+ block.{fn_name}({param})")
   new_parts.append(")")
