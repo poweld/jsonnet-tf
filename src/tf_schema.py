@@ -86,17 +86,13 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
 
     return ",\n".join(fns)
 
-DEFAULT_NAME_ATTRIBUTE = Attribute("string", None, True, None, None, None)
-
 @dataclass
 class Block(JSONWizard, JsonnetGeneratorInterface):
   attributes: dict[str, Attribute] | None = None
   block_types: dict[str, BlockType] | None = None
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
-    # must have a name attribute for terraform rendering
-    attributes = { "name": DEFAULT_NAME_ATTRIBUTE, **self.attributes }
-    attributes["name"].required = True
+    attributes = self.attributes
     attributes_in_new = {
       name: attribute
       for name, attribute in attributes.items()
@@ -185,8 +181,12 @@ class ProvidersSchema(JSONWizard):
   provider_schemas: dict[str, ProviderSchema]
 
 def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs):
+  params = attributes_in_new.keys()
+  if "name" not in params:
+    params = ["name"] + list(params)
+  else:
+    params = list(params)
   # ensure name goes first
-  params = list(attributes_in_new.keys())
   def key(param):
     if param == "name":
       return ""
@@ -198,8 +198,8 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
   terraform_type = kwargs["terraform_type"]
   terraform_prefix = "data" if terraform_type == "data" else ""
   tf_attributes = list(attributes.keys())
-  if not has_native_name:
-    tf_attributes.remove("name")
+  #if not has_native_name:
+    #tf_attributes.remove("name")
   new_body = f"""{{
     jsonnetTfMetadata:: {{
       terraformObject:: '{library_name}',
@@ -210,7 +210,7 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
     }},
   }}"""
   new_parts = [f"new({params_str}):: (", new_body]
-  if not has_native_name or attributes_in_new["name"].is_readonly():
+  if not has_native_name or attributes["name"].is_readonly():
     params.remove("name")
   for param in params:
     fn_name = jsonnet_with_fn_name(param)
