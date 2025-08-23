@@ -200,15 +200,17 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
   tf_attributes = list(attributes.keys())
   #if not has_native_name:
     #tf_attributes.remove("name")
-  new_body = f"""{{
-    jsonnetTfMetadata:: {{
-      terraformObject:: '{library_name}',
-      terraformType:: '{terraform_type}',
-      terraformPrefix:: '{terraform_prefix}',
-      terraformName:: name,
-      terraformAttributes:: {tf_attributes},
-    }},
-  }}"""
+  new_body = "{}"
+  if name == kwargs["library_name"]:
+    new_body = f"""{{
+      jsonnetTfMetadata:: {{
+        terraformObject:: '{library_name}',
+        terraformType:: '{terraform_type}',
+        terraformPrefix:: '{terraform_prefix}',
+        terraformName:: name,
+        terraformAttributes:: {tf_attributes},
+      }},
+    }}"""
   new_parts = [f"new({params_str}):: (", new_body]
   if not has_native_name or attributes["name"].is_readonly():
     params.remove("name")
