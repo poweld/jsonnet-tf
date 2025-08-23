@@ -11,6 +11,7 @@ logger = logging.getLogger("tf-schema")
 
 RESERVED = set(["assert", "else", "error", "false", "for", "function", "if", "import", "importstr", "importbin", "in", "local", "null", "tailstrict", "then", "self", "super", "true"])
 SYMBOLS = set("{}[],.();")
+METADATA_FIELD = "jsonnetTfMetadata"
 
 class JsonnetGeneratorInterface(ABC):
   @abstractmethod
@@ -93,6 +94,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
   block_types: dict[str, BlockType] | None = None
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
+    is_library_top_level = name == kwargs["library_name"]
     attributes = self.attributes
     attributes_in_new = {
       name: attribute
@@ -101,35 +103,42 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
     }
     has_native_name = "name" in self.attributes
     new_fn = jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs)
-    attributes = ",\n".join([new_fn] + [
+    attributes = [new_fn] + [
       attribute.to_jsonnet(name, **kwargs)
       for name, attribute in self.attributes.items()
       if not attribute.is_readonly()
-    ])
+    ]
+    if is_library_top_level:
+      attributes.append(jsonnet_with_terraform_name())
+    attributes_str = ",\n".join(attributes)
     if self.block_types is not None:
       block_type_fns = [
+        # block types
         block_type.to_jsonnet(name, **kwargs)
         for name, block_type in self.block_types.items()
       ] + [
+        # with fns
         jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
         for name, block_type in self.block_types.items()
       ] + [
+        # with mixin fns
         jsonnet_with_fn_mixin(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
         for name, block_type in self.block_types.items()
         if self.block_types[name].nesting_mode in ["set", "list"]
       ]
+      # if is_library_top_level:
+      #   block_type_fns += [jsonnet_with_terraform_name()]
       block_types = ",\n".join(block_type_fns)
-      # TODO need to handle nesting_mode, which can be one of: single, list, set
     else:
       block_types = ""
     body_parts = ["local block = self"]
-    if len(attributes) > 0:
-      body_parts.append(attributes)
+    if len(attributes_str) > 0:
+      body_parts.append(attributes_str)
     if len(block_types) > 0:
       body_parts.append(block_types)
     body = ",\n".join(body_parts)
     # if the block is the main block for the library, keep it at the top level
-    if name == kwargs["library_name"]:
+    if is_library_top_level:
       return body
     else:
       # if a symbol is in the key, quote it
@@ -209,7 +218,7 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
   new_body_parts = []
   if is_library_top_level:
     metadata = f"""{{
-      jsonnetTfMetadata:: {{
+      {METADATA_FIELD}:: {{
         terraformObject:: '{library_name}',
         terraformType:: '{terraform_type}',
         terraformPrefix:: '{terraform_prefix}',
@@ -303,4 +312,11 @@ def jsonnet_with_fn_mixin(name, _conversion) -> str:
       {name}+: converted,
     }}
   )"""
+
+def jsonnet_with_terraform_name() -> str:
+  return f"""withTerraformName(value):: {{
+    {METADATA_FIELD}+:: {{
+      terraformName:: value,
+    }},
+  }}"""
 
