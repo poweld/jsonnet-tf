@@ -1,3 +1,4 @@
+import functools
 import logging
 import re
 
@@ -182,6 +183,7 @@ class ProvidersSchema(JSONWizard):
 
 def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs):
   is_library_top_level = name == kwargs["library_name"]
+  # TODO also a terraform_name which defaults to be = name? allows disambiguation on name collision
   params = attributes_in_new.keys()
   # top level new() functions require a name parameter for terraform metadata
   name_injected = False
@@ -194,10 +196,12 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
   def key(param):
     if param == "name":
       return ""
-    else:
-      return param
-  sorted(params, key=key)
+    return param
+  params = sorted(params, key=key)
   params_str = ", ".join(params)
+  if name == "okta_auth_server_policy":
+    logger.info(params)
+    logger.info(params_str)
   library_name = kwargs["library_name"]
   terraform_type = kwargs["terraform_type"]
   terraform_prefix = "data" if terraform_type == "data" else ""
