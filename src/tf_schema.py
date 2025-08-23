@@ -192,16 +192,15 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
     name_injected = True
   else:
     params = list(params)
+
   # ensure name goes first in param list
   def key(param):
     if param == "name":
       return ""
     return param
   params = sorted(params, key=key)
+
   params_str = ", ".join(params)
-  if name == "okta_auth_server_policy":
-    logger.info(params)
-    logger.info(params_str)
   library_name = kwargs["library_name"]
   terraform_type = kwargs["terraform_type"]
   terraform_prefix = "data" if terraform_type == "data" else ""
