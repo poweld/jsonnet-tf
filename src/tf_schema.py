@@ -181,12 +181,16 @@ class ProvidersSchema(JSONWizard):
   provider_schemas: dict[str, ProviderSchema]
 
 def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs):
+  is_library_top_level = name == kwargs["library_name"]
   params = attributes_in_new.keys()
-  if "name" not in params:
+  # top level new() functions require a name parameter for terraform metadata
+  name_injected = False
+  if "name" not in params and is_library_top_level:
     params = ["name"] + list(params)
+    name_injected = True
   else:
     params = list(params)
-  # ensure name goes first
+  # ensure name goes first in param list
   def key(param):
     if param == "name":
       return ""
@@ -198,26 +202,32 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
   terraform_type = kwargs["terraform_type"]
   terraform_prefix = "data" if terraform_type == "data" else ""
   tf_attributes = list(attributes.keys())
-  #if not has_native_name:
-    #tf_attributes.remove("name")
-  new_body = "{}"
-  if name == kwargs["library_name"]:
-    new_body = f"""{{
+
+  new_body_parts = []
+  if is_library_top_level:
+    metadata = f"""{{
       jsonnetTfMetadata:: {{
         terraformObject:: '{library_name}',
         terraformType:: '{terraform_type}',
         terraformPrefix:: '{terraform_prefix}',
         terraformName:: name,
         terraformAttributes:: {tf_attributes},
-      }},
+      }}
     }}"""
-  new_parts = [f"new({params_str}):: (", new_body]
-  if not has_native_name or attributes["name"].is_readonly():
-    params.remove("name")
-  for param in params:
+    new_body_parts.append(metadata)
+  else:
+    new_body_parts.append("{}")
+  if "name" in attributes.keys() and not "name" in attributes_in_new.keys():
+    # force the name call even if it wasn't required since we're passing it in
+    fn_name = jsonnet_with_fn_name("name")
+    new_body_parts.append(f"block.{fn_name}(name)")
+  for param in attributes_in_new.keys():
     fn_name = jsonnet_with_fn_name(param)
-    new_parts.append(f"+ block.{fn_name}({param})")
-  new_parts.append(")")
+    new_body_parts.append(f"block.{fn_name}({param})")
+
+  new_body = "\n+ ".join(new_body_parts)
+  # new_body = "\n".join(["{"] + new_body_parts + ["}"])
+  new_parts = [f"new({params_str}):: (", new_body, ")"]
   return "\n".join(new_parts)
 
 def auto_conversion(type, from_localvar, to_localvar):
