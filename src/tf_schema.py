@@ -7,7 +7,9 @@ and generating Jsonnet code.
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 import logging
+import os
 import re
+import subprocess
 from typing import Any, Dict, ForwardRef, List, Optional, TypeVar, Union
 
 from dataclass_wizard import JSONWizard
@@ -649,9 +651,6 @@ def generate_provider(
         provider_version: Provider version
         artifacts_dir: Directory to write output files to
     """
-    import os
-    import subprocess
-
     path = provider
     provider_dir = f"{artifacts_dir}/{path}"
     resource_dir = f"{provider_dir}/resource"
