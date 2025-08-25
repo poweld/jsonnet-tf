@@ -11,7 +11,7 @@ import logging
 import os
 import re
 import subprocess
-from typing import Any, Dict, List, Optional, TypeVar, Union
+from typing import Any, Dict, List, Optional, Union
 
 from dataclass_wizard import JSONWizard
 
@@ -46,9 +46,6 @@ SYMBOLS = set("{}[],.();")
 METADATA_FIELD = "jsonnetTfMetadata"
 TERRAFORM_NAME_PARAM = "terraformName"
 WITH_TERRAFORM_NAME_FN_NAME = "withTerraformName"
-
-# Type variables
-T = TypeVar("T")
 
 
 def camel_case(s: str) -> str:
