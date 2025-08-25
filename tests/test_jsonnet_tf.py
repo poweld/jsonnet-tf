@@ -8,7 +8,7 @@ import difflib
 from pathlib import Path
 
 
-def run_jsonnet_tf():
+def run_jsonnet_tf() -> bool:
     """Run the jsonnet-tf command to generate the output files."""
     # Clear the artifacts directory before running the command
     artifacts_dir = Path("artifacts")
@@ -23,12 +23,19 @@ def run_jsonnet_tf():
     shutil.copy("tests/input/schema.json", "artifacts/schema.json")
 
     # Run the jsonnet-tf command
-    result = subprocess.run([
-        "./jsonnet-tf",
-        "--provider", "okta/okta",
-        "--provider-version", "~> 5.3.0",
-        "--terraform-version", ">= 1.12.1"
-    ], capture_output=True, text=True)
+    result = subprocess.run(
+        [
+            "./jsonnet-tf",
+            "--provider",
+            "okta/okta",
+            "--provider-version",
+            "~> 5.3.0",
+            "--terraform-version",
+            ">= 1.12.1",
+        ],
+        capture_output=True,
+        text=True,
+    )
 
     if result.returncode != 0:
         print(f"Error running jsonnet-tf: {result.stderr}")
@@ -37,7 +44,9 @@ def run_jsonnet_tf():
     return True
 
 
-def compare_directories(dir1, dir2):
+def compare_directories(
+    dir1: str | Path, dir2: str | Path
+) -> tuple[list[str], list[str]]:
     """
     Compare two directories recursively and return list of differences.
     Returns a tuple of (missing_files, different_files)
@@ -67,23 +76,23 @@ def compare_directories(dir1, dir2):
     return missing_files, different_files
 
 
-def show_file_diff(expected_file, actual_file):
+def show_file_diff(expected_file: str, actual_file: str) -> str:
     """Show the differences between two files."""
-    with open(expected_file, 'r') as f1, open(actual_file, 'r') as f2:
+    with open(expected_file, "r") as f1, open(actual_file, "r") as f2:
         expected_lines = f1.readlines()
         actual_lines = f2.readlines()
 
     diff = difflib.unified_diff(
         expected_lines,
         actual_lines,
-        fromfile=f'expected/{os.path.basename(expected_file)}',
-        tofile=f'actual/{os.path.basename(actual_file)}',
+        fromfile=f"expected/{os.path.basename(expected_file)}",
+        tofile=f"actual/{os.path.basename(actual_file)}",
     )
 
-    return ''.join(diff)
+    return "".join(diff)
 
 
-def main():
+def main() -> int:
     """Run the end-to-end test for jsonnet-tf."""
     print("Running jsonnet-tf end-to-end test...")
 

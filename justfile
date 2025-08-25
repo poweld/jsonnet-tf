@@ -2,12 +2,12 @@
 
 # Run type checking
 type-check:
-    poetry run mypy --strict src/
+    poetry run mypy --strict src/ tests/
 
 # Run linting checks
 lint:
-    poetry run ruff format src/
-    poetry run ruff check --fix src/
+    poetry run ruff format src/ tests/
+    poetry run ruff check --fix src/ tests/
 
 # Run tests
 test:
