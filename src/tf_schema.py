@@ -218,13 +218,12 @@ class JsonnetGeneratorInterface(ABC):
 
     @abstractmethod
     def to_jsonnet(
-        self, name: Optional[str] = None, **kwargs
+        self, name: Optional[str] = None
     ) -> Union[Optional[str], Dict[str, Any]]:
         """Generate the jsonnet for the Terraform object.
 
         Args:
             name: Optional name for the generated code
-            **kwargs: Additional parameters for generation
 
         Returns:
             Generated Jsonnet code as string or dictionary structure
