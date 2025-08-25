@@ -224,9 +224,7 @@ class BlockType(JSONWizard):
     min_items: Optional[int] = None
     max_items: Optional[int] = None
 
-    def to_jsonnet(
-        self, name: str, library_name: str, terraform_type: str
-    ) -> Union[str, Dict[str, Any]]:
+    def to_jsonnet(self, name: str, library_name: str, terraform_type: str) -> str:
         """Generate Jsonnet code for this block type.
 
         Args:
@@ -259,7 +257,7 @@ class Attribute(JSONWizard):
         """
         return bool(self.computed and not (self.optional or self.required))
 
-    def to_jsonnet(self, name: str) -> Union[str, Dict[str, Any]]:
+    def to_jsonnet(self, name: str) -> str:
         """Generate Jsonnet code for this attribute.
 
         Args:
@@ -386,7 +384,7 @@ class Block(JSONWizard):
         name: str,
         library_name: str,
         terraform_type: str,
-    ) -> Union[str, Dict[str, Any]]:
+    ) -> str:
         """Generate Jsonnet code for this block.
 
         Args:
@@ -498,9 +496,7 @@ class Schema(JSONWizard):
     version: int  # Schema version, not the provider version
     block: Block
 
-    def to_jsonnet(
-        self, name: str, library_name: str, terraform_type: str
-    ) -> Union[str, Dict[str, Any]]:
+    def to_jsonnet(self, name: str, library_name: str, terraform_type: str) -> str:
         """Generate Jsonnet code for this schema.
 
         Args:
