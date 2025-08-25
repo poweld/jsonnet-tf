@@ -217,13 +217,12 @@ class JsonnetGeneratorInterface(ABC):
     """Interface for objects that can generate Jsonnet code."""
 
     @abstractmethod
-    def to_jsonnet(
-        self, name: Optional[str] = None
-    ) -> Union[Optional[str], Dict[str, Any]]:
+    def to_jsonnet(self, name: str, **kwargs) -> Union[str, Dict[str, Any]]:
         """Generate the jsonnet for the Terraform object.
 
         Args:
-            name: Optional name for the generated code
+            name: Name for the generated code
+            **kwargs: Additional parameters for generation
 
         Returns:
             Generated Jsonnet code as string or dictionary structure
@@ -240,7 +239,9 @@ class BlockType(JSONWizard, JsonnetGeneratorInterface):
     min_items: Optional[int] = None
     max_items: Optional[int] = None
 
-    def to_jsonnet(self, name: str, library_name: str, terraform_type: str) -> Union[Optional[str], Dict[str, Any]]:
+    def to_jsonnet(
+        self, name: str, library_name: str, terraform_type: str
+    ) -> Union[str, Dict[str, Any]]:
         """Generate Jsonnet code for this block type.
 
         Args:
@@ -273,7 +274,7 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
         """
         return self.computed and not (self.optional or self.required)
 
-    def to_jsonnet(self, name: str) -> Union[Optional[str], Dict[str, Any]]:
+    def to_jsonnet(self, name: str) -> Union[str, Dict[str, Any]]:
         """Generate Jsonnet code for this attribute.
 
         Args:
@@ -398,7 +399,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         name: str,
         library_name: str,
         terraform_type: str,
-    ) -> Union[Optional[str], Dict[str, Any]]:
+    ) -> Union[str, Dict[str, Any]]:
         """Generate Jsonnet code for this block.
 
         Args:
@@ -449,7 +450,9 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
                 output_name = block_name
 
                 # Use the mapped name for output
-                block_type_fns.append(block_type.to_jsonnet(output_name, library_name, terraform_type))
+                block_type_fns.append(
+                    block_type.to_jsonnet(output_name, library_name, terraform_type)
+                )
 
             # Add with functions
             for block_name, block_type in self.block_types.items():
@@ -500,15 +503,12 @@ class Schema(JSONWizard, JsonnetGeneratorInterface):
     block: Block
 
     def to_jsonnet(
-        self,
-        name: Optional[str] = None,
-        library_name: Optional[str] = None,
-        terraform_type: Optional[str] = None,
-    ) -> Union[Optional[str], Dict[str, Any]]:
+        self, name: str, library_name: str, terraform_type: str
+    ) -> Union[str, Dict[str, Any]]:
         """Generate Jsonnet code for this schema.
 
         Args:
-            name: Optional name for the generated code
+            name: Name for the generated code
             library_name: Name of the library
             terraform_type: Type of terraform resource (provider, resource, data)
 
@@ -531,8 +531,8 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
         name: str,
         source: str,
         version: str,
-        library_name: Optional[str] = None,
-    ) -> Union[Optional[str], Dict[str, Any]]:
+        library_name: str,
+    ) -> Union[str, Dict[str, Any]]:
         """Generate Jsonnet code for this provider schema.
 
         Args:
