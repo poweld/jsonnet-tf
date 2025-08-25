@@ -215,25 +215,9 @@ def jsonnet_with_fn_mixin(name: str, conversion: str) -> str:
   )"""
 
 
-class JsonnetGeneratorInterface(ABC):
-    """Interface for objects that can generate Jsonnet code."""
-
-    @abstractmethod
-    def to_jsonnet(self, name: str, **kwargs) -> Union[str, Dict[str, Any]]:
-        """Generate the jsonnet for the Terraform object.
-
-        Args:
-            name: Name for the generated code
-            **kwargs: Additional parameters for generation
-
-        Returns:
-            Generated Jsonnet code as string or dictionary structure
-        """
-        raise NotImplementedError("Subclasses must implement to_jsonnet")
-
 
 @dataclass
-class BlockType(JSONWizard, JsonnetGeneratorInterface):
+class BlockType(JSONWizard):
     """Represents a Terraform block type."""
 
     nesting_mode: str
@@ -258,7 +242,7 @@ class BlockType(JSONWizard, JsonnetGeneratorInterface):
 
 
 @dataclass
-class Attribute(JSONWizard, JsonnetGeneratorInterface):
+class Attribute(JSONWizard):
     """Represents a Terraform attribute."""
 
     type: Union[str, List[str]]
@@ -330,7 +314,7 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
 
 
 @dataclass
-class Block(JSONWizard, JsonnetGeneratorInterface):
+class Block(JSONWizard):
     """Represents a Terraform configuration block."""
 
     attributes: Optional[Dict[str, Attribute]] = None
@@ -508,7 +492,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
 
 
 @dataclass
-class Schema(JSONWizard, JsonnetGeneratorInterface):
+class Schema(JSONWizard):
     """Represents a Terraform schema."""
 
     version: int  # Schema version, not the provider version
@@ -533,7 +517,7 @@ class Schema(JSONWizard, JsonnetGeneratorInterface):
 
 
 @dataclass
-class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
+class ProviderSchema(JSONWizard):
     """Represents a Terraform provider schema."""
 
     provider: Schema
@@ -595,11 +579,7 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
 
 @dataclass
 class ProvidersSchema(JSONWizard):
-    """Root schema containing all provider schemas.
-
-    This class doesn't implement JsonnetGeneratorInterface because it's
-    the top level container that holds all schemas.
-    """
+    """Root schema containing all provider schemas."""
 
     class _(JSONWizard.Meta):
         recursive_classes = True
