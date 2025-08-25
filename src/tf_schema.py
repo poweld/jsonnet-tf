@@ -12,6 +12,8 @@ logger = logging.getLogger("tf-schema")
 RESERVED = set(["assert", "else", "error", "false", "for", "function", "if", "import", "importstr", "importbin", "in", "local", "null", "tailstrict", "then", "self", "super", "true"])
 SYMBOLS = set("{}[],.();")
 METADATA_FIELD = "jsonnetTfMetadata"
+TERRAFORM_NAME_PARAM = "terraformName"
+WITH_TERRAFORM_NAME_FN_NAME = "withTerraformName"
 
 class JsonnetGeneratorInterface(ABC):
   @abstractmethod
@@ -192,22 +194,20 @@ class ProvidersSchema(JSONWizard):
 
 def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs):
   is_library_top_level = name == kwargs["library_name"]
-  # TODO also a terraform_name which defaults to be = name? allows disambiguation on name collision
   params = attributes_in_new.keys()
-  # top level new() functions require a name parameter for terraform metadata
-  name_injected = False
-  if "name" not in params and is_library_top_level:
-    params = ["name"] + list(params)
-    name_injected = True
+  # top level new() functions require a terraform name parameter for terraform metadata
+  if is_library_top_level:
+    params = [TERRAFORM_NAME_PARAM] + list(params)
   else:
     params = list(params)
 
-  # ensure name goes first in param list
+  # ensure terraform name goes first in param list
   def key(param):
-    if param == "name":
+    if param == TERRAFORM_NAME_PARAM:
       return ""
     return param
   params = sorted(params, key=key)
+  params = [camel_case(param) for param in params]
 
   params_str = ", ".join(params)
   library_name = kwargs["library_name"]
@@ -222,7 +222,6 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
         terraformObject:: '{library_name}',
         terraformType:: '{terraform_type}',
         terraformPrefix:: '{terraform_prefix}',
-        terraformName:: name,
         terraformAttributes:: {tf_attributes},
       }}
     }}"""
@@ -233,7 +232,7 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
     # force the name call even if it wasn't required since we're passing it in
     fn_name = jsonnet_with_fn_name("name")
     new_body_parts.append(f"block.{fn_name}(name)")
-  for param in attributes_in_new.keys():
+  for param in params:
     fn_name = jsonnet_with_fn_name(param)
     new_body_parts.append(f"block.{fn_name}({param})")
 
@@ -314,7 +313,7 @@ def jsonnet_with_fn_mixin(name, _conversion) -> str:
   )"""
 
 def jsonnet_with_terraform_name() -> str:
-  return f"""withTerraformName(value):: {{
+  return f"""{WITH_TERRAFORM_NAME_FN_NAME}(value):: {{
     {METADATA_FIELD}+:: {{
       terraformName:: value,
     }},
