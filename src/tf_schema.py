@@ -3,14 +3,14 @@
 This module provides the core functionality for working with Terraform schemas
 and generating Jsonnet code.
 """
+from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 import logging
 import os
 import re
 import subprocess
-from typing import Any, Dict, ForwardRef, List, Optional, TypeVar, Union
+from typing import Any, Dict, List, Optional, TypeVar, Union
 
 from dataclass_wizard import JSONWizard
 
@@ -48,7 +48,6 @@ WITH_TERRAFORM_NAME_FN_NAME = "withTerraformName"
 
 # Type variables
 T = TypeVar("T")
-Block = ForwardRef("Block")
 
 
 def camel_case(s: str) -> str:
@@ -215,13 +214,12 @@ def jsonnet_with_fn_mixin(name: str, conversion: str) -> str:
   )"""
 
 
-
 @dataclass
 class BlockType(JSONWizard):
     """Represents a Terraform block type."""
 
     nesting_mode: str
-    block: "Block"  # Forward reference
+    block: Block
     min_items: Optional[int] = None
     max_items: Optional[int] = None
 
@@ -240,7 +238,6 @@ class BlockType(JSONWizard):
         """
         return self.block.to_jsonnet(name, library_name, terraform_type)
 
-
 @dataclass
 class Attribute(JSONWizard):
     """Represents a Terraform attribute."""
@@ -258,7 +255,7 @@ class Attribute(JSONWizard):
         Returns:
             True if the attribute is computed but not optional or required
         """
-        return self.computed and not (self.optional or self.required)
+        return bool(self.computed and not (self.optional or self.required))
 
     def to_jsonnet(self, name: str) -> Union[str, Dict[str, Any]]:
         """Generate Jsonnet code for this attribute.
@@ -348,7 +345,7 @@ class Block(JSONWizard):
             params = [TERRAFORM_NAME_PARAM] + params
 
         # Ensure terraform name goes first in param list
-        def key_fn(param):
+        def key_fn(param: str) -> str:
             if param == TERRAFORM_NAME_PARAM:
                 return ""
             return param
@@ -419,7 +416,7 @@ class Block(JSONWizard):
 
         # Generate attribute functions
         attributes_code = [new_fn] + [
-            attribute.to_jsonnet(name)
+            str(attribute.to_jsonnet(name))
             for name, attribute in attributes.items()
             if not attribute.is_readonly()
         ]
@@ -440,9 +437,10 @@ class Block(JSONWizard):
                 output_name = block_name
 
                 # Use the mapped name for output
-                block_type_fns.append(
-                    block_type.to_jsonnet(output_name, library_name, terraform_type)
+                block_type_result = block_type.to_jsonnet(
+                    output_name, library_name, terraform_type
                 )
+                block_type_fns.append(str(block_type_result))
 
             # Add with functions
             for block_name, block_type in self.block_types.items():
@@ -530,7 +528,7 @@ class ProviderSchema(JSONWizard):
         source: str,
         version: str,
         library_name: str,
-    ) -> Union[str, Dict[str, Any]]:
+    ) -> Dict[str, Any]:
         """Generate Jsonnet code for this provider schema.
 
         Args:
@@ -544,13 +542,14 @@ class ProviderSchema(JSONWizard):
         """
 
         # Generate provider code
+        provider_result = self.provider.to_jsonnet(
+            name, library_name=library_name, terraform_type="provider"
+        )
         provider = ",\n".join(
             [
                 f'version:: "{version}"',
                 f'source:: "{source}"',
-                self.provider.to_jsonnet(
-                    name, library_name=library_name, terraform_type="provider"
-                ),
+                str(provider_result),
             ]
         )
 
@@ -625,22 +624,27 @@ def generate_provider(
     # Write provider file
     with open(f"{provider_dir}/provider.libsonnet", "w") as f:
         f.write("{\n")
-        f.write(jsonnet_provider_schema["provider"])
+        provider_content = jsonnet_provider_schema.get("provider", "")
+        f.write(str(provider_content))
         f.write("\n}")
 
     # Write resource files
-    for name, resource in jsonnet_provider_schema["resource_schemas"].items():
-        with open(f"{resource_dir}/{name}.libsonnet", "w") as f:
-            f.write("{\n")
-            f.write(resource)
-            f.write("\n}")
+    resource_schemas = jsonnet_provider_schema.get("resource_schemas", {})
+    if isinstance(resource_schemas, dict):
+        for name, resource in resource_schemas.items():
+            with open(f"{resource_dir}/{name}.libsonnet", "w") as f:
+                f.write("{\n")
+                f.write(str(resource))
+                f.write("\n}")
 
     # Write data source files
-    for name, data_source in jsonnet_provider_schema["data_source_schemas"].items():
-        with open(f"{data_source_dir}/{name}.libsonnet", "w") as f:
-            f.write("{\n")
-            f.write(data_source)
-            f.write("\n}")
+    data_source_schemas = jsonnet_provider_schema.get("data_source_schemas", {})
+    if isinstance(data_source_schemas, dict):
+        for name, data_source in data_source_schemas.items():
+            with open(f"{data_source_dir}/{name}.libsonnet", "w") as f:
+                f.write("{\n")
+                f.write(str(data_source))
+                f.write("\n}")
 
     # Format files
     try:
