@@ -103,8 +103,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
       for name, attribute in attributes.items()
       if attribute.required
     }
-    has_native_name = "name" in self.attributes
-    new_fn = jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs)
+    new_fn = jsonnet_new_fn(name, attributes_in_new, attributes, **kwargs)
     attributes = [new_fn] + [
       attribute.to_jsonnet(name, **kwargs)
       for name, attribute in self.attributes.items()
@@ -192,7 +191,7 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs):
+def jsonnet_new_fn(name, attributes_in_new, attributes, **kwargs):
   is_library_top_level = name == kwargs["library_name"]
   params = attributes_in_new.keys()
   # top level new() functions require a terraform name parameter for terraform metadata
@@ -228,10 +227,6 @@ def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwarg
     new_body_parts.append(metadata)
   else:
     new_body_parts.append("{}")
-  if "name" in attributes.keys() and not "name" in attributes_in_new.keys():
-    # force the name call even if it wasn't required since we're passing it in
-    fn_name = jsonnet_with_fn_name("name")
-    new_body_parts.append(f"block.{fn_name}(name)")
   for param in params:
     fn_name = jsonnet_with_fn_name(param)
     new_body_parts.append(f"block.{fn_name}({param})")
