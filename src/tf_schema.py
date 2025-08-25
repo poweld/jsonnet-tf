@@ -3,6 +3,7 @@
 This module provides the core functionality for working with Terraform schemas
 and generating Jsonnet code.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -237,6 +238,7 @@ class BlockType(JSONWizard):
             Generated Jsonnet code
         """
         return self.block.to_jsonnet(name, library_name, terraform_type)
+
 
 @dataclass
 class Attribute(JSONWizard):
