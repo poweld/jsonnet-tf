@@ -87,7 +87,9 @@ def jsonnet_with_fn_mixin_name(name: str) -> str:
     return camel_case(f"with_{name}_mixin")
 
 
-def auto_conversion(type_spec: Union[str, List[str]], from_localvar: str, to_localvar: str) -> str:
+def auto_conversion(
+    type_spec: Union[str, List[str]], from_localvar: str, to_localvar: str
+) -> str:
     """Generate Jsonnet code to convert values based on type.
 
     Args:
@@ -283,7 +285,9 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
         Returns:
             Generated Jsonnet code
         """
-        _conversion = auto_conversion(self.type, from_localvar="value", to_localvar="converted")
+        _conversion = auto_conversion(
+            self.type, from_localvar="value", to_localvar="converted"
+        )
         _assertion = assertion(self.type, name, "converted")
         fn_name = jsonnet_with_fn_name(name)
         _description = description(self, fn_name)
@@ -415,7 +419,9 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
 
         # Get required attributes for new function
         attributes_in_new = {
-            name: attribute for name, attribute in attributes.items() if attribute.required
+            name: attribute
+            for name, attribute in attributes.items()
+            if attribute.required
         }
 
         # Generate new function
@@ -459,7 +465,9 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
                 output_name = block_name
 
                 conversion = auto_conversion(
-                    block_type.nesting_mode, from_localvar="value", to_localvar="converted"
+                    block_type.nesting_mode,
+                    from_localvar="value",
+                    to_localvar="converted",
                 )
                 block_type_fns.append(jsonnet_with_fn(output_name, conversion))
 
@@ -469,9 +477,13 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
                     output_name = block_name
 
                     conversion = auto_conversion(
-                        block_type.nesting_mode, from_localvar="value", to_localvar="converted"
+                        block_type.nesting_mode,
+                        from_localvar="value",
+                        to_localvar="converted",
                     )
-                    block_type_fns.append(jsonnet_with_fn_mixin(output_name, conversion))
+                    block_type_fns.append(
+                        jsonnet_with_fn_mixin(output_name, conversion)
+                    )
 
             block_types_code = ",\n".join(block_type_fns)
 
@@ -515,7 +527,9 @@ class Schema(JSONWizard, JsonnetGeneratorInterface):
         Returns:
             Generated Jsonnet code
         """
-        return self.block.to_jsonnet(name, library_name=library_name, terraform_type=terraform_type)
+        return self.block.to_jsonnet(
+            name, library_name=library_name, terraform_type=terraform_type
+        )
 
 
 @dataclass
@@ -558,13 +572,17 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
 
         # Generate resource schemas
         resource_schemas = {
-            name: resource_schema.to_jsonnet(name, library_name=name, terraform_type="resource")
+            name: resource_schema.to_jsonnet(
+                name, library_name=name, terraform_type="resource"
+            )
             for name, resource_schema in self.resource_schemas.items()
         }
 
         # Generate data source schemas
         data_source_schemas = {
-            name: data_source_schema.to_jsonnet(name, library_name=name, terraform_type="data")
+            name: data_source_schema.to_jsonnet(
+                name, library_name=name, terraform_type="data"
+            )
             for name, data_source_schema in self.data_source_schemas.items()
         }
 
@@ -647,7 +665,8 @@ def generate_provider(
     # Format files
     try:
         ps = subprocess.Popen(
-            ["find", f"{provider_dir}/", "-name", "*.*sonnet", "-print0"], stdout=subprocess.PIPE
+            ["find", f"{provider_dir}/", "-name", "*.*sonnet", "-print0"],
+            stdout=subprocess.PIPE,
         )
         subprocess.check_output(
             [

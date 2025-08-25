@@ -102,15 +102,21 @@ def get_providers_schema(
 
 @click.command()
 @click.option("--provider", required=True, help="The provider, e.g. hashicorp/aws")
-@click.option("--provider-version", required=True, help="The provider version, e.g. '~> 5.3.0'")
-@click.option("--terraform-version", required=True, help="The terraform version, e.g. '>= 1.12.1'")
+@click.option(
+    "--provider-version", required=True, help="The provider version, e.g. '~> 5.3.0'"
+)
+@click.option(
+    "--terraform-version", required=True, help="The terraform version, e.g. '>= 1.12.1'"
+)
 @click.option(
     "--force",
     is_flag=True,
     default=False,
     help="Force the downloading of the schema even if it already exists",
 )
-def main(provider: str, provider_version: str, terraform_version: str, force: bool) -> None:
+def main(
+    provider: str, provider_version: str, terraform_version: str, force: bool
+) -> None:
     """Generate Jsonnet files from Terraform provider schemas."""
     try:
         provider_source = provider
@@ -118,13 +124,22 @@ def main(provider: str, provider_version: str, terraform_version: str, force: bo
 
         # Get provider schemas
         providers_schema = get_providers_schema(
-            provider, provider_source, provider_version, terraform_version, ARTIFACTS_DIR, force
+            provider,
+            provider_source,
+            provider_version,
+            terraform_version,
+            ARTIFACTS_DIR,
+            force,
         )
 
         # Generate files for each provider
         for provider_path, provider_schema in providers_schema.provider_schemas.items():
             tf_schema.generate_provider(
-                provider_path, provider_schema, provider_source, provider_version, ARTIFACTS_DIR
+                provider_path,
+                provider_schema,
+                provider_source,
+                provider_version,
+                ARTIFACTS_DIR,
             )
     except Exception as e:
         logger.error(f"Error generating provider files: {e}")
