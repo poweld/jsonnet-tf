@@ -241,22 +241,18 @@ class BlockType(JSONWizard, JsonnetGeneratorInterface):
     min_items: Optional[int] = None
     max_items: Optional[int] = None
 
-    def to_jsonnet(
-        self, name: Optional[str] = None, **kwargs
-    ) -> Union[Optional[str], Dict[str, Any]]:
+    def to_jsonnet(self, name: str, library_name: str, terraform_type: str) -> Union[Optional[str], Dict[str, Any]]:
         """Generate Jsonnet code for this block type.
 
         Args:
-            name: Optional name for the generated code
-            **kwargs: Additional parameters for generation
+            name: Name for the generated code
+            library_name: Name of the library
+            terraform_type: Type of terraform resource (provider, resource, data)
 
         Returns:
             Generated Jsonnet code
         """
-        # TODO handle min/max_items
-        block_kwargs = kwargs.copy()
-        block_kwargs["is_block_type"] = True
-        return self.block.to_jsonnet(name, **block_kwargs)
+        return self.block.to_jsonnet(name, library_name, terraform_type)
 
 
 @dataclass
@@ -278,14 +274,11 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
         """
         return self.computed and not (self.optional or self.required)
 
-    def to_jsonnet(
-        self, name: Optional[str] = None, **kwargs
-    ) -> Union[Optional[str], Dict[str, Any]]:
+    def to_jsonnet(self, name: str) -> Union[Optional[str], Dict[str, Any]]:
         """Generate Jsonnet code for this attribute.
 
         Args:
             name: Name of the attribute
-            **kwargs: Additional parameters for generation
 
         Returns:
             Generated Jsonnet code
@@ -344,7 +337,8 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         name: str,
         attributes_in_new: Dict[str, Attribute],
         attributes: Dict[str, Attribute],
-        **kwargs,
+        library_name: str,
+        terraform_type: str,
     ) -> str:
         """Generate the 'new' function for this block.
 
@@ -352,12 +346,13 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
             name: Block name
             attributes_in_new: Attributes to include in new function
             attributes: All attributes
-            **kwargs: Additional parameters
+            library_name: Name of the library
+            terraform_type: Type of terraform resource (provider, resource, data)
 
         Returns:
             Generated 'new' function code
         """
-        is_library_top_level = name == kwargs.get("library_name")
+        is_library_top_level = name == library_name
         params = list(attributes_in_new.keys())
 
         # Top level new() functions require a terraform name parameter for terraform metadata
@@ -374,8 +369,6 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         params = [camel_case(param) for param in params]
 
         params_str = ", ".join(params)
-        library_name = kwargs.get("library_name", "")
-        terraform_type = kwargs.get("terraform_type", "")
         terraform_prefix = "data" if terraform_type == "data" else ""
         tf_attributes = list(attributes.keys())
 
@@ -402,18 +395,22 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         return "\n".join(new_parts)
 
     def to_jsonnet(
-        self, name: Optional[str] = None, **kwargs
+        self,
+        name: str,
+        library_name: str,
+        terraform_type: str,
     ) -> Union[Optional[str], Dict[str, Any]]:
         """Generate Jsonnet code for this block.
 
         Args:
             name: Block name
-            **kwargs: Additional parameters for generation
+            library_name: Name of the library
+            terraform_type: Type of terraform resource (provider, resource, data)
 
         Returns:
             Generated Jsonnet code
         """
-        is_library_top_level = name == kwargs.get("library_name")
+        is_library_top_level = name == library_name
         attributes = self.attributes or {}
 
         # Get required attributes for new function
@@ -422,11 +419,17 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         }
 
         # Generate new function
-        new_fn = self._generate_new_fn(name, attributes_in_new, attributes, **kwargs)
+        new_fn = self._generate_new_fn(
+            name,
+            attributes_in_new,
+            attributes,
+            library_name=library_name,
+            terraform_type=terraform_type,
+        )
 
         # Generate attribute functions
         attributes_code = [new_fn] + [
-            attribute.to_jsonnet(name, **kwargs)
+            attribute.to_jsonnet(name)
             for name, attribute in attributes.items()
             if not attribute.is_readonly()
         ]
@@ -447,7 +450,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
                 output_name = block_name
 
                 # Use the mapped name for output
-                block_type_fns.append(block_type.to_jsonnet(output_name, **kwargs))
+                block_type_fns.append(block_type.to_jsonnet(output_name, library_name, terraform_type))
 
             # Add with functions
             for block_name, block_type in self.block_types.items():
@@ -483,7 +486,6 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         if is_library_top_level:
             return body
         else:
-
             # Quote field name if it contains symbols
             if any(c in SYMBOLS for c in name):
                 return f"'{name}':: {{\n{body}\n}}"
@@ -499,18 +501,22 @@ class Schema(JSONWizard, JsonnetGeneratorInterface):
     block: Block
 
     def to_jsonnet(
-        self, name: Optional[str] = None, **kwargs
+        self,
+        name: Optional[str] = None,
+        library_name: Optional[str] = None,
+        terraform_type: Optional[str] = None,
     ) -> Union[Optional[str], Dict[str, Any]]:
         """Generate Jsonnet code for this schema.
 
         Args:
             name: Optional name for the generated code
-            **kwargs: Additional parameters for generation
+            library_name: Name of the library
+            terraform_type: Type of terraform resource (provider, resource, data)
 
         Returns:
             Generated Jsonnet code
         """
-        return self.block.to_jsonnet(name, **kwargs)
+        return self.block.to_jsonnet(name, library_name=library_name, terraform_type=terraform_type)
 
 
 @dataclass
@@ -522,26 +528,32 @@ class ProviderSchema(JSONWizard, JsonnetGeneratorInterface):
     data_source_schemas: Dict[str, Schema]
 
     def to_jsonnet(
-        self, name: Optional[str] = None, **kwargs
+        self,
+        name: str,
+        source: str,
+        version: str,
+        library_name: Optional[str] = None,
     ) -> Union[Optional[str], Dict[str, Any]]:
         """Generate Jsonnet code for this provider schema.
 
         Args:
-            name: Optional name for the generated code
-            **kwargs: Additional parameters for generation
+            name: Name for the generated code
+            source: Source of the provider
+            version: Version of the provider
+            library_name: Name of the library
 
         Returns:
             Dictionary containing provider, resource, and data source code
         """
-        provider_source = kwargs.get("provider_source", "")
-        provider_version = kwargs.get("provider_version", "")
 
         # Generate provider code
         provider = ",\n".join(
             [
-                f'version:: "{provider_version}"',
-                f'source:: "{provider_source}"',
-                self.provider.to_jsonnet(name, **kwargs, terraform_type="provider"),
+                f'version:: "{version}"',
+                f'source:: "{source}"',
+                self.provider.to_jsonnet(
+                    name, library_name=library_name, terraform_type="provider"
+                ),
             ]
         )
 
@@ -608,9 +620,9 @@ def generate_provider(
     # Generate code from schema
     jsonnet_provider_schema = provider_schema.to_jsonnet(
         provider,
+        source=provider_source,
+        version=provider_version,
         library_name=provider,
-        provider_source=provider_source,
-        provider_version=provider_version,
     )
 
     # Write provider file
