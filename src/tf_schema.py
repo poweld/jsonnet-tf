@@ -72,12 +72,6 @@ def jsonnet_with_fn_name(name: str) -> str:
     Returns:
         camelCase function name with "with_" prefix
     """
-    # Special case for backward compatibility
-    if name == "factor_sequence":
-        return "withFactorSequence"
-    elif name == "secondary_criteria":
-        return "withSecondaryCriteria"
-
     return camel_case(f"with_{name}")
 
 
@@ -90,12 +84,6 @@ def jsonnet_with_fn_mixin_name(name: str) -> str:
     Returns:
         camelCase function name with "with_" prefix and "_mixin" suffix
     """
-    # Special case for backward compatibility
-    if name == "factor_sequence":
-        return "withFactorSequenceMixin"
-    elif name == "secondary_criteria":
-        return "withSecondaryCriteriaMixin"
-
     return camel_case(f"with_{name}_mixin")
 
 
@@ -195,22 +183,12 @@ def jsonnet_with_fn(name: str, conversion: str) -> str:
     Returns:
         Jsonnet code for the 'with' function
     """
-    # For the okta_policy_rule_signon special case, we need to swap the function names
-    # and field names for factor_sequence and secondary_criteria
-    field_name = name
-    if name == "factor_sequence":
-        fn_name = "withSecondaryCriteria"
-        field_name = "secondary_criteria"
-    elif name == "secondary_criteria":
-        fn_name = "withFactorSequence"
-        field_name = "factor_sequence"
-    else:
-        fn_name = jsonnet_with_fn_name(name)
+    fn_name = jsonnet_with_fn_name(name)
 
     return f"""{fn_name}(value):: (
     {conversion}
     {{
-      {field_name}: value,
+      {name}: value,
     }}
   )"""
 
@@ -225,22 +203,12 @@ def jsonnet_with_fn_mixin(name: str, conversion: str) -> str:
     Returns:
         Jsonnet code for the 'with' mixin function
     """
-    # For the okta_policy_rule_signon special case, we need to swap the function names
-    # and field names for factor_sequence and secondary_criteria
-    field_name = name
-    if name == "factor_sequence":
-        fn_name = "withSecondaryCriteriaMixin"
-        field_name = "secondary_criteria"
-    elif name == "secondary_criteria":
-        fn_name = "withFactorSequenceMixin"
-        field_name = "factor_sequence"
-    else:
-        fn_name = jsonnet_with_fn_mixin_name(name)
+    fn_name = jsonnet_with_fn_mixin_name(name)
 
     return f"""{fn_name}(value):: (
     {conversion}
     {{
-      {field_name}+: converted,
+      {name}+: converted,
     }}
   )"""
 
@@ -371,12 +339,6 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
     attributes: Optional[Dict[str, Attribute]] = None
     block_types: Optional[Dict[str, BlockType]] = None
 
-    # Field name compatibility mapping for backward compatibility
-    FIELD_NAME_MAPPING = {
-        "secondary_criteria": "factor_sequence",
-        "factor_sequence": "secondary_criteria",
-    }
-
     def _generate_new_fn(
         self,
         name: str,
@@ -451,8 +413,6 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         Returns:
             Generated Jsonnet code
         """
-        # Special case handling for okta_policy_rule_signon resource
-        is_special_case = kwargs.get("library_name") == "okta_policy_rule_signon"
         is_library_top_level = name == kwargs.get("library_name")
         attributes = self.attributes or {}
 
@@ -482,24 +442,16 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         if self.block_types:
             block_type_fns = []
 
-            # Process block types with name compatibility mapping
+            # Process block types
             for block_name, block_type in self.block_types.items():
-                # Apply name mapping for backward compatibility
-                if is_special_case and block_name in self.FIELD_NAME_MAPPING:
-                    output_name = self.FIELD_NAME_MAPPING[block_name]
-                else:
-                    output_name = block_name
+                output_name = block_name
 
                 # Use the mapped name for output
                 block_type_fns.append(block_type.to_jsonnet(output_name, **kwargs))
 
             # Add with functions
             for block_name, block_type in self.block_types.items():
-                # Apply name mapping for backward compatibility
-                if is_special_case and block_name in self.FIELD_NAME_MAPPING:
-                    output_name = self.FIELD_NAME_MAPPING[block_name]
-                else:
-                    output_name = block_name
+                output_name = block_name
 
                 conversion = auto_conversion(
                     block_type.nesting_mode, from_localvar="value", to_localvar="converted"
@@ -509,11 +461,7 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
             # Add mixin functions for lists and sets
             for block_name, block_type in self.block_types.items():
                 if block_type.nesting_mode in ("set", "list"):
-                    # Apply name mapping for backward compatibility
-                    if is_special_case and block_name in self.FIELD_NAME_MAPPING:
-                        output_name = self.FIELD_NAME_MAPPING[block_name]
-                    else:
-                        output_name = block_name
+                    output_name = block_name
 
                     conversion = auto_conversion(
                         block_type.nesting_mode, from_localvar="value", to_localvar="converted"
@@ -535,9 +483,6 @@ class Block(JSONWizard, JsonnetGeneratorInterface):
         if is_library_top_level:
             return body
         else:
-            # Special case: if we're in the special case file and this is a known field that needs remapping
-            if is_special_case and name in self.FIELD_NAME_MAPPING:
-                name = self.FIELD_NAME_MAPPING[name]
 
             # Quote field name if it contains symbols
             if any(c in SYMBOLS for c in name):
