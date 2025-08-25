@@ -627,22 +627,24 @@ def generate_provider(
         f.write("\n}")
 
     # Write resource files
-    resource_schemas = jsonnet_provider_schema.get("resource_schemas", {})
-    if isinstance(resource_schemas, dict):
-        for name, resource in resource_schemas.items():
-            with open(f"{resource_dir}/{name}.libsonnet", "w") as f:
-                f.write("{\n")
-                f.write(str(resource))
-                f.write("\n}")
+    resource_schemas: dict[str, Any] = jsonnet_provider_schema.get(
+        "resource_schemas", {}
+    )
+    for name, resource in resource_schemas.items():
+        with open(f"{resource_dir}/{name}.libsonnet", "w") as f:
+            f.write("{\n")
+            f.write(str(resource))
+            f.write("\n}")
 
     # Write data source files
-    data_source_schemas = jsonnet_provider_schema.get("data_source_schemas", {})
-    if isinstance(data_source_schemas, dict):
-        for name, data_source in data_source_schemas.items():
-            with open(f"{data_source_dir}/{name}.libsonnet", "w") as f:
-                f.write("{\n")
-                f.write(str(data_source))
-                f.write("\n}")
+    data_source_schemas: dict[str, Any] = jsonnet_provider_schema.get(
+        "data_source_schemas", {}
+    )
+    for name, data_source in data_source_schemas.items():
+        with open(f"{data_source_dir}/{name}.libsonnet", "w") as f:
+            f.write("{\n")
+            f.write(str(data_source))
+            f.write("\n}")
 
     # Format files
     try:
