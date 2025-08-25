@@ -1,3 +1,4 @@
+import functools
 import logging
 import re
 
@@ -10,6 +11,9 @@ logger = logging.getLogger("tf-schema")
 
 RESERVED = set(["assert", "else", "error", "false", "for", "function", "if", "import", "importstr", "importbin", "in", "local", "null", "tailstrict", "then", "self", "super", "true"])
 SYMBOLS = set("{}[],.();")
+METADATA_FIELD = "jsonnetTfMetadata"
+TERRAFORM_NAME_PARAM = "terraformName"
+WITH_TERRAFORM_NAME_FN_NAME = "withTerraformName"
 
 class JsonnetGeneratorInterface(ABC):
   @abstractmethod
@@ -86,53 +90,56 @@ class Attribute(JSONWizard, JsonnetGeneratorInterface):
 
     return ",\n".join(fns)
 
-DEFAULT_NAME_ATTRIBUTE = Attribute("string", None, True, None, None, None)
-
 @dataclass
 class Block(JSONWizard, JsonnetGeneratorInterface):
   attributes: dict[str, Attribute] | None = None
   block_types: dict[str, BlockType] | None = None
 
   def to_jsonnet(self, name: Optional[str] = None, **kwargs) -> Optional[str] | dict:
-    # must have a name attribute for terraform rendering
-    attributes = { "name": DEFAULT_NAME_ATTRIBUTE, **self.attributes }
-    attributes["name"].required = True
+    is_library_top_level = name == kwargs["library_name"]
+    attributes = self.attributes
     attributes_in_new = {
       name: attribute
       for name, attribute in attributes.items()
       if attribute.required
     }
-    has_native_name = "name" in self.attributes
-    new_fn = jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs)
-    attributes = ",\n".join([new_fn] + [
+    new_fn = jsonnet_new_fn(name, attributes_in_new, attributes, **kwargs)
+    attributes = [new_fn] + [
       attribute.to_jsonnet(name, **kwargs)
       for name, attribute in self.attributes.items()
       if not attribute.is_readonly()
-    ])
+    ]
+    if is_library_top_level:
+      attributes.append(jsonnet_with_terraform_name())
+    attributes_str = ",\n".join(attributes)
     if self.block_types is not None:
       block_type_fns = [
+        # block types
         block_type.to_jsonnet(name, **kwargs)
         for name, block_type in self.block_types.items()
       ] + [
+        # with fns
         jsonnet_with_fn(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
         for name, block_type in self.block_types.items()
       ] + [
+        # with mixin fns
         jsonnet_with_fn_mixin(name, auto_conversion(block_type.nesting_mode, from_localvar="value", to_localvar="converted"))
         for name, block_type in self.block_types.items()
         if self.block_types[name].nesting_mode in ["set", "list"]
       ]
+      # if is_library_top_level:
+      #   block_type_fns += [jsonnet_with_terraform_name()]
       block_types = ",\n".join(block_type_fns)
-      # TODO need to handle nesting_mode, which can be one of: single, list, set
     else:
       block_types = ""
     body_parts = ["local block = self"]
-    if len(attributes) > 0:
-      body_parts.append(attributes)
+    if len(attributes_str) > 0:
+      body_parts.append(attributes_str)
     if len(block_types) > 0:
       body_parts.append(block_types)
     body = ",\n".join(body_parts)
     # if the block is the main block for the library, keep it at the top level
-    if name == kwargs["library_name"]:
+    if is_library_top_level:
       return body
     else:
       # if a symbol is in the key, quote it
@@ -184,38 +191,49 @@ class ProvidersSchema(JSONWizard):
   format_version: str
   provider_schemas: dict[str, ProviderSchema]
 
-def jsonnet_new_fn(name, attributes_in_new, attributes, has_native_name, **kwargs):
-  # ensure name goes first
-  params = list(attributes_in_new.keys())
+def jsonnet_new_fn(name, attributes_in_new, attributes, **kwargs):
+  is_library_top_level = name == kwargs["library_name"]
+  params = attributes_in_new.keys()
+  # top level new() functions require a terraform name parameter for terraform metadata
+  if is_library_top_level:
+    params = [TERRAFORM_NAME_PARAM] + list(params)
+  else:
+    params = list(params)
+
+  # ensure terraform name goes first in param list
   def key(param):
-    if param == "name":
+    if param == TERRAFORM_NAME_PARAM:
       return ""
-    else:
-      return param
-  sorted(params, key=key)
+    return param
+  params = sorted(params, key=key)
+  params = [camel_case(param) for param in params]
+
   params_str = ", ".join(params)
   library_name = kwargs["library_name"]
   terraform_type = kwargs["terraform_type"]
   terraform_prefix = "data" if terraform_type == "data" else ""
   tf_attributes = list(attributes.keys())
-  if not has_native_name:
-    tf_attributes.remove("name")
-  new_body = f"""{{
-    jsonnetTfMetadata:: {{
-      terraformObject:: '{library_name}',
-      terraformType:: '{terraform_type}',
-      terraformPrefix:: '{terraform_prefix}',
-      terraformName:: name,
-      terraformAttributes:: {tf_attributes},
-    }},
-  }}"""
-  new_parts = [f"new({params_str}):: (", new_body]
-  if not has_native_name:
-    params.remove("name")
+
+  new_body_parts = []
+  if is_library_top_level:
+    metadata = f"""{{
+      {METADATA_FIELD}:: {{
+        terraformObject:: '{library_name}',
+        terraformType:: '{terraform_type}',
+        terraformPrefix:: '{terraform_prefix}',
+        terraformAttributes:: {tf_attributes},
+      }}
+    }}"""
+    new_body_parts.append(metadata)
+  else:
+    new_body_parts.append("{}")
   for param in params:
     fn_name = jsonnet_with_fn_name(param)
-    new_parts.append(f"+ block.{fn_name}({param})")
-  new_parts.append(")")
+    new_body_parts.append(f"block.{fn_name}({param})")
+
+  new_body = "\n+ ".join(new_body_parts)
+  # new_body = "\n".join(["{"] + new_body_parts + ["}"])
+  new_parts = [f"new({params_str}):: (", new_body, ")"]
   return "\n".join(new_parts)
 
 def auto_conversion(type, from_localvar, to_localvar):
@@ -288,4 +306,11 @@ def jsonnet_with_fn_mixin(name, _conversion) -> str:
       {name}+: converted,
     }}
   )"""
+
+def jsonnet_with_terraform_name() -> str:
+  return f"""{WITH_TERRAFORM_NAME_FN_NAME}(value):: {{
+    {METADATA_FIELD}+:: {{
+      terraformName:: value,
+    }},
+  }}"""
 
