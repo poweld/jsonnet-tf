@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, brand_id, template_name):: (
+  new(terraformName, brandId, templateName):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_email_customization",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["body", "brand_id", "force_is_default", "id", "is_default", "language", "links", "subject", "template_name"],
       },
     }
-    + block.withBrandId(brand_id)
-    + block.withTemplateName(template_name)
+    + block.withTerraformName(terraformName)
+    + block.withBrandId(brandId)
+    + block.withTemplateName(templateName)
   ),
   "#withBody":: "The body of the customization",
   withBody(value):: (
@@ -69,4 +69,9 @@
       template_name: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

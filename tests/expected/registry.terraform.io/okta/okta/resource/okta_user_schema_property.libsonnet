@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name, index, title, type):: (
+  new(terraformName, index, title, type):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_user_schema_property",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["array_enum", "array_type", "description", "enum", "external_name", "external_namespace", "id", "index", "master", "max_length", "min_length", "pattern", "permissions", "required", "scope", "title", "type", "unique", "user_type"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withIndex(index)
     + block.withTitle(title)
     + block.withType(type)
@@ -181,18 +181,15 @@
       user_type: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
   array_one_of:: {
     local block = self,
-    new(name, const, title):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_user_schema_property",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["const", "title"],
-        },
-      }
+    new(const, title):: (
+      {}
       + block.withConst(const)
       + block.withTitle(title)
     ),
@@ -215,16 +212,8 @@
   },
   master_override_priority:: {
     local block = self,
-    new(name, value):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_user_schema_property",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["type", "value"],
-        },
-      }
+    new(value):: (
+      {}
       + block.withValue(value)
     ),
     withType(value):: (
@@ -244,16 +233,8 @@
   },
   one_of:: {
     local block = self,
-    new(name, const, title):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_user_schema_property",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["const", "title"],
-        },
-      }
+    new(const, title):: (
+      {}
       + block.withConst(const)
       + block.withTitle(title)
     ),

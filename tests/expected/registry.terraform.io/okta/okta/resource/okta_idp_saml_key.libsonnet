@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name, x5c):: (
+  new(terraformName, x5c):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_idp_saml_key",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["created", "expires_at", "id", "kid", "kty", "use", "x5c", "x5t_s256"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withX5c(x5c)
   ),
   withId(value):: (
@@ -35,4 +35,9 @@
       x5c+: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

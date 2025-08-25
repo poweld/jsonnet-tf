@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, primary_name, primary_user_id):: (
+  new(terraformName, primaryName, primaryUserId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_link_value",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["associated_user_ids", "id", "primary_name", "primary_user_id"],
       },
     }
-    + block.withPrimaryName(primary_name)
-    + block.withPrimaryUserId(primary_user_id)
+    + block.withTerraformName(terraformName)
+    + block.withPrimaryName(primaryName)
+    + block.withPrimaryUserId(primaryUserId)
   ),
   "#withAssociatedUserIds":: "Set of User IDs or login values of the users to be assigned the `associated` relationship.",
   withAssociatedUserIds(value):: (
@@ -52,4 +52,9 @@
       primary_user_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

@@ -1,18 +1,18 @@
 {
   local block = self,
-  new(name, answer, key, user_id):: (
+  new(terraformName, answer, key, userId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_user_factor_question",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["answer", "id", "key", "status", "text", "user_id"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withAnswer(answer)
     + block.withKey(key)
-    + block.withUserId(user_id)
+    + block.withUserId(userId)
   ),
   "#withAnswer":: "Security question answer. Note here that answer won't be set during the resource import.",
   withAnswer(value):: (
@@ -45,4 +45,9 @@
       user_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

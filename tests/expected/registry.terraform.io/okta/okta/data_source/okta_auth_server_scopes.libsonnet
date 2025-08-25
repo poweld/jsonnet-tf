@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, auth_server_id):: (
+  new(terraformName, authServerId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_auth_server_scopes",
         terraformType:: "data",
         terraformPrefix:: "data",
-        terraformName:: name,
         terraformAttributes:: ["auth_server_id", "id", "scopes"],
       },
     }
-    + block.withAuthServerId(auth_server_id)
+    + block.withTerraformName(terraformName)
+    + block.withAuthServerId(authServerId)
   ),
   "#withAuthServerId":: "Auth server ID",
   withAuthServerId(value):: (
@@ -27,4 +27,9 @@
       id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

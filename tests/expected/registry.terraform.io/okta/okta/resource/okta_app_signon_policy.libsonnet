@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, description):: (
+  new(terraformName, description, name):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_signon_policy",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "catch_all", "default_rule_id", "description", "id", "priority"],
+        terraformAttributes:: ["catch_all", "default_rule_id", "description", "id", "name", "priority"],
       },
     }
-    + block.withName(name)
+    + block.withTerraformName(terraformName)
     + block.withDescription(description)
+    + block.withName(name)
   ),
   "#withCatchAll":: "If false, the default rule of the policy is set access to `DENY`. Otherwise default behavior of the default rule is to leave access at `ALLOW`.  **WARNING** setting this attribute to false changes policy rule's default behavior. Use at your own risk. This is only applied during creation and does not affect import or update.",
   withCatchAll(value):: (
@@ -45,4 +45,9 @@
       priority: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

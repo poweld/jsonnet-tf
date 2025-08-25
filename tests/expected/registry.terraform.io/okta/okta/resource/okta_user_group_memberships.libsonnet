@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, groups, user_id):: (
+  new(terraformName, groups, userId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_user_group_memberships",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["groups", "id", "user_id"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withGroups(groups)
-    + block.withUserId(user_id)
+    + block.withUserId(userId)
   ),
   "#withGroups":: "The list of Okta group IDs which the user should have membership managed for.",
   withGroups(value):: (
@@ -44,4 +44,9 @@
       user_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

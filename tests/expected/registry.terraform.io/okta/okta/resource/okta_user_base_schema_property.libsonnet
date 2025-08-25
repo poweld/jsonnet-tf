@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name, index, title, type):: (
+  new(terraformName, index, title, type):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_user_base_schema_property",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["id", "index", "master", "pattern", "permissions", "required", "title", "type", "user_type"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withIndex(index)
     + block.withTitle(title)
     + block.withType(type)
@@ -85,4 +85,9 @@
       user_type: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

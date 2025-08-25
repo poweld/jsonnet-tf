@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, role_type, user_id):: (
+  new(terraformName, roleType, userId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_admin_role_targets",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["apps", "groups", "id", "role_id", "role_type", "user_id"],
       },
     }
-    + block.withRoleType(role_type)
-    + block.withUserId(user_id)
+    + block.withTerraformName(terraformName)
+    + block.withRoleType(roleType)
+    + block.withUserId(userId)
   ),
   "#withApps":: "List of app names (name represents set of app instances) or a combination of app name and app instance ID (like 'salesforce' or 'facebook.0oapsqQ6dv19pqyEo0g3')",
   withApps(value):: (
@@ -68,4 +68,9 @@
       user_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

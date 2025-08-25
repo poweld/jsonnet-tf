@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, provider_id):: (
+  new(terraformName, providerId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_factor",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["active", "id", "provider_id"],
       },
     }
-    + block.withProviderId(provider_id)
+    + block.withTerraformName(terraformName)
+    + block.withProviderId(providerId)
   ),
   "#withActive":: "Whether to activate the provider, by default, it is set to `true`.",
   withActive(value):: (
@@ -35,4 +35,9 @@
       provider_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

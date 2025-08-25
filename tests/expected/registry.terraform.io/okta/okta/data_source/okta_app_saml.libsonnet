@@ -1,16 +1,15 @@
 {
   local block = self,
-  new(name):: (
+  new(terraformName):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_saml",
         terraformType:: "data",
         terraformPrefix:: "data",
-        terraformName:: name,
-        terraformAttributes:: ["name", "accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "acs_endpoints", "active_only", "app_settings_json", "assertion_signed", "attribute_statements", "audience", "authn_context_class_ref", "auto_submit_toolbar", "default_relay_state", "destination", "digest_algorithm", "features", "groups", "hide_ios", "hide_web", "honor_force_authn", "id", "idp_issuer", "inline_hook_id", "key_id", "label", "label_prefix", "links", "recipient", "request_compressed", "response_signed", "saml_signed_request_enabled", "signature_algorithm", "single_logout_certificate", "single_logout_issuer", "single_logout_url", "skip_groups", "skip_users", "sp_issuer", "sso_url", "status", "subject_name_id_format", "subject_name_id_template", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type", "users"],
+        terraformAttributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "acs_endpoints", "active_only", "app_settings_json", "assertion_signed", "attribute_statements", "audience", "authn_context_class_ref", "auto_submit_toolbar", "default_relay_state", "destination", "digest_algorithm", "features", "groups", "hide_ios", "hide_web", "honor_force_authn", "id", "idp_issuer", "inline_hook_id", "key_id", "label", "label_prefix", "links", "name", "recipient", "request_compressed", "response_signed", "saml_signed_request_enabled", "signature_algorithm", "single_logout_certificate", "single_logout_issuer", "single_logout_url", "skip_groups", "skip_users", "sp_issuer", "sso_url", "status", "subject_name_id_format", "subject_name_id_template", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type", "users"],
       },
     }
-    + block.withName(name)
+    + block.withTerraformName(terraformName)
   ),
   "#withActiveOnly":: "Search only ACTIVE applications.",
   withActiveOnly(value):: (
@@ -44,14 +43,6 @@
       label_prefix: converted,
     }
   ),
-  "#withName":: "Name of application.",
-  withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
-    {
-      name: converted,
-    }
-  ),
   "#withRequestCompressed":: "Denotes whether the request is compressed or not.",
   withRequestCompressed(value):: (
     local converted = value;
@@ -76,4 +67,9 @@
       skip_users: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

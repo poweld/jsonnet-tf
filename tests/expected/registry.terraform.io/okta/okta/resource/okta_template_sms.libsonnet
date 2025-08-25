@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name, template, type):: (
+  new(terraformName, template, type):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_template_sms",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["id", "template", "type"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withTemplate(template)
     + block.withType(type)
   ),
@@ -36,18 +36,15 @@
       type: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
   translations:: {
     local block = self,
-    new(name, language, template):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_template_sms",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["language", "template"],
-        },
-      }
+    new(language, template):: (
+      {}
       + block.withLanguage(language)
       + block.withTemplate(template)
     ),

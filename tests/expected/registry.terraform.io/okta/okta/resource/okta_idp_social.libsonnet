@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name, scopes, type):: (
+  new(terraformName, name, scopes, type):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_idp_social",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "account_link_action", "account_link_group_include", "apple_kid", "apple_private_key", "apple_team_id", "authorization_binding", "authorization_url", "client_id", "client_secret", "deprovisioned_action", "groups_action", "groups_assignment", "groups_attribute", "groups_filter", "id", "issuer_mode", "max_clock_skew", "profile_master", "protocol_type", "provisioning_action", "scopes", "status", "subject_match_attribute", "subject_match_type", "suspended_action", "token_binding", "token_url", "trust_audience", "trust_issuer", "trust_kid", "trust_revocation", "trust_revocation_cache_lifetime", "type", "username_template"],
+        terraformAttributes:: ["account_link_action", "account_link_group_include", "apple_kid", "apple_private_key", "apple_team_id", "authorization_binding", "authorization_url", "client_id", "client_secret", "deprovisioned_action", "groups_action", "groups_assignment", "groups_attribute", "groups_filter", "id", "issuer_mode", "max_clock_skew", "name", "profile_master", "protocol_type", "provisioning_action", "scopes", "status", "subject_match_attribute", "subject_match_type", "suspended_action", "token_binding", "token_url", "trust_audience", "trust_issuer", "trust_kid", "trust_revocation", "trust_revocation_cache_lifetime", "type", "username_template"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withName(name)
     + block.withScopes(scopes)
     + block.withType(type)
@@ -253,4 +253,9 @@
       username_template: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

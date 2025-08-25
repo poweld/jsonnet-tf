@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name):: (
+  new(terraformName):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_security_notification_emails",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["id", "report_suspicious_activity_enabled", "send_email_for_factor_enrollment_enabled", "send_email_for_factor_reset_enabled", "send_email_for_new_device_enabled", "send_email_for_password_changed_enabled"],
       },
     }
+    + block.withTerraformName(terraformName)
   ),
   withId(value):: (
     local converted = value;
@@ -58,4 +58,9 @@
       send_email_for_password_changed_enabled: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

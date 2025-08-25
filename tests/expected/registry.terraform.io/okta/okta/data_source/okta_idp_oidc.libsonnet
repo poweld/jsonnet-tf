@@ -1,16 +1,15 @@
 {
   local block = self,
-  new(name):: (
+  new(terraformName):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_idp_oidc",
         terraformType:: "data",
         terraformPrefix:: "data",
-        terraformName:: name,
-        terraformAttributes:: ["name", "authorization_binding", "authorization_url", "client_id", "client_secret", "id", "issuer_mode", "issuer_url", "jwks_binding", "jwks_url", "max_clock_skew", "protocol_type", "scopes", "token_binding", "token_url", "type", "user_info_binding", "user_info_url"],
+        terraformAttributes:: ["authorization_binding", "authorization_url", "client_id", "client_secret", "id", "issuer_mode", "issuer_url", "jwks_binding", "jwks_url", "max_clock_skew", "name", "protocol_type", "scopes", "token_binding", "token_url", "type", "user_info_binding", "user_info_url"],
       },
     }
-    + block.withName(name)
+    + block.withTerraformName(terraformName)
   ),
   "#withId":: "Id of idp.",
   withId(value):: (
@@ -28,4 +27,9 @@
       name: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, key):: (
+  new(terraformName, key, name):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_authenticator",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "id", "key", "legacy_ignore_name", "provider_auth_port", "provider_host", "provider_hostname", "provider_instance_id", "provider_integration_key", "provider_json", "provider_secret_key", "provider_shared_secret", "provider_type", "provider_user_name_template", "settings", "status", "type"],
+        terraformAttributes:: ["id", "key", "legacy_ignore_name", "name", "provider_auth_port", "provider_host", "provider_hostname", "provider_instance_id", "provider_integration_key", "provider_json", "provider_secret_key", "provider_shared_secret", "provider_type", "provider_user_name_template", "settings", "status", "type"],
       },
     }
-    + block.withName(name)
+    + block.withTerraformName(terraformName)
     + block.withKey(key)
+    + block.withName(name)
   ),
   withId(value):: (
     local converted = value;
@@ -124,4 +124,9 @@
       status: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

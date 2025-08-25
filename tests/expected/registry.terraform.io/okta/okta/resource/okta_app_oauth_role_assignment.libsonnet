@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, client_id, type):: (
+  new(terraformName, clientId, type):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_oauth_role_assignment",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["client_id", "id", "label", "resource_set", "role", "status", "type"],
       },
     }
-    + block.withClientId(client_id)
+    + block.withTerraformName(terraformName)
+    + block.withClientId(clientId)
     + block.withType(type)
   ),
   "#withClientId":: "Client ID for the role to be assigned to",
@@ -45,4 +45,9 @@
       type: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

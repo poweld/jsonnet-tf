@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, admin_roles, user_id):: (
+  new(terraformName, adminRoles, userId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_user_admin_roles",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["admin_roles", "disable_notifications", "id", "user_id"],
       },
     }
-    + block.withAdminRoles(admin_roles)
-    + block.withUserId(user_id)
+    + block.withTerraformName(terraformName)
+    + block.withAdminRoles(adminRoles)
+    + block.withUserId(userId)
   ),
   "#withAdminRoles":: "The list of Okta user admin roles, e.g. `['APP_ADMIN', 'USER_ADMIN']` See [API Docs](https://developer.okta.com/docs/api/openapi/okta-management/guides/roles/#standard-roles).",
   withAdminRoles(value):: (
@@ -52,4 +52,9 @@
       user_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

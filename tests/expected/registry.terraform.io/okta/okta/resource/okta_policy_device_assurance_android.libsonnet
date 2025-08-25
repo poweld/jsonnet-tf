@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name):: (
+  new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_policy_device_assurance_android",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "created_by", "created_date", "disk_encryption_type", "id", "jailbreak", "last_update", "last_updated_by", "os_version", "platform", "screenlock_type", "secure_hardware_present"],
+        terraformAttributes:: ["created_by", "created_date", "disk_encryption_type", "id", "jailbreak", "last_update", "last_updated_by", "name", "os_version", "platform", "screenlock_type", "secure_hardware_present"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withName(name)
   ),
   "#withDiskEncryptionType":: "List of disk encryption type, can be `FULL`, `USER`",
@@ -76,4 +76,9 @@
       secure_hardware_present: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

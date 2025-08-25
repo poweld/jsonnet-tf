@@ -1,18 +1,18 @@
 {
   local block = self,
-  new(name, email, first_name, last_name, login):: (
+  new(terraformName, email, firstName, lastName, login):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_user",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["city", "cost_center", "country_code", "custom_profile_attributes", "custom_profile_attributes_to_ignore", "department", "display_name", "division", "email", "employee_number", "expire_password_on_create", "first_name", "honorific_prefix", "honorific_suffix", "id", "last_name", "locale", "login", "manager", "manager_id", "middle_name", "mobile_phone", "nick_name", "old_password", "organization", "password", "password_inline_hook", "postal_address", "preferred_language", "primary_phone", "profile_url", "raw_status", "recovery_answer", "recovery_question", "second_email", "skip_roles", "state", "status", "street_address", "timezone", "title", "user_type", "zip_code"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withEmail(email)
-    + block.withFirstName(first_name)
-    + block.withLastName(last_name)
+    + block.withFirstName(firstName)
+    + block.withLastName(lastName)
     + block.withLogin(login)
   ),
   "#withCity":: "User city",
@@ -358,18 +358,15 @@
       zip_code: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
   password_hash:: {
     local block = self,
-    new(name, algorithm, value):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_user",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["algorithm", "salt", "salt_order", "value", "work_factor"],
-        },
-      }
+    new(algorithm, value):: (
+      {}
       + block.withAlgorithm(algorithm)
       + block.withValue(value)
     ),

@@ -1,16 +1,15 @@
 {
   local block = self,
-  new(name, label):: (
+  new(terraformName, label):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_auto_login",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "admin_note", "app_links_json", "app_settings_json", "auto_submit_toolbar", "credentials_scheme", "enduser_note", "hide_ios", "hide_web", "id", "label", "logo", "logo_url", "preconfigured_app", "reveal_password", "shared_password", "shared_username", "sign_on_mode", "sign_on_redirect_url", "sign_on_url", "status", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type"],
+        terraformAttributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "admin_note", "app_links_json", "app_settings_json", "auto_submit_toolbar", "credentials_scheme", "enduser_note", "hide_ios", "hide_web", "id", "label", "logo", "logo_url", "name", "preconfigured_app", "reveal_password", "shared_password", "shared_username", "sign_on_mode", "sign_on_redirect_url", "sign_on_url", "status", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type"],
       },
     }
-    + block.withName(name)
+    + block.withTerraformName(terraformName)
     + block.withLabel(label)
   ),
   "#withAccessibilityErrorRedirectUrl":: "Custom error page URL",
@@ -124,14 +123,6 @@
       logo: converted,
     }
   ),
-  "#withName":: "Name of the app.",
-  withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
-    {
-      name: converted,
-    }
-  ),
   "#withPreconfiguredApp":: "Tells Okta to use an existing application in their application catalog, as opposed to a custom application.",
   withPreconfiguredApp(value):: (
     local converted = value;
@@ -220,18 +211,15 @@
       user_name_template_type: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
   timeouts:: {
     local block = self,
-    new(name):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_app_auto_login",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["create", "read", "update"],
-        },
-      }
+    new():: (
+      {}
     ),
     withCreate(value):: (
       local converted = value;

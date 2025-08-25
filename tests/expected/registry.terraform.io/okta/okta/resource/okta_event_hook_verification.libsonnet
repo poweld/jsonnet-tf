@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, event_hook_id):: (
+  new(terraformName, eventHookId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_event_hook_verification",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["event_hook_id", "id"],
       },
     }
-    + block.withEventHookId(event_hook_id)
+    + block.withTerraformName(terraformName)
+    + block.withEventHookId(eventHookId)
   ),
   "#withEventHookId":: "Event hook ID",
   withEventHookId(value):: (
@@ -27,4 +27,9 @@
       id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

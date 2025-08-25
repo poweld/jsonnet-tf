@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, app_id):: (
+  new(terraformName, appId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_metadata_saml",
         terraformType:: "data",
         terraformPrefix:: "data",
-        terraformName:: name,
         terraformAttributes:: ["app_id", "certificate", "entity_id", "http_post_binding", "http_redirect_binding", "id", "key_id", "metadata", "want_authn_requests_signed"],
       },
     }
-    + block.withAppId(app_id)
+    + block.withTerraformName(terraformName)
+    + block.withAppId(appId)
   ),
   "#withAppId":: "The application ID.",
   withAppId(value):: (
@@ -35,4 +35,9 @@
       key_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

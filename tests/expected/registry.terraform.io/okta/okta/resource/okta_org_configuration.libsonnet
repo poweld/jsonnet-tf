@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, company_name):: (
+  new(terraformName, companyName):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_org_configuration",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["address_1", "address_2", "billing_contact_user", "city", "company_name", "country", "end_user_support_help_url", "expires_at", "id", "logo", "opt_out_communication_emails", "phone_number", "postal_code", "state", "subdomain", "support_phone_number", "technical_contact_user", "website"],
       },
     }
-    + block.withCompanyName(company_name)
+    + block.withTerraformName(terraformName)
+    + block.withCompanyName(companyName)
   ),
   "#withAddress_1":: "Primary address of org",
   withAddress_1(value):: (
@@ -139,4 +139,9 @@
       website: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

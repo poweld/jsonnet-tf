@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name, type, version):: (
+  new(terraformName, name, type, version):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_inline_hook",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "auth", "channel", "channel_json", "id", "status", "type", "version"],
+        terraformAttributes:: ["auth", "channel", "channel_json", "id", "name", "status", "type", "version"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withName(name)
     + block.withType(type)
     + block.withVersion(version)
@@ -75,18 +75,15 @@
       version: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
   headers:: {
     local block = self,
-    new(name):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_inline_hook",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["key", "value"],
-        },
-      }
+    new():: (
+      {}
     ),
     withKey(value):: (
       local converted = value;

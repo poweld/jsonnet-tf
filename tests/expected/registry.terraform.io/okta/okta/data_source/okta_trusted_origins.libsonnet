@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name):: (
+  new(terraformName):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_trusted_origins",
         terraformType:: "data",
         terraformPrefix:: "data",
-        terraformName:: name,
         terraformAttributes:: ["filter", "id", "trusted_origins"],
       },
     }
+    + block.withTerraformName(terraformName)
   ),
   "#withFilter":: "Filter criteria. Filter value will be URL-encoded by the provider",
   withFilter(value):: (
@@ -26,4 +26,9 @@
       id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

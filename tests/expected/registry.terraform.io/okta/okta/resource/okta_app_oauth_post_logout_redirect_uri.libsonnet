@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, app_id, uri):: (
+  new(terraformName, appId, uri):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_oauth_post_logout_redirect_uri",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["app_id", "id", "uri"],
       },
     }
-    + block.withAppId(app_id)
+    + block.withTerraformName(terraformName)
+    + block.withAppId(appId)
     + block.withUri(uri)
   ),
   "#withAppId":: "OAuth application ID.",
@@ -36,4 +36,9 @@
       uri: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

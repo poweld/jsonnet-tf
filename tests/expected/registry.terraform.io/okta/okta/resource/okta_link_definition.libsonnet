@@ -1,21 +1,21 @@
 {
   local block = self,
-  new(name, associated_description, associated_name, associated_title, primary_description, primary_name, primary_title):: (
+  new(terraformName, associatedDescription, associatedName, associatedTitle, primaryDescription, primaryName, primaryTitle):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_link_definition",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["associated_description", "associated_name", "associated_title", "id", "primary_description", "primary_name", "primary_title"],
       },
     }
-    + block.withAssociatedDescription(associated_description)
-    + block.withAssociatedName(associated_name)
-    + block.withAssociatedTitle(associated_title)
-    + block.withPrimaryDescription(primary_description)
-    + block.withPrimaryName(primary_name)
-    + block.withPrimaryTitle(primary_title)
+    + block.withTerraformName(terraformName)
+    + block.withAssociatedDescription(associatedDescription)
+    + block.withAssociatedName(associatedName)
+    + block.withAssociatedTitle(associatedTitle)
+    + block.withPrimaryDescription(primaryDescription)
+    + block.withPrimaryName(primaryName)
+    + block.withPrimaryTitle(primaryTitle)
   ),
   "#withAssociatedDescription":: "Description of the associated relationship.",
   withAssociatedDescription(value):: (
@@ -72,4 +72,9 @@
       primary_title: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

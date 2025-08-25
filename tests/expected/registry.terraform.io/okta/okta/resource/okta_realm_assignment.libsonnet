@@ -1,18 +1,18 @@
 {
   local block = self,
-  new(name, profile_source_id, realm_id):: (
+  new(terraformName, name, profileSourceId, realmId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_realm_assignment",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "condition_expression", "id", "is_default", "priority", "profile_source_id", "realm_id", "status"],
+        terraformAttributes:: ["condition_expression", "id", "is_default", "name", "priority", "profile_source_id", "realm_id", "status"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withName(name)
-    + block.withProfileSourceId(profile_source_id)
-    + block.withRealmId(realm_id)
+    + block.withProfileSourceId(profileSourceId)
+    + block.withRealmId(realmId)
   ),
   "#withConditionExpression":: "Condition expression for the Realm Assignment in Okta Expression Language. Example: `user.profile.role =='Manager'` or `user.profile.state.contains('example')`.",
   withConditionExpression(value):: (
@@ -62,4 +62,9 @@
       status: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

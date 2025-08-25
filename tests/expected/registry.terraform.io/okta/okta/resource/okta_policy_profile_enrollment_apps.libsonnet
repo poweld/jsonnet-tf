@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, policy_id):: (
+  new(terraformName, policyId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_policy_profile_enrollment_apps",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["apps", "default_policy_id", "id", "policy_id"],
       },
     }
-    + block.withPolicyId(policy_id)
+    + block.withTerraformName(terraformName)
+    + block.withPolicyId(policyId)
   ),
   "#withApps":: "List of app IDs to be added to this policy",
   withApps(value):: (
@@ -43,4 +43,9 @@
       policy_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

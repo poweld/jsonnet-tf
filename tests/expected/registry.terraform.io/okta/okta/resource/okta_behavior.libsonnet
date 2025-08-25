@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name, type):: (
+  new(terraformName, name, type):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_behavior",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "id", "location_granularity_type", "number_of_authentications", "radius_from_location", "status", "type", "velocity"],
+        terraformAttributes:: ["id", "location_granularity_type", "name", "number_of_authentications", "radius_from_location", "status", "type", "velocity"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withName(name)
     + block.withType(type)
   ),
@@ -76,4 +76,9 @@
       velocity: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

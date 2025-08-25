@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, app_id, policy_id):: (
+  new(terraformName, appId, policyId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_access_policy_assignment",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["app_id", "id", "policy_id"],
       },
     }
-    + block.withAppId(app_id)
-    + block.withPolicyId(policy_id)
+    + block.withTerraformName(terraformName)
+    + block.withAppId(appId)
+    + block.withPolicyId(policyId)
   ),
   "#withAppId":: "The application ID; this value is immutable and can not be updated.",
   withAppId(value):: (
@@ -29,4 +29,9 @@
       policy_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

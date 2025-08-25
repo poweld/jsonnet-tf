@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, source_id, target_id):: (
+  new(terraformName, sourceId, targetId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_profile_mapping",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["always_apply", "delete_when_absent", "id", "source_id", "source_name", "source_type", "target_id", "target_name", "target_type"],
       },
     }
-    + block.withSourceId(source_id)
-    + block.withTargetId(target_id)
+    + block.withTerraformName(terraformName)
+    + block.withSourceId(sourceId)
+    + block.withTargetId(targetId)
   ),
   "#withAlwaysApply":: "Whether apply the changes to all users with this profile after updating or creating the these mappings.  \t~> **WARNING:**: 'always_apply' is incompatible with OAuth 2.0 authentication and will be ignored when using that type of authentication. \t~> **WARNING:** 'always_apply' makes use of an internal/private Okta API endpoint that could change without notice rendering this resource inoperable.",
   withAlwaysApply(value):: (
@@ -52,18 +52,15 @@
       target_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
   mappings:: {
     local block = self,
-    new(name, expression, id):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_profile_mapping",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["expression", "id", "push_status"],
-        },
-      }
+    new(expression, id):: (
+      {}
       + block.withExpression(expression)
       + block.withId(id)
     ),

@@ -1,26 +1,26 @@
 {
   local block = self,
-  new(name, authorization_binding, authorization_url, client_id, client_secret, issuer_url, jwks_binding, jwks_url, scopes, token_binding, token_url):: (
+  new(terraformName, authorizationBinding, authorizationUrl, clientId, clientSecret, issuerUrl, jwksBinding, jwksUrl, name, scopes, tokenBinding, tokenUrl):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_idp_oidc",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "account_link_action", "account_link_group_include", "authorization_binding", "authorization_url", "client_id", "client_secret", "deprovisioned_action", "filter", "groups_action", "groups_assignment", "groups_attribute", "groups_filter", "id", "issuer_mode", "issuer_url", "jwks_binding", "jwks_url", "max_clock_skew", "pkce_required", "profile_master", "protocol_type", "provisioning_action", "request_signature_algorithm", "request_signature_scope", "scopes", "status", "subject_match_attribute", "subject_match_type", "suspended_action", "token_binding", "token_url", "type", "user_info_binding", "user_info_url", "user_type_id", "username_template"],
+        terraformAttributes:: ["account_link_action", "account_link_group_include", "authorization_binding", "authorization_url", "client_id", "client_secret", "deprovisioned_action", "filter", "groups_action", "groups_assignment", "groups_attribute", "groups_filter", "id", "issuer_mode", "issuer_url", "jwks_binding", "jwks_url", "max_clock_skew", "name", "pkce_required", "profile_master", "protocol_type", "provisioning_action", "request_signature_algorithm", "request_signature_scope", "scopes", "status", "subject_match_attribute", "subject_match_type", "suspended_action", "token_binding", "token_url", "type", "user_info_binding", "user_info_url", "user_type_id", "username_template"],
       },
     }
+    + block.withTerraformName(terraformName)
+    + block.withAuthorizationBinding(authorizationBinding)
+    + block.withAuthorizationUrl(authorizationUrl)
+    + block.withClientId(clientId)
+    + block.withClientSecret(clientSecret)
+    + block.withIssuerUrl(issuerUrl)
+    + block.withJwksBinding(jwksBinding)
+    + block.withJwksUrl(jwksUrl)
     + block.withName(name)
-    + block.withAuthorizationBinding(authorization_binding)
-    + block.withAuthorizationUrl(authorization_url)
-    + block.withClientId(client_id)
-    + block.withClientSecret(client_secret)
-    + block.withIssuerUrl(issuer_url)
-    + block.withJwksBinding(jwks_binding)
-    + block.withJwksUrl(jwks_url)
     + block.withScopes(scopes)
-    + block.withTokenBinding(token_binding)
-    + block.withTokenUrl(token_url)
+    + block.withTokenBinding(tokenBinding)
+    + block.withTokenUrl(tokenUrl)
   ),
   "#withAccountLinkAction":: "Specifies the account linking action for an IdP user. Default: `AUTO`",
   withAccountLinkAction(value):: (
@@ -332,4 +332,9 @@
       username_template: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, group_id, users):: (
+  new(terraformName, groupId, users):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_group_memberships",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["group_id", "id", "track_all_users", "users"],
       },
     }
-    + block.withGroupId(group_id)
+    + block.withTerraformName(terraformName)
+    + block.withGroupId(groupId)
     + block.withUsers(users)
   ),
   "#withGroupId":: "ID of a Okta group.",
@@ -52,4 +52,9 @@
       users+: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

@@ -1,19 +1,19 @@
 {
   local block = self,
-  new(name, auth_server_id, grant_type_whitelist, policy_id, priority):: (
+  new(terraformName, authServerId, grantTypeWhitelist, name, policyId, priority):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_auth_server_policy_rule",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "access_token_lifetime_minutes", "auth_server_id", "grant_type_whitelist", "group_blacklist", "group_whitelist", "id", "inline_hook_id", "policy_id", "priority", "refresh_token_lifetime_minutes", "refresh_token_window_minutes", "scope_whitelist", "status", "system", "type", "user_blacklist", "user_whitelist"],
+        terraformAttributes:: ["access_token_lifetime_minutes", "auth_server_id", "grant_type_whitelist", "group_blacklist", "group_whitelist", "id", "inline_hook_id", "name", "policy_id", "priority", "refresh_token_lifetime_minutes", "refresh_token_window_minutes", "scope_whitelist", "status", "system", "type", "user_blacklist", "user_whitelist"],
       },
     }
+    + block.withTerraformName(terraformName)
+    + block.withAuthServerId(authServerId)
+    + block.withGrantTypeWhitelist(grantTypeWhitelist)
     + block.withName(name)
-    + block.withAuthServerId(auth_server_id)
-    + block.withGrantTypeWhitelist(grant_type_whitelist)
-    + block.withPolicyId(policy_id)
+    + block.withPolicyId(policyId)
     + block.withPriority(priority)
   ),
   "#withAccessTokenLifetimeMinutes":: "Lifetime of access token. Can be set to a value between 5 and 1440 minutes. Default is `60`.",
@@ -199,4 +199,9 @@
       user_whitelist+: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

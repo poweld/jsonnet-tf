@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name, origin, scopes):: (
+  new(terraformName, name, origin, scopes):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_trusted_origin",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "active", "id", "origin", "scopes"],
+        terraformAttributes:: ["active", "id", "name", "origin", "scopes"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withName(name)
     + block.withOrigin(origin)
     + block.withScopes(scopes)
@@ -61,4 +61,9 @@
       scopes+: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

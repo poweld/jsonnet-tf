@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name):: (
+  new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_policy_device_assurance_windows",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "created_by", "created_date", "disk_encryption_type", "id", "last_update", "last_updated_by", "os_version", "platform", "screenlock_type", "secure_hardware_present", "third_party_signal_providers", "tpsp_browser_version", "tpsp_builtin_dns_client_enabled", "tpsp_chrome_remote_desktop_app_blocked", "tpsp_crowd_strike_agent_id", "tpsp_crowd_strike_customer_id", "tpsp_device_enrollment_domain", "tpsp_disk_encrypted", "tpsp_key_trust_level", "tpsp_os_firewall", "tpsp_os_version", "tpsp_password_proctection_warning_trigger", "tpsp_realtime_url_check_mode", "tpsp_safe_browsing_protection_level", "tpsp_screen_lock_secured", "tpsp_secure_boot_enabled", "tpsp_site_isolation_enabled", "tpsp_third_party_blocking_enabled", "tpsp_windows_machine_domain", "tpsp_windows_user_domain"],
+        terraformAttributes:: ["created_by", "created_date", "disk_encryption_type", "id", "last_update", "last_updated_by", "name", "os_version", "platform", "screenlock_type", "secure_hardware_present", "third_party_signal_providers", "tpsp_browser_version", "tpsp_builtin_dns_client_enabled", "tpsp_chrome_remote_desktop_app_blocked", "tpsp_crowd_strike_agent_id", "tpsp_crowd_strike_customer_id", "tpsp_device_enrollment_domain", "tpsp_disk_encrypted", "tpsp_key_trust_level", "tpsp_os_firewall", "tpsp_os_version", "tpsp_password_proctection_warning_trigger", "tpsp_realtime_url_check_mode", "tpsp_safe_browsing_protection_level", "tpsp_screen_lock_secured", "tpsp_secure_boot_enabled", "tpsp_site_isolation_enabled", "tpsp_third_party_blocking_enabled", "tpsp_windows_machine_domain", "tpsp_windows_user_domain"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withName(name)
   ),
   "#withDiskEncryptionType":: "List of disk encryption type, can be `ALL_INTERNAL_VOLUMES`",
@@ -228,4 +228,9 @@
       tpsp_windows_user_domain: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

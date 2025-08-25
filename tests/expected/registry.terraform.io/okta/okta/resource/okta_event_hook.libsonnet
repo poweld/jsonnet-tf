@@ -1,18 +1,18 @@
 {
   local block = self,
-  new(name, channel, events):: (
+  new(terraformName, channel, events, name):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_event_hook",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "auth", "channel", "events", "id", "status"],
+        terraformAttributes:: ["auth", "channel", "events", "id", "name", "status"],
       },
     }
-    + block.withName(name)
+    + block.withTerraformName(terraformName)
     + block.withChannel(channel)
     + block.withEvents(events)
+    + block.withName(name)
   ),
   "#withAuth":: "Details of the endpoint the event hook will hit.    \t- 'version' - (Required) The version of the channel. The currently-supported version is '1.0.0'. \t- 'uri' - (Required) The URI the hook will hit. \t- 'type' - (Optional) The type of hook to trigger. Currently, the only supported type is 'HTTP'.",
   withAuth(value):: (
@@ -69,18 +69,15 @@
       status: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
   headers:: {
     local block = self,
-    new(name):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_event_hook",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["key", "value"],
-        },
-      }
+    new():: (
+      {}
     ),
     withKey(value):: (
       local converted = value;

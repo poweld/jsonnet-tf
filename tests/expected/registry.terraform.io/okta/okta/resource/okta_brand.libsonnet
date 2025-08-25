@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name):: (
+  new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_brand",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "agree_to_custom_privacy_policy", "brand_id", "custom_privacy_policy_url", "default_app_app_instance_id", "default_app_app_link_name", "default_app_classic_application_uri", "email_domain_id", "id", "is_default", "links", "locale", "remove_powered_by_okta"],
+        terraformAttributes:: ["agree_to_custom_privacy_policy", "brand_id", "custom_privacy_policy_url", "default_app_app_instance_id", "default_app_app_link_name", "default_app_classic_application_uri", "email_domain_id", "id", "is_default", "links", "locale", "name", "remove_powered_by_okta"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withName(name)
   ),
   "#withAgreeToCustomPrivacyPolicy":: "Is a required input flag with when changing custom_privacy_url, shouldn't be considered as a readable property",
@@ -84,4 +84,9 @@
       remove_powered_by_okta: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

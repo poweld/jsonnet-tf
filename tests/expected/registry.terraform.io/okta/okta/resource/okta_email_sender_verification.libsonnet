@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, sender_id):: (
+  new(terraformName, senderId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_email_sender_verification",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["id", "sender_id"],
       },
     }
-    + block.withSenderId(sender_id)
+    + block.withTerraformName(terraformName)
+    + block.withSenderId(senderId)
   ),
   withId(value):: (
     local converted = value;
@@ -27,4 +27,9 @@
       sender_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

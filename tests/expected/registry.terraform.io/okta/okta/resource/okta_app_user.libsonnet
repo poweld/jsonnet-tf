@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, app_id, user_id):: (
+  new(terraformName, appId, userId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_user",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["app_id", "has_shared_username", "id", "password", "profile", "retain_assignment", "user_id", "username"],
       },
     }
-    + block.withAppId(app_id)
-    + block.withUserId(user_id)
+    + block.withTerraformName(terraformName)
+    + block.withAppId(appId)
+    + block.withUserId(userId)
   ),
   "#withAppId":: "App to associate user with",
   withAppId(value):: (
@@ -68,4 +68,9 @@
       username: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

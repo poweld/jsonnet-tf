@@ -1,16 +1,15 @@
 {
   local block = self,
-  new(name, label):: (
+  new(terraformName, label):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_saml",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "acs_endpoints", "admin_note", "app_links_json", "app_settings_json", "assertion_signed", "audience", "authentication_policy", "authn_context_class_ref", "auto_submit_toolbar", "certificate", "default_relay_state", "destination", "digest_algorithm", "embed_url", "enduser_note", "entity_key", "entity_url", "features", "hide_ios", "hide_web", "honor_force_authn", "http_post_binding", "http_redirect_binding", "id", "idp_issuer", "implicit_assignment", "inline_hook_id", "key_id", "key_name", "key_years_valid", "keys", "label", "logo", "logo_url", "metadata", "metadata_url", "preconfigured_app", "recipient", "request_compressed", "response_signed", "saml_signed_request_enabled", "saml_version", "sign_on_mode", "signature_algorithm", "single_logout_certificate", "single_logout_issuer", "single_logout_url", "sp_issuer", "sso_url", "status", "subject_name_id_format", "subject_name_id_template", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type"],
+        terraformAttributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "acs_endpoints", "admin_note", "app_links_json", "app_settings_json", "assertion_signed", "audience", "authentication_policy", "authn_context_class_ref", "auto_submit_toolbar", "certificate", "default_relay_state", "destination", "digest_algorithm", "embed_url", "enduser_note", "entity_key", "entity_url", "features", "hide_ios", "hide_web", "honor_force_authn", "http_post_binding", "http_redirect_binding", "id", "idp_issuer", "implicit_assignment", "inline_hook_id", "key_id", "key_name", "key_years_valid", "keys", "label", "logo", "logo_url", "metadata", "metadata_url", "name", "preconfigured_app", "recipient", "request_compressed", "response_signed", "saml_signed_request_enabled", "saml_version", "sign_on_mode", "signature_algorithm", "single_logout_certificate", "single_logout_issuer", "single_logout_url", "sp_issuer", "sso_url", "status", "subject_name_id_format", "subject_name_id_template", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type"],
       },
     }
-    + block.withName(name)
+    + block.withTerraformName(terraformName)
     + block.withLabel(label)
   ),
   "#withAccessibilityErrorRedirectUrl":: "Custom error page URL",
@@ -236,14 +235,6 @@
       logo: converted,
     }
   ),
-  "#withName":: "Name of the app.",
-  withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
-    {
-      name: converted,
-    }
-  ),
   "#withPreconfiguredApp":: "Name of application from the Okta Integration Network. For instance 'slack'. If not included a custom app will be created.  If not provided the following arguments are required: 'sso_url' 'recipient' 'destination' 'audience' 'subject_name_id_template' 'subject_name_id_format' 'signature_algorithm' 'digest_algorithm' 'authn_context_class_ref'",
   withPreconfiguredApp(value):: (
     local converted = value;
@@ -396,18 +387,15 @@
       user_name_template_type: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
   acs_endpoints_indices:: {
     local block = self,
-    new(name, index, url):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_app_saml",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["index", "url"],
-        },
-      }
+    new(index, url):: (
+      {}
       + block.withIndex(index)
       + block.withUrl(url)
     ),
@@ -429,15 +417,7 @@
   attribute_statements:: {
     local block = self,
     new(name):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_app_saml",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["name", "filter_type", "filter_value", "namespace", "type", "values"],
-        },
-      }
+      {}
       + block.withName(name)
     ),
     "#withFilterType":: "Type of group attribute filter. Valid values are: `STARTS_WITH`, `EQUALS`, `CONTAINS`, or `REGEX`",
@@ -497,16 +477,8 @@
   },
   timeouts:: {
     local block = self,
-    new(name):: (
-      {
-        jsonnetTfMetadata:: {
-          terraformObject:: "okta_app_saml",
-          terraformType:: "resource",
-          terraformPrefix:: "",
-          terraformName:: name,
-          terraformAttributes:: ["create", "read", "update"],
-        },
-      }
+    new():: (
+      {}
     ),
     withCreate(value):: (
       local converted = value;

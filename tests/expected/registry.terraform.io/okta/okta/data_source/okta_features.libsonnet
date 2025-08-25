@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name):: (
+  new(terraformName):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_features",
         terraformType:: "data",
         terraformPrefix:: "data",
-        terraformName:: name,
         terraformAttributes:: ["features", "id", "label", "substring"],
       },
     }
+    + block.withTerraformName(terraformName)
   ),
   "#withLabel":: "Searches for features whose label or name property matches this value exactly. Case sensitive",
   withLabel(value):: (
@@ -27,4 +27,9 @@
       substring: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

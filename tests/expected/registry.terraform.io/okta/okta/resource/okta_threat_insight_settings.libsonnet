@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name, action):: (
+  new(terraformName, action):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_threat_insight_settings",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["action", "id", "network_excludes"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withAction(action)
   ),
   "#withAction":: "Specifies how Okta responds to authentication requests from suspicious IPs. Valid values are `none`, `audit`, or `block`. A value of `none` indicates that ThreatInsight is disabled. A value of `audit` indicates that Okta logs suspicious requests in the System Log. A value of `block` indicates that Okta logs suspicious requests in the System Log and blocks the requests.",
@@ -43,4 +43,9 @@
       network_excludes+: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

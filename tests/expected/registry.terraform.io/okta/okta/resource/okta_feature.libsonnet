@@ -1,17 +1,16 @@
 {
   local block = self,
-  new(name, feature_id):: (
+  new(terraformName, featureId):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_feature",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
-        terraformAttributes:: ["name", "description", "feature_id", "id", "life_cycle", "mode", "stage", "status", "type"],
+        terraformAttributes:: ["description", "feature_id", "id", "life_cycle", "mode", "name", "stage", "status", "type"],
       },
     }
-    + block.withName(name)
-    + block.withFeatureId(feature_id)
+    + block.withTerraformName(terraformName)
+    + block.withFeatureId(featureId)
   ),
   "#withFeatureId":: "Okta API for feature only reads and updates therefore the okta_feature resource needs to act as a quasi data source. Do this by setting feature_id",
   withFeatureId(value):: (
@@ -37,12 +36,9 @@
       mode: converted,
     }
   ),
-  "#withName":: "Name of the feature.",
-  withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
-    {
-      name: converted,
-    }
-  ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

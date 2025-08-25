@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name):: (
+  new(terraformName):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_org_support",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["expiration", "extend_by", "id", "status"],
       },
     }
+    + block.withTerraformName(terraformName)
   ),
   "#withExtendBy":: "Number of days the support should be extended by",
   withExtendBy(value):: (
@@ -26,4 +26,9 @@
       id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

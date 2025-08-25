@@ -1,16 +1,16 @@
 {
   local block = self,
-  new(name, app_id, issuer, scopes):: (
+  new(terraformName, appId, issuer, scopes):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_oauth_api_scope",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["app_id", "id", "issuer", "scopes"],
       },
     }
-    + block.withAppId(app_id)
+    + block.withTerraformName(terraformName)
+    + block.withAppId(appId)
     + block.withIssuer(issuer)
     + block.withScopes(scopes)
   ),
@@ -53,4 +53,9 @@
       scopes+: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

@@ -1,18 +1,18 @@
 {
   local block = self,
-  new(name, brand_id, recipients, template_name):: (
+  new(terraformName, brandId, recipients, templateName):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_email_template_settings",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["brand_id", "id", "recipients", "template_name"],
       },
     }
-    + block.withBrandId(brand_id)
+    + block.withTerraformName(terraformName)
+    + block.withBrandId(brandId)
     + block.withRecipients(recipients)
-    + block.withTemplateName(template_name)
+    + block.withTemplateName(templateName)
   ),
   "#withBrandId":: "The ID of the brand.",
   withBrandId(value):: (
@@ -38,4 +38,9 @@
       template_name: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

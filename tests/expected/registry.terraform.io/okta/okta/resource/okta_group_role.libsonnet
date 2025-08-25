@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, group_id, role_type):: (
+  new(terraformName, groupId, roleType):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_group_role",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["disable_notifications", "group_id", "id", "resource_set_id", "role_id", "role_type", "target_app_list", "target_group_list"],
       },
     }
-    + block.withGroupId(group_id)
-    + block.withRoleType(role_type)
+    + block.withTerraformName(terraformName)
+    + block.withGroupId(groupId)
+    + block.withRoleType(roleType)
   ),
   "#withDisableNotifications":: "When this setting is enabled, the admins won't receive any of the default Okta administrator emails. These admins also won't have access to contact Okta Support and open support cases on behalf of your org.",
   withDisableNotifications(value):: (
@@ -92,4 +92,9 @@
       target_group_list+: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

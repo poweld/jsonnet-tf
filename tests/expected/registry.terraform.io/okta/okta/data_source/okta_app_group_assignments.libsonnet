@@ -1,15 +1,15 @@
 {
   local block = self,
-  new(name, id):: (
+  new(terraformName, id):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_app_group_assignments",
         terraformType:: "data",
         terraformPrefix:: "data",
-        terraformName:: name,
         terraformAttributes:: ["groups", "id"],
       },
     }
+    + block.withTerraformName(terraformName)
     + block.withId(id)
   ),
   "#withId":: "ID of the Okta App being queried for groups",
@@ -20,4 +20,9 @@
       id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }

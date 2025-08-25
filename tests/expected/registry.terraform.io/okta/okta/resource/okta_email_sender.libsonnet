@@ -1,17 +1,17 @@
 {
   local block = self,
-  new(name, from_address, from_name, subdomain):: (
+  new(terraformName, fromAddress, fromName, subdomain):: (
     {
       jsonnetTfMetadata:: {
         terraformObject:: "okta_email_sender",
         terraformType:: "resource",
         terraformPrefix:: "",
-        terraformName:: name,
         terraformAttributes:: ["dns_records", "from_address", "from_name", "id", "status", "subdomain"],
       },
     }
-    + block.withFromAddress(from_address)
-    + block.withFromName(from_name)
+    + block.withTerraformName(terraformName)
+    + block.withFromAddress(fromAddress)
+    + block.withFromName(fromName)
     + block.withSubdomain(subdomain)
   ),
   "#withFromAddress":: "Email address to send from ",
@@ -45,4 +45,9 @@
       subdomain: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraformName:: value,
+    },
+  },
 }
