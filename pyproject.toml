@@ -2,20 +2,25 @@
 name = "jsonnet-tf-py"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Dave Powell",email = "poweld@gmail.com"}
-]
+authors = [{ name = "Dave Powell", email = "poweld@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "dataclass-wizard (>=0.35.0,<0.36.0)",
     "jsonnet (>=0.21.0,<0.22.0)",
-    "click (>=8.2.1,<9.0.0)"
+    "click (>=8.2.1,<9.0.0)",
 ]
 
 [tool.poetry]
-packages = [{include = "jsonnet_tf_py", from = "src"}]
+packages = [{ include = "src", from = "." }]
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.10"
+mypy = "^1.17.1"
+
+[[tool.mypy.overrides]]
+module = ["_jsonnet.*", "tf_schema"]
+ignore_missing_imports = true
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
