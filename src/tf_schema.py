@@ -416,7 +416,7 @@ class Block(JSONWizard):
 
         # Generate attribute functions
         attributes_code = [new_fn] + [
-            str(attribute.to_jsonnet(name))
+            attribute.to_jsonnet(name)
             for name, attribute in attributes.items()
             if not attribute.is_readonly()
         ]
@@ -437,10 +437,9 @@ class Block(JSONWizard):
                 output_name = block_name
 
                 # Use the mapped name for output
-                block_type_result = block_type.to_jsonnet(
-                    output_name, library_name, terraform_type
+                block_type_fns.append(
+                    block_type.to_jsonnet(output_name, library_name, terraform_type)
                 )
-                block_type_fns.append(str(block_type_result))
 
             # Add with functions
             for block_name, block_type in self.block_types.items():
