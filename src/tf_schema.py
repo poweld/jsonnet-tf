@@ -574,6 +574,32 @@ class ProviderSchema(JSONWizard):
             "data_source_schemas": data_source_schemas,
         }
 
+    def library_index(self) -> str:
+        index_parts = []
+        index_parts.append(f"provider:: import 'provider.libsonnet'")
+
+        resource_types = sorted(self.resource_schemas.keys())
+        resource_parts = [
+          f"%s:: import 'resource/{resource_type}.libsonnet'" % camel_case(resource_type)
+          for resource_type in resource_types
+        ]
+        resource = """resource:: {
+          %s
+        }""" % ",\n".join(resource_parts)
+        index_parts.append(resource)
+
+        data_source_types = sorted(self.data_source_schemas.keys())
+        data_source_parts = [
+          f"%s:: import 'data_source/{data_source_type}.libsonnet'" % camel_case(data_source_type)
+          for data_source_type in data_source_types
+        ]
+        data_source = """dataSource:: {
+          %s
+        }""" % ",\n".join(data_source_parts)
+        index_parts.append(data_source)
+
+        return ",\n".join(index_parts)
+
 
 @dataclass
 class ProvidersSchema(JSONWizard):
@@ -646,6 +672,15 @@ def generate_provider(
             f.write("{\n")
             f.write(str(data_source))
             f.write("\n}")
+
+    # Write index file
+    index: str = provider_schema.library_index()
+    provider_name = provider.split("/")[-1]
+    index_path = f"{provider_dir}/{provider_name}.libsonnet"
+    with open(index_path, "w") as f:
+        f.write("{\n")
+        f.write(index)
+        f.write("\n}")
 
     # Format files
     try:
