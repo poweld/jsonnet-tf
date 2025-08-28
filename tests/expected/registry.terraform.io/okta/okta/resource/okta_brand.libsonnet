@@ -85,4 +85,11 @@
       remove_powered_by_okta: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
 }

@@ -68,4 +68,11 @@
       time_step: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
 }

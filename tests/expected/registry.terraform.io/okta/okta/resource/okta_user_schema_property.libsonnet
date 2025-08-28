@@ -182,6 +182,13 @@
       user_type: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   array_one_of:: {
     local block = self,
     new(const, title):: (

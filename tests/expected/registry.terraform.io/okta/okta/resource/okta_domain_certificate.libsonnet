@@ -63,4 +63,11 @@
       type: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
 }

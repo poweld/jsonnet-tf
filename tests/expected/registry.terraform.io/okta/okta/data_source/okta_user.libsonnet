@@ -59,6 +59,13 @@
       user_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   search:: {
     local block = self,
     new():: (

@@ -21,6 +21,13 @@
       brand_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   content_security_policy_setting:: {
     local block = self,
     new():: (

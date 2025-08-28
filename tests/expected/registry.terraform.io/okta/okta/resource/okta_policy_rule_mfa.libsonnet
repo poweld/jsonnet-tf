@@ -116,6 +116,13 @@
       users_excluded+: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   app_exclude:: {
     local block = self,
     new(type):: (

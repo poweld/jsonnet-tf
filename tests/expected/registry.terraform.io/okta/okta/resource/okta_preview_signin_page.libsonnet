@@ -39,6 +39,13 @@
       widget_version: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   content_security_policy_setting:: {
     local block = self,
     new():: (

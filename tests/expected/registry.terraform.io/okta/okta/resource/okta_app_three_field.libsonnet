@@ -242,6 +242,13 @@
       username_selector: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   timeouts:: {
     local block = self,
     new():: (

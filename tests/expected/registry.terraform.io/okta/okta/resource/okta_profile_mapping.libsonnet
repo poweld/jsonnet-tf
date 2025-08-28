@@ -53,6 +53,13 @@
       target_id: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   mappings:: {
     local block = self,
     new(expression, id):: (

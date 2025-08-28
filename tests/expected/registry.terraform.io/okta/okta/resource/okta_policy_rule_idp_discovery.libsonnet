@@ -108,6 +108,13 @@
       user_identifier_type: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   app_exclude:: {
     local block = self,
     new(type):: (

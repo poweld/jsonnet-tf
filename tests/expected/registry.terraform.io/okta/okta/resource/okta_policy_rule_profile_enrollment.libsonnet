@@ -101,6 +101,13 @@
       unknown_user_action: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   profile_attributes:: {
     local block = self,
     new(label, name):: (

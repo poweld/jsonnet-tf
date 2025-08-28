@@ -359,6 +359,13 @@
       zip_code: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   password_hash:: {
     local block = self,
     new(algorithm, value):: (

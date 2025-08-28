@@ -45,6 +45,7 @@ RESERVED = set(
 SYMBOLS = set("{}[],.();")
 METADATA_FIELD = "jsonnetTfMetadata"
 TERRAFORM_NAME_PARAM = "terraformName"
+WITH_TERRAFORM_NAME_FN_NAME = "withTerraformName"
 
 
 def camel_case(s: str) -> str:
@@ -156,6 +157,20 @@ def description(attribute: Any, fn_name: str) -> Optional[str]:
         _description = attribute.description.replace("\n", " ").replace('"', "'")
         return f'"#{fn_name}":: "{_description}"'
     return None
+
+
+def jsonnet_with_terraform_name() -> str:
+    """Generate the withTerraformName function code.
+    Returns:
+        Jsonnet code for the withTerraformName function
+    """
+    return f"""{WITH_TERRAFORM_NAME_FN_NAME}(value):: {{
+    {METADATA_FIELD}+:: {{
+        terraform+:: {{
+          name:: value,
+        }},
+    }},
+  }}"""
 
 
 def jsonnet_with_fn(name: str, conversion: str) -> str:
@@ -406,6 +421,10 @@ class Block(JSONWizard):
             for name, attribute in attributes.items()
             if not attribute.is_readonly()
         ]
+
+        # Add withTerraformName function for top-level blocks
+        if is_library_top_level:
+            attributes_code.append(jsonnet_with_terraform_name())
 
         attributes_str = ",\n".join(attributes_code)
 

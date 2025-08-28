@@ -413,6 +413,13 @@
       wildcard_redirect: converted,
     }
   ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
   groups_claim:: {
     local block = self,
     new(name, type, value):: (
