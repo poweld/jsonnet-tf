@@ -357,9 +357,11 @@ class Block(JSONWizard):
         if is_library_top_level:
             metadata = f"""{{
               {METADATA_FIELD}:: {{
-                object:: '{library_name}',
-                type:: '{terraform_type}',
-                attributes:: {tf_attributes},
+                terraform:: {{
+                    object:: '{library_name}',
+                    type:: '{terraform_type}',
+                    attributes:: {tf_attributes},
+                }},
               }}
             }}"""
             new_body_parts.append(metadata)
