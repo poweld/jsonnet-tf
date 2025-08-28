@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_captcha_org_wide_settings",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["captcha_id", "enabled_for", "id"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_captcha_org_wide_settings",
+          type:: "resource",
+          attributes:: ["captcha_id", "enabled_for", "id"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withCaptchaId":: "Array of pages that have CAPTCHA enabled. Valid values: `SSR`, `SSPR` and `SIGN_IN`.",
   withCaptchaId(value):: (
@@ -44,7 +45,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

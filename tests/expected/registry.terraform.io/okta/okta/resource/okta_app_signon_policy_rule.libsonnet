@@ -3,13 +3,14 @@
   new(terraformName, name, policyId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_signon_policy_rule",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["access", "chains", "constraints", "custom_expression", "device_assurances_included", "device_is_managed", "device_is_registered", "factor_mode", "groups_excluded", "groups_included", "id", "inactivity_period", "name", "network_connection", "network_excludes", "network_includes", "policy_id", "priority", "re_authentication_frequency", "risk_score", "status", "system", "type", "user_types_excluded", "user_types_included", "users_excluded", "users_included"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_app_signon_policy_rule",
+          type:: "resource",
+          attributes:: ["access", "chains", "constraints", "custom_expression", "device_assurances_included", "device_is_managed", "device_is_registered", "factor_mode", "groups_excluded", "groups_included", "id", "inactivity_period", "name", "network_connection", "network_excludes", "network_includes", "policy_id", "priority", "re_authentication_frequency", "risk_score", "status", "system", "type", "user_types_excluded", "user_types_included", "users_excluded", "users_included"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withName(name)
     + block.withPolicyId(policyId)
   ),
@@ -310,7 +311,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
   platform_include:: {

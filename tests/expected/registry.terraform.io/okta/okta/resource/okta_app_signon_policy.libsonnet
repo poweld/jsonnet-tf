@@ -3,13 +3,14 @@
   new(terraformName, description, name):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_signon_policy",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["catch_all", "default_rule_id", "description", "id", "name", "priority"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_app_signon_policy",
+          type:: "resource",
+          attributes:: ["catch_all", "default_rule_id", "description", "id", "name", "priority"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withDescription(description)
     + block.withName(name)
   ),
@@ -47,7 +48,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

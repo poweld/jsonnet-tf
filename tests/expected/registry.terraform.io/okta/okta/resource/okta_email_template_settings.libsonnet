@@ -3,13 +3,14 @@
   new(terraformName, brandId, recipients, templateName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_email_template_settings",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["brand_id", "id", "recipients", "template_name"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_email_template_settings",
+          type:: "resource",
+          attributes:: ["brand_id", "id", "recipients", "template_name"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withBrandId(brandId)
     + block.withRecipients(recipients)
     + block.withTemplateName(templateName)
@@ -40,7 +41,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

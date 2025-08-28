@@ -3,13 +3,14 @@
   new(terraformName, label, url):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_bookmark",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "admin_note", "app_links_json", "authentication_policy", "auto_submit_toolbar", "enduser_note", "hide_ios", "hide_web", "id", "label", "logo", "logo_url", "name", "request_integration", "sign_on_mode", "status", "url"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_app_bookmark",
+          type:: "resource",
+          attributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "admin_note", "app_links_json", "authentication_policy", "auto_submit_toolbar", "enduser_note", "hide_ios", "hide_web", "id", "label", "logo", "logo_url", "name", "request_integration", "sign_on_mode", "status", "url"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withLabel(label)
     + block.withUrl(url)
   ),
@@ -142,7 +143,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
   timeouts:: {

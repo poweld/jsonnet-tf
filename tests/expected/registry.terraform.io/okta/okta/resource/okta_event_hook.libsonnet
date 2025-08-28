@@ -3,13 +3,14 @@
   new(terraformName, channel, events, name):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_event_hook",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["auth", "channel", "events", "id", "name", "status"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_event_hook",
+          type:: "resource",
+          attributes:: ["auth", "channel", "events", "id", "name", "status"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withChannel(channel)
     + block.withEvents(events)
     + block.withName(name)
@@ -71,7 +72,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
   headers:: {

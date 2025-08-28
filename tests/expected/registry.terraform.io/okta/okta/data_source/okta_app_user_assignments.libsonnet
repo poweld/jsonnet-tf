@@ -3,13 +3,14 @@
   new(terraformName, id):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_user_assignments",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["id", "users"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_app_user_assignments",
+          type:: "data",
+          attributes:: ["id", "users"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withId(id)
   ),
   "#withId":: "ID of the Okta App being queried for groups",
@@ -22,7 +23,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

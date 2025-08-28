@@ -3,13 +3,14 @@
   new(terraformName, policyId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_policy_profile_enrollment_apps",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["apps", "default_policy_id", "id", "policy_id"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_policy_profile_enrollment_apps",
+          type:: "resource",
+          attributes:: ["apps", "default_policy_id", "id", "policy_id"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withPolicyId(policyId)
   ),
   "#withApps":: "List of app IDs to be added to this policy",
@@ -45,7 +46,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

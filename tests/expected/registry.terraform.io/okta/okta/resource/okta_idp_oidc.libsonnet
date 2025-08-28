@@ -3,13 +3,14 @@
   new(terraformName, authorizationBinding, authorizationUrl, clientId, clientSecret, issuerUrl, jwksBinding, jwksUrl, name, scopes, tokenBinding, tokenUrl):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_idp_oidc",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["account_link_action", "account_link_group_include", "authorization_binding", "authorization_url", "client_id", "client_secret", "deprovisioned_action", "filter", "groups_action", "groups_assignment", "groups_attribute", "groups_filter", "id", "issuer_mode", "issuer_url", "jwks_binding", "jwks_url", "max_clock_skew", "name", "pkce_required", "profile_master", "protocol_type", "provisioning_action", "request_signature_algorithm", "request_signature_scope", "scopes", "status", "subject_match_attribute", "subject_match_type", "suspended_action", "token_binding", "token_url", "type", "user_info_binding", "user_info_url", "user_type_id", "username_template"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_idp_oidc",
+          type:: "resource",
+          attributes:: ["account_link_action", "account_link_group_include", "authorization_binding", "authorization_url", "client_id", "client_secret", "deprovisioned_action", "filter", "groups_action", "groups_assignment", "groups_attribute", "groups_filter", "id", "issuer_mode", "issuer_url", "jwks_binding", "jwks_url", "max_clock_skew", "name", "pkce_required", "profile_master", "protocol_type", "provisioning_action", "request_signature_algorithm", "request_signature_scope", "scopes", "status", "subject_match_attribute", "subject_match_type", "suspended_action", "token_binding", "token_url", "type", "user_info_binding", "user_info_url", "user_type_id", "username_template"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAuthorizationBinding(authorizationBinding)
     + block.withAuthorizationUrl(authorizationUrl)
     + block.withClientId(clientId)
@@ -334,7 +335,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

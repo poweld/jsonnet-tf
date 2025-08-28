@@ -167,7 +167,9 @@ def jsonnet_with_terraform_name() -> str:
     """
     return f"""{WITH_TERRAFORM_NAME_FN_NAME}(value):: {{
     {METADATA_FIELD}+:: {{
-      terraformName:: value,
+        terraform+:: {{
+          name:: value,
+        }},
     }},
   }}"""
 
@@ -351,17 +353,18 @@ class Block(JSONWizard):
         params = [camel_case(param) for param in params]
 
         params_str = ", ".join(params)
-        terraform_prefix = "data" if terraform_type == "data" else ""
         tf_attributes = list(attributes.keys())
 
         new_body_parts = []
         if is_library_top_level:
             metadata = f"""{{
               {METADATA_FIELD}:: {{
-                terraformObject:: '{library_name}',
-                terraformType:: '{terraform_type}',
-                terraformPrefix:: '{terraform_prefix}',
-                terraformAttributes:: {tf_attributes},
+                terraform:: {{
+                    name:: {TERRAFORM_NAME_PARAM},
+                    object:: '{library_name}',
+                    type:: '{terraform_type}',
+                    attributes:: {tf_attributes},
+                }},
               }}
             }}"""
             new_body_parts.append(metadata)
@@ -369,6 +372,8 @@ class Block(JSONWizard):
             new_body_parts.append("{}")
 
         for param in params:
+            if param == TERRAFORM_NAME_PARAM:
+                continue
             fn_name = jsonnet_with_fn_name(param)
             new_body_parts.append(f"block.{fn_name}({param})")
 

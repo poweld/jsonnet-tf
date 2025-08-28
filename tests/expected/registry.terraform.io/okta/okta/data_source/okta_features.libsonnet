@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_features",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["features", "id", "label", "substring"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_features",
+          type:: "data",
+          attributes:: ["features", "id", "label", "substring"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withLabel":: "Searches for features whose label or name property matches this value exactly. Case sensitive",
   withLabel(value):: (
@@ -29,7 +30,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

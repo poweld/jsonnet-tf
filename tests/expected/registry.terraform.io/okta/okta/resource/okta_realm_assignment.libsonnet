@@ -3,13 +3,14 @@
   new(terraformName, name, profileSourceId, realmId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_realm_assignment",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["condition_expression", "id", "is_default", "name", "priority", "profile_source_id", "realm_id", "status"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_realm_assignment",
+          type:: "resource",
+          attributes:: ["condition_expression", "id", "is_default", "name", "priority", "profile_source_id", "realm_id", "status"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withName(name)
     + block.withProfileSourceId(profileSourceId)
     + block.withRealmId(realmId)
@@ -64,7 +65,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

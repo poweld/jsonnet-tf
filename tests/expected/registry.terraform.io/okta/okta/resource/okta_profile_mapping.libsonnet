@@ -3,13 +3,14 @@
   new(terraformName, sourceId, targetId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_profile_mapping",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["always_apply", "delete_when_absent", "id", "source_id", "source_name", "source_type", "target_id", "target_name", "target_type"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_profile_mapping",
+          type:: "resource",
+          attributes:: ["always_apply", "delete_when_absent", "id", "source_id", "source_name", "source_type", "target_id", "target_name", "target_type"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withSourceId(sourceId)
     + block.withTargetId(targetId)
   ),
@@ -54,7 +55,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
   mappings:: {

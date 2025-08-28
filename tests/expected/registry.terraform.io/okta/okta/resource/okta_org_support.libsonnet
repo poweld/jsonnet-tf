@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_org_support",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["expiration", "extend_by", "id", "status"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_org_support",
+          type:: "resource",
+          attributes:: ["expiration", "extend_by", "id", "status"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withExtendBy":: "Number of days the support should be extended by",
   withExtendBy(value):: (
@@ -28,7 +29,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

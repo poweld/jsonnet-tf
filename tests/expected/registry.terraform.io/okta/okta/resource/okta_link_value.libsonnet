@@ -3,13 +3,14 @@
   new(terraformName, primaryName, primaryUserId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_link_value",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["associated_user_ids", "id", "primary_name", "primary_user_id"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_link_value",
+          type:: "resource",
+          attributes:: ["associated_user_ids", "id", "primary_name", "primary_user_id"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withPrimaryName(primaryName)
     + block.withPrimaryUserId(primaryUserId)
   ),
@@ -54,7 +55,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

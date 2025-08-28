@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_group",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["delay_read_seconds", "description", "id", "include_users", "name", "type", "users"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_group",
+          type:: "data",
+          attributes:: ["delay_read_seconds", "description", "id", "include_users", "name", "type", "users"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withDelayReadSeconds":: "Force delay of the group read by N seconds. Useful when eventual consistency of group information needs to be allowed for; for instance, when group rules are known to have been applied.",
   withDelayReadSeconds(value):: (
@@ -53,7 +54,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

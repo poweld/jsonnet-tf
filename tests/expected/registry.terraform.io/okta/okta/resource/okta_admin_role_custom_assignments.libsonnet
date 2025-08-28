@@ -3,13 +3,14 @@
   new(terraformName, customRoleId, resourceSetId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_admin_role_custom_assignments",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["custom_role_id", "id", "members", "resource_set_id"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_admin_role_custom_assignments",
+          type:: "resource",
+          attributes:: ["custom_role_id", "id", "members", "resource_set_id"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withCustomRoleId(customRoleId)
     + block.withResourceSetId(resourceSetId)
   ),
@@ -54,7 +55,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

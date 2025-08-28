@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_users",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["compound_search_operator", "delay_read_seconds", "group_id", "id", "include_groups", "include_roles", "users"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_users",
+          type:: "data",
+          attributes:: ["compound_search_operator", "delay_read_seconds", "group_id", "id", "include_groups", "include_roles", "users"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withCompoundSearchOperator":: "Search operator used when joining multiple search clauses",
   withCompoundSearchOperator(value):: (
@@ -60,7 +61,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
   search:: {

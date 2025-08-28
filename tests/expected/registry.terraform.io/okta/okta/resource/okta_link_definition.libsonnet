@@ -3,13 +3,14 @@
   new(terraformName, associatedDescription, associatedName, associatedTitle, primaryDescription, primaryName, primaryTitle):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_link_definition",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["associated_description", "associated_name", "associated_title", "id", "primary_description", "primary_name", "primary_title"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_link_definition",
+          type:: "resource",
+          attributes:: ["associated_description", "associated_name", "associated_title", "id", "primary_description", "primary_name", "primary_title"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAssociatedDescription(associatedDescription)
     + block.withAssociatedName(associatedName)
     + block.withAssociatedTitle(associatedTitle)
@@ -74,7 +75,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

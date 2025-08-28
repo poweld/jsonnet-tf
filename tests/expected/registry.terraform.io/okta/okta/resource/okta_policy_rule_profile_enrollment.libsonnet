@@ -3,13 +3,14 @@
   new(terraformName, policyId, unknownUserAction):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_policy_rule_profile_enrollment",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["access", "email_verification", "enroll_authenticator_types", "id", "inline_hook_id", "name", "policy_id", "progressive_profiling_action", "status", "target_group_id", "ui_schema_id", "unknown_user_action"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_policy_rule_profile_enrollment",
+          type:: "resource",
+          attributes:: ["access", "email_verification", "enroll_authenticator_types", "id", "inline_hook_id", "name", "policy_id", "progressive_profiling_action", "status", "target_group_id", "ui_schema_id", "unknown_user_action"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withPolicyId(policyId)
     + block.withUnknownUserAction(unknownUserAction)
   ),
@@ -102,7 +103,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
   profile_attributes:: {

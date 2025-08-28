@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_trusted_origins",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["filter", "id", "trusted_origins"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_trusted_origins",
+          type:: "data",
+          attributes:: ["filter", "id", "trusted_origins"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withFilter":: "Filter criteria. Filter value will be URL-encoded by the provider",
   withFilter(value):: (
@@ -28,7 +29,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

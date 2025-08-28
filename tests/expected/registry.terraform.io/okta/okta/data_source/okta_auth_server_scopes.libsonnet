@@ -3,13 +3,14 @@
   new(terraformName, authServerId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_auth_server_scopes",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["auth_server_id", "id", "scopes"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_auth_server_scopes",
+          type:: "data",
+          attributes:: ["auth_server_id", "id", "scopes"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAuthServerId(authServerId)
   ),
   "#withAuthServerId":: "Auth server ID",
@@ -29,7 +30,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

@@ -3,13 +3,14 @@
   new(terraformName, domainIdOrName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_domain",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["certificate_source_type", "dns_records", "domain", "domain_id_or_name", "id", "public_certificate", "validation_status"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_domain",
+          type:: "data",
+          attributes:: ["certificate_source_type", "dns_records", "domain", "domain_id_or_name", "id", "public_certificate", "validation_status"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withDomainIdOrName(domainIdOrName)
   ),
   "#withDomainIdOrName":: "Brand ID",
@@ -22,7 +23,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

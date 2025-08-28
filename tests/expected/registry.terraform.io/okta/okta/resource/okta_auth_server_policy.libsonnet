@@ -3,13 +3,14 @@
   new(terraformName, authServerId, clientWhitelist, description, name, priority):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_auth_server_policy",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["auth_server_id", "client_whitelist", "description", "id", "name", "priority", "status"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_auth_server_policy",
+          type:: "resource",
+          attributes:: ["auth_server_id", "client_whitelist", "description", "id", "name", "priority", "status"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAuthServerId(authServerId)
     + block.withClientWhitelist(clientWhitelist)
     + block.withDescription(description)
@@ -81,7 +82,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

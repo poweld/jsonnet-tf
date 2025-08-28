@@ -3,13 +3,14 @@
   new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_policy_rule_mfa",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["enroll", "id", "name", "network_connection", "network_excludes", "network_includes", "policy_id", "priority", "status", "users_excluded"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_policy_rule_mfa",
+          type:: "resource",
+          attributes:: ["enroll", "id", "name", "network_connection", "network_excludes", "network_includes", "policy_id", "priority", "status", "users_excluded"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withName(name)
   ),
   "#withEnroll":: "When a user should be prompted for MFA. It can be `CHALLENGE`, `LOGIN`, or `NEVER`.",
@@ -117,7 +118,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
   app_exclude:: {

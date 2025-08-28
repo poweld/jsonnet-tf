@@ -3,13 +3,14 @@
   new(terraformName, brandId, pageContent, widgetVersion):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_preview_signin_page",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["brand_id", "id", "page_content", "widget_version"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_preview_signin_page",
+          type:: "resource",
+          attributes:: ["brand_id", "id", "page_content", "widget_version"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withBrandId(brandId)
     + block.withPageContent(pageContent)
     + block.withWidgetVersion(widgetVersion)
@@ -40,7 +41,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
   content_security_policy_setting:: {

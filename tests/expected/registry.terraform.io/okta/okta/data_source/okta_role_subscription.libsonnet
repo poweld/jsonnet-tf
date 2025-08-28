@@ -3,13 +3,14 @@
   new(terraformName, notificationType, roleType):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_role_subscription",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["id", "notification_type", "role_type", "status"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_role_subscription",
+          type:: "data",
+          attributes:: ["id", "notification_type", "role_type", "status"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withNotificationType(notificationType)
     + block.withRoleType(roleType)
   ),
@@ -38,7 +39,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

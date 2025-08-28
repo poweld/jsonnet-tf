@@ -3,13 +3,14 @@
   new(terraformName, providerId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_factor",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["active", "id", "provider_id"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_factor",
+          type:: "resource",
+          attributes:: ["active", "id", "provider_id"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withProviderId(providerId)
   ),
   "#withActive":: "Whether to activate the provider, by default, it is set to `true`.",
@@ -37,7 +38,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

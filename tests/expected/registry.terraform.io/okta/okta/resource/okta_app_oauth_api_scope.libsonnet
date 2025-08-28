@@ -3,13 +3,14 @@
   new(terraformName, appId, issuer, scopes):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_oauth_api_scope",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["app_id", "id", "issuer", "scopes"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_app_oauth_api_scope",
+          type:: "resource",
+          attributes:: ["app_id", "id", "issuer", "scopes"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAppId(appId)
     + block.withIssuer(issuer)
     + block.withScopes(scopes)
@@ -55,7 +56,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

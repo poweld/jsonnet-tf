@@ -3,13 +3,14 @@
   new(terraformName, userId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_user_security_questions",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["id", "questions", "user_id"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_user_security_questions",
+          type:: "data",
+          attributes:: ["id", "questions", "user_id"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withUserId(userId)
   ),
   withId(value):: (
@@ -29,7 +30,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

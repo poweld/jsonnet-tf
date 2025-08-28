@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_idp_metadata_saml",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["assertions_signed", "authn_request_signed", "encryption_certificate", "entity_id", "http_post_binding", "http_redirect_binding", "id", "idp_id", "metadata", "signing_certificate"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_idp_metadata_saml",
+          type:: "data",
+          attributes:: ["assertions_signed", "authn_request_signed", "encryption_certificate", "entity_id", "http_post_binding", "http_redirect_binding", "id", "idp_id", "metadata", "signing_certificate"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   withId(value):: (
     local converted = value;
@@ -28,7 +29,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

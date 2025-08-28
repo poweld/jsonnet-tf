@@ -3,13 +3,14 @@
   new(terraformName, appId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_group_assignments",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["app_id", "id"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_app_group_assignments",
+          type:: "resource",
+          attributes:: ["app_id", "id"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAppId(appId)
   ),
   "#withAppId":: "The ID of the application to assign a group to.",
@@ -29,7 +30,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
   group:: {

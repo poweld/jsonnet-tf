@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_everyone_group",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["description", "id", "include_users"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_everyone_group",
+          type:: "data",
+          attributes:: ["description", "id", "include_users"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   withId(value):: (
     local converted = value;
@@ -28,7 +29,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

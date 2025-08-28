@@ -3,13 +3,14 @@
   new(terraformName, eventHookId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_event_hook_verification",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["event_hook_id", "id"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_event_hook_verification",
+          type:: "resource",
+          attributes:: ["event_hook_id", "id"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withEventHookId(eventHookId)
   ),
   "#withEventHookId":: "Event hook ID",
@@ -29,7 +30,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

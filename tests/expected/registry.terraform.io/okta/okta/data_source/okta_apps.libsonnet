@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_apps",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["active_only", "apps", "include_non_deleted", "label", "label_prefix", "q", "use_optimization"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_apps",
+          type:: "data",
+          attributes:: ["active_only", "apps", "include_non_deleted", "label", "label_prefix", "q", "use_optimization"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withActiveOnly":: "Search only active applications.",
   withActiveOnly(value):: (
@@ -61,7 +62,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

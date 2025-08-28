@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_user_type",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["description", "display_name", "id", "name"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_user_type",
+          type:: "data",
+          attributes:: ["description", "display_name", "id", "name"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withId":: "ID of the user type to retrieve, conflicts with `name`.",
   withId(value):: (
@@ -29,7 +30,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

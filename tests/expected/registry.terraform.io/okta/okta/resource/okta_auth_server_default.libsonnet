@@ -3,13 +3,14 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_auth_server_default",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["audiences", "credentials_last_rotated", "credentials_next_rotation", "credentials_rotation_mode", "description", "id", "issuer", "issuer_mode", "kid", "name", "status"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_auth_server_default",
+          type:: "resource",
+          attributes:: ["audiences", "credentials_last_rotated", "credentials_next_rotation", "credentials_rotation_mode", "description", "id", "issuer", "issuer_mode", "kid", "name", "status"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withAudiences":: "The recipients that the tokens are intended for. This becomes the `aud` claim in an access token. Currently Okta only supports a single value here.",
   withAudiences(value):: (
@@ -76,7 +77,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

@@ -3,13 +3,14 @@
   new(terraformName, featureId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_feature",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["description", "feature_id", "id", "life_cycle", "mode", "name", "stage", "status", "type"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_feature",
+          type:: "resource",
+          attributes:: ["description", "feature_id", "id", "life_cycle", "mode", "name", "stage", "status", "type"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withFeatureId(featureId)
   ),
   "#withFeatureId":: "Okta API for feature only reads and updates therefore the okta_feature resource needs to act as a quasi data source. Do this by setting feature_id",
@@ -38,7 +39,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

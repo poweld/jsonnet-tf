@@ -3,13 +3,14 @@
   new(terraformName, appId, index, title, type):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_user_base_schema_property",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["app_id", "id", "index", "master", "pattern", "permissions", "required", "title", "type", "user_type"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_app_user_base_schema_property",
+          type:: "resource",
+          attributes:: ["app_id", "id", "index", "master", "pattern", "permissions", "required", "title", "type", "user_type"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAppId(appId)
     + block.withIndex(index)
     + block.withTitle(title)
@@ -96,7 +97,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }

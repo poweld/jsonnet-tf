@@ -3,13 +3,14 @@
   new(terraformName, name, origin, scopes):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_trusted_origin",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["active", "id", "name", "origin", "scopes"],
+        terraform:: {
+          name:: terraformName,
+          object:: "okta_trusted_origin",
+          type:: "resource",
+          attributes:: ["active", "id", "name", "origin", "scopes"],
+        },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withName(name)
     + block.withOrigin(origin)
     + block.withScopes(scopes)
@@ -63,7 +64,9 @@
   ),
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
-      terraformName:: value,
+      terraform+:: {
+        name:: value,
+      },
     },
   },
 }
