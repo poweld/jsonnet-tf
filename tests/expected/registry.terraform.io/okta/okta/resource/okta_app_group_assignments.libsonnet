@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAppId(appId)
   ),
   "#withAppId":: "The ID of the application to assign a group to.",

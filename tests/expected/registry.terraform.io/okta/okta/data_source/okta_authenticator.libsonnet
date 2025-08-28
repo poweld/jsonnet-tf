@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withId":: "ID of the authenticator.",
   withId(value):: (

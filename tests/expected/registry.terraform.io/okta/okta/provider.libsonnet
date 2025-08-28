@@ -13,7 +13,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withAccessToken":: "Bearer token granting privileges to Okta API.",
   withAccessToken(value):: (

@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withBrandId(brandId)
     + block.withTemplateName(templateName)
   ),

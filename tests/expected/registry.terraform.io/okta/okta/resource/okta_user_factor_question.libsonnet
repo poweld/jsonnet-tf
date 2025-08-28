@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAnswer(answer)
     + block.withKey(key)
     + block.withUserId(userId)

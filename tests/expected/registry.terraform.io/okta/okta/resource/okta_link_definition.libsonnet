@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAssociatedDescription(associatedDescription)
     + block.withAssociatedName(associatedName)
     + block.withAssociatedTitle(associatedTitle)

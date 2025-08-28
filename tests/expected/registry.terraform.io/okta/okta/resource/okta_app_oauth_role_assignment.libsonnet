@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withClientId(clientId)
     + block.withType(type)
   ),

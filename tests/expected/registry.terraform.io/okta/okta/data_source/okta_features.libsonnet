@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withLabel":: "Searches for features whose label or name property matches this value exactly. Case sensitive",
   withLabel(value):: (

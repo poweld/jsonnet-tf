@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withId":: "Id of idp.",
   withId(value):: (

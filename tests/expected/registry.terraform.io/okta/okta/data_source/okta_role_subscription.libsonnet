@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withNotificationType(notificationType)
     + block.withRoleType(roleType)
   ),

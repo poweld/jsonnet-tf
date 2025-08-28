@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withId":: "The id of the social idp to retrieve, conflicts with `name`.",
   withId(value):: (

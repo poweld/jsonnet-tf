@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAlias(alias)
     + block.withHost(host)
     + block.withPassword(password)

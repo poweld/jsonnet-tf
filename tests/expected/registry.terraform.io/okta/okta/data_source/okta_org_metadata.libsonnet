@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   domains:: {
     local block = self,

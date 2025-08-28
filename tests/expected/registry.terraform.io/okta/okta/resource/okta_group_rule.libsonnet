@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withExpressionValue(expressionValue)
     + block.withGroupAssignments(groupAssignments)
     + block.withName(name)

@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withActiveOnly":: "Search only active applications.",
   withActiveOnly(value):: (

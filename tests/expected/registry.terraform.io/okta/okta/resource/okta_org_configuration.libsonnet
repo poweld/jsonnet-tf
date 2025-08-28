@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withCompanyName(companyName)
   ),
   "#withAddress_1":: "Primary address of org",

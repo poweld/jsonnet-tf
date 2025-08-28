@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withIssuer(issuer)
     + block.withKid(kid)
     + block.withName(name)

@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withCertificate(certificate)
     + block.withCertificateChain(certificateChain)
     + block.withDomainId(domainId)

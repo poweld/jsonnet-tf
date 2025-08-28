@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withName(name)
   ),
   "#withDescription":: "Policy Description",

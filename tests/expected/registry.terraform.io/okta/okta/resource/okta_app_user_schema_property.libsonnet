@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAppId(appId)
     + block.withIndex(index)
     + block.withTitle(title)

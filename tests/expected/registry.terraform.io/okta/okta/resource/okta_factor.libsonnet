@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withProviderId(providerId)
   ),
   "#withActive":: "Whether to activate the provider, by default, it is set to `true`.",

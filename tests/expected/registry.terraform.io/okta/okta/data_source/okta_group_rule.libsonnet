@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withId":: "The ID of the Group Rule.",
   withId(value):: (

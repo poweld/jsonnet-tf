@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withFromAddress(fromAddress)
     + block.withFromName(fromName)
     + block.withSubdomain(subdomain)

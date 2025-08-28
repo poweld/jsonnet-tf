@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withX5c(x5c)
   ),
   withId(value):: (

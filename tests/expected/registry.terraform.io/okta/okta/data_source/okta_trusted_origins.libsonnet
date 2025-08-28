@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withFilter":: "Filter criteria. Filter value will be URL-encoded by the provider",
   withFilter(value):: (

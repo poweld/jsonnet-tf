@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withName(name)
   ),
   "#withJailbreak":: "Is the device jailbroken in the device assurance policy.",

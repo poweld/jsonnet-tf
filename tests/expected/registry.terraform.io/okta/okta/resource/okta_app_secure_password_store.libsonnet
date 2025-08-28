@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withLabel(label)
     + block.withPasswordField(passwordField)
     + block.withUrl(url)

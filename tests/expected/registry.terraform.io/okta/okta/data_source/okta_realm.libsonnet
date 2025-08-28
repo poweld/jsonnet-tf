@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withId":: "The id of the Okta Realm.",
   withId(value):: (

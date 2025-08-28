@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withEventHookId(eventHookId)
   ),
   "#withEventHookId":: "Event hook ID",

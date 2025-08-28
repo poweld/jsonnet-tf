@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withName(name)
   ),
   "#withEnroll":: "When a user should be prompted for MFA. It can be `CHALLENGE`, `LOGIN`, or `NEVER`.",

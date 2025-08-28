@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withPolicyId(policyId)
     + block.withUnknownUserAction(unknownUserAction)
   ),

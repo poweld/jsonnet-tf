@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAuthServerId(authServerId)
   ),
   "#withAuthServerId":: "Auth server ID",

@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withCompoundSearchOperator":: "Search operator used when joining multiple search clauses",
   withCompoundSearchOperator(value):: (

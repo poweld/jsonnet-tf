@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withId(id)
   ),
   "#withId":: "The ID of the SMTP server.",

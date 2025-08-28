@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withId(id)
   ),
   "#withId":: "ID of the Okta App being queried for groups",

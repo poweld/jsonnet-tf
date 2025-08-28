@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withBrandId(brandId)
   ),
   "#withBrandId":: "Brand ID",

@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withEmail(email)
     + block.withFirstName(firstName)
     + block.withLastName(lastName)

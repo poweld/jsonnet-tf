@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withChannel(channel)
     + block.withEvents(events)
     + block.withName(name)

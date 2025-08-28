@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withLabel(label)
   ),
   "#withAccessibilityErrorRedirectUrl":: "Custom error page URL",

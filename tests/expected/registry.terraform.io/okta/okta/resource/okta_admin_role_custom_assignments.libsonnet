@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withCustomRoleId(customRoleId)
     + block.withResourceSetId(resourceSetId)
   ),

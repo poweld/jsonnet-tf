@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withButtonSelector(buttonSelector)
     + block.withExtraFieldSelector(extraFieldSelector)
     + block.withExtraFieldValue(extraFieldValue)

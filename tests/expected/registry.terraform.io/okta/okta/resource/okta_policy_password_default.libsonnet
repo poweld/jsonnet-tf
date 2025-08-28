@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withCallRecovery":: "Enable or disable voice call recovery: ACTIVE or INACTIVE. Default: `INACTIVE`",
   withCallRecovery(value):: (

@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withGroupId(groupId)
     + block.withRoleType(roleType)
   ),

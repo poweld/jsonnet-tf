@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withId":: "ID of the user type to retrieve, conflicts with `name`.",
   withId(value):: (

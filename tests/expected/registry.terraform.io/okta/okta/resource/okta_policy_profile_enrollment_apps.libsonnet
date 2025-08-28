@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withPolicyId(policyId)
   ),
   "#withApps":: "List of app IDs to be added to this policy",

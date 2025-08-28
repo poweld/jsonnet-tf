@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withName":: "The name of the Okta Realm Assignment.",
   withName(value):: (

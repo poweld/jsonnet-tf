@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withSourceId(sourceId)
     + block.withTargetId(targetId)
   ),

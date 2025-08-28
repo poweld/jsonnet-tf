@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAuthorizationBinding(authorizationBinding)
     + block.withAuthorizationUrl(authorizationUrl)
     + block.withClientId(clientId)

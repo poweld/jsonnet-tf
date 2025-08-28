@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withUserId(userId)
   ),
   withId(value):: (

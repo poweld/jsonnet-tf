@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAuthorize(authorize)
     + block.withLogin(login)
   ),

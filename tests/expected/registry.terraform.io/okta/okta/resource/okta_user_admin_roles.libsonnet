@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAdminRoles(adminRoles)
     + block.withUserId(userId)
   ),

@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withEmailDomainId(emailDomainId)
   ),
   "#withEmailDomainId":: "Email domain ID",

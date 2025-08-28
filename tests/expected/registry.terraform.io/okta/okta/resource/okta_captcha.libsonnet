@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withName(name)
     + block.withSecretKey(secretKey)
     + block.withSiteKey(siteKey)

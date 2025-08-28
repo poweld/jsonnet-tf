@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withAuthServerId(authServerId)
     + block.withGrantTypeWhitelist(grantTypeWhitelist)
     + block.withName(name)

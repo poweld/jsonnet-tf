@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withPrimaryName(primaryName)
     + block.withPrimaryUserId(primaryUserId)
   ),

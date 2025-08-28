@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withDomainIdOrName(domainIdOrName)
   ),
   "#withDomainIdOrName":: "Brand ID",

@@ -45,7 +45,6 @@ RESERVED = set(
 SYMBOLS = set("{}[],.();")
 METADATA_FIELD = "jsonnetTfMetadata"
 TERRAFORM_NAME_PARAM = "terraformName"
-WITH_TERRAFORM_NAME_FN_NAME = "withTerraformName"
 
 
 def camel_case(s: str) -> str:
@@ -357,6 +356,8 @@ class Block(JSONWizard):
             new_body_parts.append("{}")
 
         for param in params:
+            if param == TERRAFORM_NAME_PARAM:
+                continue
             fn_name = jsonnet_with_fn_name(param)
             new_body_parts.append(f"block.{fn_name}({param})")
 

@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
   ),
   "#withExtendBy":: "Number of days the support should be extended by",
   withExtendBy(value):: (

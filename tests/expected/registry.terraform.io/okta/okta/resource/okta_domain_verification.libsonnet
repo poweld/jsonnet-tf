@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withDomainId(domainId)
   ),
   "#withDomainId":: "Domain's ID",

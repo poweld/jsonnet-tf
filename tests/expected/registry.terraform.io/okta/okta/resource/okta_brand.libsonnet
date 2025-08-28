@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withName(name)
   ),
   "#withAgreeToCustomPrivacyPolicy":: "Is a required input flag with when changing custom_privacy_url, shouldn't be considered as a readable property",

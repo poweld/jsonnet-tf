@@ -11,7 +11,6 @@
         },
       },
     }
-    + block.withTerraformName(terraformName)
     + block.withDescription(description)
     + block.withLabel(label)
   ),
