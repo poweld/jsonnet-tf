@@ -576,12 +576,13 @@ class ProviderSchema(JSONWizard):
 
     def library_index(self) -> str:
         index_parts = []
-        index_parts.append(f"provider:: import 'provider.libsonnet'")
+        index_parts.append("provider:: import 'provider.libsonnet'")
 
         resource_types = sorted(self.resource_schemas.keys())
         resource_parts = [
-          f"%s:: import 'resource/{resource_type}.libsonnet'" % camel_case(resource_type)
-          for resource_type in resource_types
+            f"%s:: import 'resource/{resource_type}.libsonnet'"
+            % camel_case(resource_type)
+            for resource_type in resource_types
         ]
         resource = """resource:: {
           %s
@@ -590,8 +591,9 @@ class ProviderSchema(JSONWizard):
 
         data_source_types = sorted(self.data_source_schemas.keys())
         data_source_parts = [
-          f"%s:: import 'data_source/{data_source_type}.libsonnet'" % camel_case(data_source_type)
-          for data_source_type in data_source_types
+            f"%s:: import 'data_source/{data_source_type}.libsonnet'"
+            % camel_case(data_source_type)
+            for data_source_type in data_source_types
         ]
         data_source = """dataSource:: {
           %s
