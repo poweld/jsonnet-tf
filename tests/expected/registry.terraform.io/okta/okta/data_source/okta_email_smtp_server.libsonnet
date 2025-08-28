@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_email_smtp_server",
           type:: "data",
           attributes:: ["alias", "enabled", "host", "id", "port", "username"],
@@ -21,9 +22,4 @@
       id: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

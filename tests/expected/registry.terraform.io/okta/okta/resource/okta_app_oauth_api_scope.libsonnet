@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_app_oauth_api_scope",
           type:: "resource",
           attributes:: ["app_id", "id", "issuer", "scopes"],
@@ -54,9 +55,4 @@
       scopes+: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

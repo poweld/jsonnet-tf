@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_apps",
           type:: "data",
           attributes:: ["active_only", "apps", "include_non_deleted", "label", "label_prefix", "q", "use_optimization"],
@@ -60,9 +61,4 @@
       use_optimization: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

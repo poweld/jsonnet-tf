@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_log_stream",
           type:: "resource",
           attributes:: ["id", "name", "status", "type"],
@@ -38,11 +39,6 @@
       type: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
   settings:: {
     local block = self,
     new():: (

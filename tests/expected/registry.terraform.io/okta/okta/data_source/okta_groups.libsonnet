@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_groups",
           type:: "data",
           attributes:: ["groups", "id", "limit", "q", "search", "type"],
@@ -51,9 +52,4 @@
       type: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

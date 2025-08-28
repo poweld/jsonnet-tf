@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_org_support",
           type:: "resource",
           attributes:: ["expiration", "extend_by", "id", "status"],
@@ -27,9 +28,4 @@
       id: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

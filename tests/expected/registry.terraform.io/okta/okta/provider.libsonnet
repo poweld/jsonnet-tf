@@ -6,6 +6,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "registry.terraform.io/okta/okta",
           type:: "provider",
           attributes:: ["access_token", "api_token", "backoff", "base_url", "client_id", "http_proxy", "log_level", "max_api_capacity", "max_retries", "max_wait_seconds", "min_wait_seconds", "org_name", "parallelism", "private_key", "private_key_id", "request_timeout", "scopes"],
@@ -158,9 +159,4 @@
       scopes+: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

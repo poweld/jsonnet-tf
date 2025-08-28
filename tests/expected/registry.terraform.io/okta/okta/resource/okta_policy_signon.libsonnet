@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_policy_signon",
           type:: "resource",
           attributes:: ["description", "groups_included", "id", "name", "priority", "status"],
@@ -68,9 +69,4 @@
       status: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

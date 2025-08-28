@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_app_group_assignment",
           type:: "resource",
           attributes:: ["app_id", "group_id", "id", "priority", "profile", "retain_assignment"],
@@ -61,11 +62,6 @@
       retain_assignment: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
   timeouts:: {
     local block = self,
     new():: (

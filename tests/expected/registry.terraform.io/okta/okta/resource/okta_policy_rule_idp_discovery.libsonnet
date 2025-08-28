@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_policy_rule_idp_discovery",
           type:: "resource",
           attributes:: ["id", "name", "network_connection", "network_excludes", "network_includes", "policy_id", "priority", "status", "user_identifier_attribute", "user_identifier_type"],
@@ -108,11 +109,6 @@
       user_identifier_type: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
   app_exclude:: {
     local block = self,
     new(type):: (

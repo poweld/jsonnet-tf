@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_template_sms",
           type:: "resource",
           attributes:: ["id", "template", "type"],
@@ -37,11 +38,6 @@
       type: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
   translations:: {
     local block = self,
     new(language, template):: (

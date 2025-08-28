@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_user_factor_question",
           type:: "resource",
           attributes:: ["answer", "id", "key", "status", "text", "user_id"],
@@ -46,9 +47,4 @@
       user_id: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

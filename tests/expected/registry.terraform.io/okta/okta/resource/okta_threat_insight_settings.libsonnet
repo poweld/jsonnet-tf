@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_threat_insight_settings",
           type:: "resource",
           attributes:: ["action", "id", "network_excludes"],
@@ -44,9 +45,4 @@
       network_excludes+: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

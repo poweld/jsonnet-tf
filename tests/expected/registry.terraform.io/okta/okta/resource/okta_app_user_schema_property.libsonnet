@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_app_user_schema_property",
           type:: "resource",
           attributes:: ["app_id", "array_enum", "array_type", "description", "enum", "external_name", "external_namespace", "id", "index", "master", "max_length", "min_length", "permissions", "required", "scope", "title", "type", "union", "unique", "user_type"],
@@ -191,11 +192,6 @@
       user_type: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
   array_one_of:: {
     local block = self,
     new(const, title):: (

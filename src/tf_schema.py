@@ -159,19 +159,6 @@ def description(attribute: Any, fn_name: str) -> Optional[str]:
     return None
 
 
-def jsonnet_with_terraform_name() -> str:
-    """Generate the withTerraformName function code.
-
-    Returns:
-        Jsonnet code for the withTerraformName function
-    """
-    return f"""{WITH_TERRAFORM_NAME_FN_NAME}(value):: {{
-    {METADATA_FIELD}+:: {{
-      terraformName:: value,
-    }},
-  }}"""
-
-
 def jsonnet_with_fn(name: str, conversion: str) -> str:
     """Generate a standard 'with' function for a field.
 
@@ -358,6 +345,7 @@ class Block(JSONWizard):
             metadata = f"""{{
               {METADATA_FIELD}:: {{
                 terraform:: {{
+                    name:: {TERRAFORM_NAME_PARAM},
                     object:: '{library_name}',
                     type:: '{terraform_type}',
                     attributes:: {tf_attributes},
@@ -417,10 +405,6 @@ class Block(JSONWizard):
             for name, attribute in attributes.items()
             if not attribute.is_readonly()
         ]
-
-        # Add withTerraformName function for top-level blocks
-        if is_library_top_level:
-            attributes_code.append(jsonnet_with_terraform_name())
 
         attributes_str = ",\n".join(attributes_code)
 

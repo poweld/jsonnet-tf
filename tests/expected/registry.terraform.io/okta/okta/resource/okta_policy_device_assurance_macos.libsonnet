@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_policy_device_assurance_macos",
           type:: "resource",
           attributes:: ["created_by", "created_date", "disk_encryption_type", "id", "last_update", "last_updated_by", "name", "os_version", "platform", "screenlock_type", "secure_hardware_present", "third_party_signal_providers", "tpsp_browser_version", "tpsp_builtin_dns_client_enabled", "tpsp_chrome_remote_desktop_app_blocked", "tpsp_device_enrollment_domain", "tpsp_disk_encrypted", "tpsp_key_trust_level", "tpsp_os_firewall", "tpsp_os_version", "tpsp_password_proctection_warning_trigger", "tpsp_realtime_url_check_mode", "tpsp_safe_browsing_protection_level", "tpsp_screen_lock_secured", "tpsp_site_isolation_enabled"],
@@ -181,9 +182,4 @@
       tpsp_site_isolation_enabled: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

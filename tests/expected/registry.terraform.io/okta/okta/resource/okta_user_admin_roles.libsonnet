@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_user_admin_roles",
           type:: "resource",
           attributes:: ["admin_roles", "disable_notifications", "id", "user_id"],
@@ -53,9 +54,4 @@
       user_id: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

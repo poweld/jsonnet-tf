@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_rate_limiting",
           type:: "resource",
           attributes:: ["authorize", "communications_enabled", "id", "login"],
@@ -45,9 +46,4 @@
       login: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

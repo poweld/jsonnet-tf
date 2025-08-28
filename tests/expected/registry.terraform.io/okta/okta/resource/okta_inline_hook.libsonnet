@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_inline_hook",
           type:: "resource",
           attributes:: ["auth", "channel", "channel_json", "id", "name", "status", "type", "version"],
@@ -76,11 +77,6 @@
       version: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
   headers:: {
     local block = self,
     new():: (

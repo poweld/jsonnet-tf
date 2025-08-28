@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_app_oauth_role_assignment",
           type:: "resource",
           attributes:: ["client_id", "id", "label", "resource_set", "role", "status", "type"],
@@ -46,9 +47,4 @@
       type: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

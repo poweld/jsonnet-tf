@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_policy_profile_enrollment_apps",
           type:: "resource",
           attributes:: ["apps", "default_policy_id", "id", "policy_id"],
@@ -44,9 +45,4 @@
       policy_id: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

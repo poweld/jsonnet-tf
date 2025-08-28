@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_policy_device_assurance_ios",
           type:: "resource",
           attributes:: ["created_by", "created_date", "id", "jailbreak", "last_update", "last_updated_by", "name", "os_version", "platform", "screenlock_type"],
@@ -53,9 +54,4 @@
       screenlock_type+: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_group_rule",
           type:: "resource",
           attributes:: ["expression_type", "expression_value", "group_assignments", "id", "name", "remove_assigned_users", "status", "users_excluded"],
@@ -94,9 +95,4 @@
       users_excluded+: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

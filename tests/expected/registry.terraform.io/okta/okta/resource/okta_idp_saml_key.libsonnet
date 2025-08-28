@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_idp_saml_key",
           type:: "resource",
           attributes:: ["created", "expires_at", "id", "kid", "kty", "use", "x5c", "x5t_s256"],
@@ -36,9 +37,4 @@
       x5c+: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

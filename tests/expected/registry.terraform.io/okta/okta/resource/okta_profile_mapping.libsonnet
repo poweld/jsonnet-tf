@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_profile_mapping",
           type:: "resource",
           attributes:: ["always_apply", "delete_when_absent", "id", "source_id", "source_name", "source_type", "target_id", "target_name", "target_type"],
@@ -53,11 +54,6 @@
       target_id: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
   mappings:: {
     local block = self,
     new(expression, id):: (

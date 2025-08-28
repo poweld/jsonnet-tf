@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_group",
           type:: "resource",
           attributes:: ["custom_profile_attributes", "description", "id", "name", "skip_users"],
@@ -52,9 +53,4 @@
       skip_users: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

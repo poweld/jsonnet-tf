@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_app_oauth_redirect_uri",
           type:: "resource",
           attributes:: ["app_id", "id", "uri"],
@@ -37,9 +38,4 @@
       uri: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

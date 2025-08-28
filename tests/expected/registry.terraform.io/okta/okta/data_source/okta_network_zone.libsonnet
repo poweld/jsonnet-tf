@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_network_zone",
           type:: "data",
           attributes:: ["asns", "dynamic_locations", "dynamic_locations_exclude", "dynamic_proxy_type", "gateways", "id", "ip_service_categories_exclude", "ip_service_categories_include", "name", "proxies", "status", "type", "usage"],
@@ -76,9 +77,4 @@
       name: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

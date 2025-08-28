@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_app_saml_app_settings",
           type:: "resource",
           attributes:: ["app_id", "id", "settings"],
@@ -37,9 +38,4 @@
       settings: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

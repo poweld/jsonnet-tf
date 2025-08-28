@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_feature",
           type:: "resource",
           attributes:: ["description", "feature_id", "id", "life_cycle", "mode", "name", "stage", "status", "type"],
@@ -37,9 +38,4 @@
       mode: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

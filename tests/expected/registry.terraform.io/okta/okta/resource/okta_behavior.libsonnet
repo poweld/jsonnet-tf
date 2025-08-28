@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_behavior",
           type:: "resource",
           attributes:: ["id", "location_granularity_type", "name", "number_of_authentications", "radius_from_location", "status", "type", "velocity"],
@@ -77,9 +78,4 @@
       velocity: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_org_metadata",
           type:: "data",
           attributes:: ["id", "pipeline"],
@@ -12,11 +13,6 @@
     }
     + block.withTerraformName(terraformName)
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
   domains:: {
     local block = self,
     new():: (

@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_auth_server_policy_rule",
           type:: "resource",
           attributes:: ["access_token_lifetime_minutes", "auth_server_id", "grant_type_whitelist", "group_blacklist", "group_whitelist", "id", "inline_hook_id", "name", "policy_id", "priority", "refresh_token_lifetime_minutes", "refresh_token_window_minutes", "scope_whitelist", "status", "system", "type", "user_blacklist", "user_whitelist"],
@@ -200,9 +201,4 @@
       user_whitelist+: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

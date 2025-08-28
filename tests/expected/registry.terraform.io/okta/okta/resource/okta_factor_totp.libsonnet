@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_factor_totp",
           type:: "resource",
           attributes:: ["clock_drift_interval", "hmac_algorithm", "id", "name", "otp_length", "shared_secret_encoding", "time_step"],
@@ -68,9 +69,4 @@
       time_step: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

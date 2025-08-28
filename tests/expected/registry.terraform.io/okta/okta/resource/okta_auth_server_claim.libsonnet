@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_auth_server_claim",
           type:: "resource",
           attributes:: ["always_include_in_token", "auth_server_id", "claim_type", "group_filter_type", "id", "name", "scopes", "status", "value", "value_type"],
@@ -103,9 +104,4 @@
       value_type: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

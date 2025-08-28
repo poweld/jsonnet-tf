@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_customized_signin_page",
           type:: "resource",
           attributes:: ["brand_id", "id", "page_content", "widget_version"],
@@ -39,11 +40,6 @@
       widget_version: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
   content_security_policy_setting:: {
     local block = self,
     new():: (

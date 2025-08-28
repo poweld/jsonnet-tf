@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_link_value",
           type:: "resource",
           attributes:: ["associated_user_ids", "id", "primary_name", "primary_user_id"],
@@ -53,9 +54,4 @@
       primary_user_id: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

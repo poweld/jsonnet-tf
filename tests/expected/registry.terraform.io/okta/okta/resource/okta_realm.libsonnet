@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_realm",
           type:: "resource",
           attributes:: ["id", "is_default", "name", "realm_type"],
@@ -30,9 +31,4 @@
       realm_type: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_trusted_origin",
           type:: "resource",
           attributes:: ["active", "id", "name", "origin", "scopes"],
@@ -62,9 +63,4 @@
       scopes+: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
 }

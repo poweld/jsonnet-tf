@@ -4,6 +4,7 @@
     {
       jsonnetTfMetadata:: {
         terraform:: {
+          name:: terraformName,
           object:: "okta_app_group_assignments",
           type:: "resource",
           attributes:: ["app_id", "id"],
@@ -28,11 +29,6 @@
       id: converted,
     }
   ),
-  withTerraformName(value):: {
-    jsonnetTfMetadata+:: {
-      terraformName:: value,
-    },
-  },
   group:: {
     local block = self,
     new(id):: (
