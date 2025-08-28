@@ -3,10 +3,9 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_groups",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["groups", "id", "limit", "q", "search", "type"],
+        object:: "okta_groups",
+        type:: "data",
+        attributes:: ["groups", "id", "limit", "q", "search", "type"],
       },
     }
     + block.withTerraformName(terraformName)

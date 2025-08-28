@@ -3,10 +3,9 @@
   new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_policy_rule_signon",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["access", "authtype", "behaviors", "id", "identity_provider", "identity_provider_ids", "mfa_lifetime", "mfa_prompt", "mfa_remember_device", "mfa_required", "name", "network_connection", "network_excludes", "network_includes", "policy_id", "primary_factor", "priority", "risc_level", "risk_level", "session_idle", "session_lifetime", "session_persistent", "status", "users_excluded"],
+        object:: "okta_policy_rule_signon",
+        type:: "resource",
+        attributes:: ["access", "authtype", "behaviors", "id", "identity_provider", "identity_provider_ids", "mfa_lifetime", "mfa_prompt", "mfa_remember_device", "mfa_required", "name", "network_connection", "network_excludes", "network_includes", "policy_id", "primary_factor", "priority", "risc_level", "risk_level", "session_idle", "session_lifetime", "session_persistent", "status", "users_excluded"],
       },
     }
     + block.withTerraformName(terraformName)

@@ -3,10 +3,9 @@
   new(terraformName, channel, events, name):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_event_hook",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["auth", "channel", "events", "id", "name", "status"],
+        object:: "okta_event_hook",
+        type:: "resource",
+        attributes:: ["auth", "channel", "events", "id", "name", "status"],
       },
     }
     + block.withTerraformName(terraformName)

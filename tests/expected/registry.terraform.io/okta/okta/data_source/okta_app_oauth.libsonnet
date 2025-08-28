@@ -3,10 +3,9 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_oauth",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["active_only", "auto_submit_toolbar", "client_id", "client_secret", "client_uri", "grant_types", "hide_ios", "hide_web", "id", "label", "label_prefix", "links", "login_mode", "login_scopes", "login_uri", "logo_uri", "name", "policy_uri", "post_logout_redirect_uris", "redirect_uris", "response_types", "skip_groups", "skip_users", "status", "type", "wildcard_redirect"],
+        object:: "okta_app_oauth",
+        type:: "data",
+        attributes:: ["active_only", "auto_submit_toolbar", "client_id", "client_secret", "client_uri", "grant_types", "hide_ios", "hide_web", "id", "label", "label_prefix", "links", "login_mode", "login_scopes", "login_uri", "logo_uri", "name", "policy_uri", "post_logout_redirect_uris", "redirect_uris", "response_types", "skip_groups", "skip_users", "status", "type", "wildcard_redirect"],
       },
     }
     + block.withTerraformName(terraformName)

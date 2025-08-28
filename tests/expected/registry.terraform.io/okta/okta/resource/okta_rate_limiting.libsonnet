@@ -3,10 +3,9 @@
   new(terraformName, authorize, login):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_rate_limiting",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["authorize", "communications_enabled", "id", "login"],
+        object:: "okta_rate_limiting",
+        type:: "resource",
+        attributes:: ["authorize", "communications_enabled", "id", "login"],
       },
     }
     + block.withTerraformName(terraformName)

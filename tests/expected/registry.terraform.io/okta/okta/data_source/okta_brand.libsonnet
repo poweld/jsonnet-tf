@@ -3,10 +3,9 @@
   new(terraformName, brandId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_brand",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["brand_id", "custom_privacy_policy_url", "id", "links", "name", "remove_powered_by_okta"],
+        object:: "okta_brand",
+        type:: "data",
+        attributes:: ["brand_id", "custom_privacy_policy_url", "id", "links", "name", "remove_powered_by_okta"],
       },
     }
     + block.withTerraformName(terraformName)

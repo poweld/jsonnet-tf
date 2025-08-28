@@ -3,10 +3,9 @@
   new(terraformName, clientId, type):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_oauth_role_assignment",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["client_id", "id", "label", "resource_set", "role", "status", "type"],
+        object:: "okta_app_oauth_role_assignment",
+        type:: "resource",
+        attributes:: ["client_id", "id", "label", "resource_set", "role", "status", "type"],
       },
     }
     + block.withTerraformName(terraformName)

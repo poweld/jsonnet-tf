@@ -3,10 +3,9 @@
   new(terraformName, label):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_saml",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "acs_endpoints", "admin_note", "app_links_json", "app_settings_json", "assertion_signed", "audience", "authentication_policy", "authn_context_class_ref", "auto_submit_toolbar", "certificate", "default_relay_state", "destination", "digest_algorithm", "embed_url", "enduser_note", "entity_key", "entity_url", "features", "hide_ios", "hide_web", "honor_force_authn", "http_post_binding", "http_redirect_binding", "id", "idp_issuer", "implicit_assignment", "inline_hook_id", "key_id", "key_name", "key_years_valid", "keys", "label", "logo", "logo_url", "metadata", "metadata_url", "name", "preconfigured_app", "recipient", "request_compressed", "response_signed", "saml_signed_request_enabled", "saml_version", "sign_on_mode", "signature_algorithm", "single_logout_certificate", "single_logout_issuer", "single_logout_url", "sp_issuer", "sso_url", "status", "subject_name_id_format", "subject_name_id_template", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type"],
+        object:: "okta_app_saml",
+        type:: "resource",
+        attributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "acs_endpoints", "admin_note", "app_links_json", "app_settings_json", "assertion_signed", "audience", "authentication_policy", "authn_context_class_ref", "auto_submit_toolbar", "certificate", "default_relay_state", "destination", "digest_algorithm", "embed_url", "enduser_note", "entity_key", "entity_url", "features", "hide_ios", "hide_web", "honor_force_authn", "http_post_binding", "http_redirect_binding", "id", "idp_issuer", "implicit_assignment", "inline_hook_id", "key_id", "key_name", "key_years_valid", "keys", "label", "logo", "logo_url", "metadata", "metadata_url", "name", "preconfigured_app", "recipient", "request_compressed", "response_signed", "saml_signed_request_enabled", "saml_version", "sign_on_mode", "signature_algorithm", "single_logout_certificate", "single_logout_issuer", "single_logout_url", "sp_issuer", "sso_url", "status", "subject_name_id_format", "subject_name_id_template", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type"],
       },
     }
     + block.withTerraformName(terraformName)

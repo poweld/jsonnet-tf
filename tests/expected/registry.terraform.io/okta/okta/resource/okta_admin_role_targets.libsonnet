@@ -3,10 +3,9 @@
   new(terraformName, roleType, userId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_admin_role_targets",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["apps", "groups", "id", "role_id", "role_type", "user_id"],
+        object:: "okta_admin_role_targets",
+        type:: "resource",
+        attributes:: ["apps", "groups", "id", "role_id", "role_type", "user_id"],
       },
     }
     + block.withTerraformName(terraformName)

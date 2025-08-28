@@ -3,10 +3,9 @@
   new(terraformName, emailDomainId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_email_domain_verification",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["email_domain_id", "id"],
+        object:: "okta_email_domain_verification",
+        type:: "resource",
+        attributes:: ["email_domain_id", "id"],
       },
     }
     + block.withTerraformName(terraformName)

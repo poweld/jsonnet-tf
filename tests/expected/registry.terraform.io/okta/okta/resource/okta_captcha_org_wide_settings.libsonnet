@@ -3,10 +3,9 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_captcha_org_wide_settings",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["captcha_id", "enabled_for", "id"],
+        object:: "okta_captcha_org_wide_settings",
+        type:: "resource",
+        attributes:: ["captcha_id", "enabled_for", "id"],
       },
     }
     + block.withTerraformName(terraformName)

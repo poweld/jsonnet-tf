@@ -3,10 +3,9 @@
   new(terraformName, authServerId, claimType, name, value):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_auth_server_claim",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["always_include_in_token", "auth_server_id", "claim_type", "group_filter_type", "id", "name", "scopes", "status", "value", "value_type"],
+        object:: "okta_auth_server_claim",
+        type:: "resource",
+        attributes:: ["always_include_in_token", "auth_server_id", "claim_type", "group_filter_type", "id", "name", "scopes", "status", "value", "value_type"],
       },
     }
     + block.withTerraformName(terraformName)

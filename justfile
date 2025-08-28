@@ -1,5 +1,9 @@
 # Common commands for development
 
+# Generate libraries
+generate:
+    ./jsonnet-tf --provider okta/okta --provider-version "~> 5.3.0" --terraform-version ">= 1.12.1" --force
+
 # Run type checking
 type-check:
     poetry run mypy --strict src/ tests/

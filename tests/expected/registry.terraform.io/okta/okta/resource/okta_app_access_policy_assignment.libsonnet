@@ -3,10 +3,9 @@
   new(terraformName, appId, policyId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_access_policy_assignment",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["app_id", "id", "policy_id"],
+        object:: "okta_app_access_policy_assignment",
+        type:: "resource",
+        attributes:: ["app_id", "id", "policy_id"],
       },
     }
     + block.withTerraformName(terraformName)

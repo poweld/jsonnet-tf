@@ -3,10 +3,9 @@
   new(terraformName, appId, userId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_user",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["app_id", "has_shared_username", "id", "password", "profile", "retain_assignment", "user_id", "username"],
+        object:: "okta_app_user",
+        type:: "resource",
+        attributes:: ["app_id", "has_shared_username", "id", "password", "profile", "retain_assignment", "user_id", "username"],
       },
     }
     + block.withTerraformName(terraformName)

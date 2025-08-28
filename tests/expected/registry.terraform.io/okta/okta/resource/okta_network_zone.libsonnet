@@ -3,10 +3,9 @@
   new(terraformName, name, type):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_network_zone",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["asns", "dynamic_locations", "dynamic_locations_exclude", "dynamic_proxy_type", "gateways", "id", "ip_service_categories_exclude", "ip_service_categories_include", "name", "proxies", "status", "type", "usage"],
+        object:: "okta_network_zone",
+        type:: "resource",
+        attributes:: ["asns", "dynamic_locations", "dynamic_locations_exclude", "dynamic_proxy_type", "gateways", "id", "ip_service_categories_exclude", "ip_service_categories_include", "name", "proxies", "status", "type", "usage"],
       },
     }
     + block.withTerraformName(terraformName)

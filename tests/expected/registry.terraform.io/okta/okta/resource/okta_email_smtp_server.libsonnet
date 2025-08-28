@@ -3,10 +3,9 @@
   new(terraformName, alias, host, password, port, username):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_email_smtp_server",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["alias", "enabled", "host", "id", "password", "port", "username"],
+        object:: "okta_email_smtp_server",
+        type:: "resource",
+        attributes:: ["alias", "enabled", "host", "id", "password", "port", "username"],
       },
     }
     + block.withTerraformName(terraformName)

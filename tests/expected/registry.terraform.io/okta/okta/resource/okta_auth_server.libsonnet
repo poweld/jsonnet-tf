@@ -3,10 +3,9 @@
   new(terraformName, audiences, name):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_auth_server",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["audiences", "credentials_last_rotated", "credentials_next_rotation", "credentials_rotation_mode", "description", "id", "issuer", "issuer_mode", "kid", "name", "status"],
+        object:: "okta_auth_server",
+        type:: "resource",
+        attributes:: ["audiences", "credentials_last_rotated", "credentials_next_rotation", "credentials_rotation_mode", "description", "id", "issuer", "issuer_mode", "kid", "name", "status"],
       },
     }
     + block.withTerraformName(terraformName)

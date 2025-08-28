@@ -3,10 +3,9 @@
   new(terraformName, key, name):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_authenticator",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["id", "key", "legacy_ignore_name", "name", "provider_auth_port", "provider_host", "provider_hostname", "provider_instance_id", "provider_integration_key", "provider_json", "provider_secret_key", "provider_shared_secret", "provider_type", "provider_user_name_template", "settings", "status", "type"],
+        object:: "okta_authenticator",
+        type:: "resource",
+        attributes:: ["id", "key", "legacy_ignore_name", "name", "provider_auth_port", "provider_host", "provider_hostname", "provider_instance_id", "provider_integration_key", "provider_json", "provider_secret_key", "provider_shared_secret", "provider_type", "provider_user_name_template", "settings", "status", "type"],
       },
     }
     + block.withTerraformName(terraformName)

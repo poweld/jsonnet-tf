@@ -3,10 +3,9 @@
   new(terraformName, notificationType, roleType):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_role_subscription",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["id", "notification_type", "role_type", "status"],
+        object:: "okta_role_subscription",
+        type:: "resource",
+        attributes:: ["id", "notification_type", "role_type", "status"],
       },
     }
     + block.withTerraformName(terraformName)

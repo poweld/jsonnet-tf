@@ -3,10 +3,9 @@
   new(terraformName, name, secretKey, siteKey, type):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_captcha",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["id", "name", "secret_key", "site_key", "type"],
+        object:: "okta_captcha",
+        type:: "resource",
+        attributes:: ["id", "name", "secret_key", "site_key", "type"],
       },
     }
     + block.withTerraformName(terraformName)

@@ -3,10 +3,9 @@
   new(terraformName, certificate, certificateChain, domainId, privateKey):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_domain_certificate",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["certificate", "certificate_chain", "domain_id", "id", "private_key", "type"],
+        object:: "okta_domain_certificate",
+        type:: "resource",
+        attributes:: ["certificate", "certificate_chain", "domain_id", "id", "private_key", "type"],
       },
     }
     + block.withTerraformName(terraformName)

@@ -3,10 +3,9 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_device_assurance_policy",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["disk_encryption_type", "id", "jailbreak", "name", "os_version", "os_version_constraint", "platform", "screenlock_type", "secure_hardware_present", "third_party_signal_provider"],
+        object:: "okta_device_assurance_policy",
+        type:: "data",
+        attributes:: ["disk_encryption_type", "id", "jailbreak", "name", "os_version", "os_version_constraint", "platform", "screenlock_type", "secure_hardware_present", "third_party_signal_provider"],
       },
     }
     + block.withTerraformName(terraformName)

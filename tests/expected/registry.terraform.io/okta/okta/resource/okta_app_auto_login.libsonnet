@@ -3,10 +3,9 @@
   new(terraformName, label):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_auto_login",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "admin_note", "app_links_json", "app_settings_json", "auto_submit_toolbar", "credentials_scheme", "enduser_note", "hide_ios", "hide_web", "id", "label", "logo", "logo_url", "name", "preconfigured_app", "reveal_password", "shared_password", "shared_username", "sign_on_mode", "sign_on_redirect_url", "sign_on_url", "status", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type"],
+        object:: "okta_app_auto_login",
+        type:: "resource",
+        attributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "admin_note", "app_links_json", "app_settings_json", "auto_submit_toolbar", "credentials_scheme", "enduser_note", "hide_ios", "hide_web", "id", "label", "logo", "logo_url", "name", "preconfigured_app", "reveal_password", "shared_password", "shared_username", "sign_on_mode", "sign_on_redirect_url", "sign_on_url", "status", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type"],
       },
     }
     + block.withTerraformName(terraformName)

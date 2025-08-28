@@ -3,10 +3,9 @@
   new(terraformName, appId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_metadata_saml",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["app_id", "certificate", "entity_id", "http_post_binding", "http_redirect_binding", "id", "key_id", "metadata", "want_authn_requests_signed"],
+        object:: "okta_app_metadata_saml",
+        type:: "data",
+        attributes:: ["app_id", "certificate", "entity_id", "http_post_binding", "http_redirect_binding", "id", "key_id", "metadata", "want_authn_requests_signed"],
       },
     }
     + block.withTerraformName(terraformName)

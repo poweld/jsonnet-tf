@@ -3,10 +3,9 @@
   new(terraformName, brandId):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_theme",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["background_image", "background_image_url", "brand_id", "email_template_touch_point_variant", "end_user_dashboard_touch_point_variant", "error_page_touch_point_variant", "favicon", "favicon_url", "id", "links", "logo", "logo_url", "primary_color_contrast_hex", "primary_color_hex", "secondary_color_contrast_hex", "secondary_color_hex", "sign_in_page_touch_point_variant", "theme_id"],
+        object:: "okta_theme",
+        type:: "resource",
+        attributes:: ["background_image", "background_image_url", "brand_id", "email_template_touch_point_variant", "end_user_dashboard_touch_point_variant", "error_page_touch_point_variant", "favicon", "favicon_url", "id", "links", "logo", "logo_url", "primary_color_contrast_hex", "primary_color_hex", "secondary_color_contrast_hex", "secondary_color_hex", "sign_in_page_touch_point_variant", "theme_id"],
       },
     }
     + block.withTerraformName(terraformName)

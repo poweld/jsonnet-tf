@@ -3,10 +3,9 @@
   new(terraformName, issuer, kid, name, ssoUrl):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_idp_saml",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["account_link_action", "account_link_group_include", "acs_binding", "acs_type", "audience", "deprovisioned_action", "groups_action", "groups_assignment", "groups_attribute", "groups_filter", "honor_persistent_name_id", "id", "issuer", "issuer_mode", "kid", "max_clock_skew", "name", "name_format", "profile_master", "provisioning_action", "request_signature_algorithm", "request_signature_scope", "response_signature_algorithm", "response_signature_scope", "sso_binding", "sso_destination", "sso_url", "status", "subject_filter", "subject_format", "subject_match_attribute", "subject_match_type", "suspended_action", "type", "user_type_id", "username_template"],
+        object:: "okta_idp_saml",
+        type:: "resource",
+        attributes:: ["account_link_action", "account_link_group_include", "acs_binding", "acs_type", "audience", "deprovisioned_action", "groups_action", "groups_assignment", "groups_attribute", "groups_filter", "honor_persistent_name_id", "id", "issuer", "issuer_mode", "kid", "max_clock_skew", "name", "name_format", "profile_master", "provisioning_action", "request_signature_algorithm", "request_signature_scope", "response_signature_algorithm", "response_signature_scope", "sso_binding", "sso_destination", "sso_url", "status", "subject_filter", "subject_format", "subject_match_attribute", "subject_match_type", "suspended_action", "type", "user_type_id", "username_template"],
       },
     }
     + block.withTerraformName(terraformName)

@@ -3,10 +3,9 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_user_profile_mapping_source",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["id", "name", "type"],
+        object:: "okta_user_profile_mapping_source",
+        type:: "data",
+        attributes:: ["id", "name", "type"],
       },
     }
     + block.withTerraformName(terraformName)

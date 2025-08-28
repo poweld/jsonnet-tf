@@ -3,10 +3,9 @@
   new(terraformName, appId, uri):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_app_oauth_redirect_uri",
-        terraformType:: "resource",
-        terraformPrefix:: "",
-        terraformAttributes:: ["app_id", "id", "uri"],
+        object:: "okta_app_oauth_redirect_uri",
+        type:: "resource",
+        attributes:: ["app_id", "id", "uri"],
       },
     }
     + block.withTerraformName(terraformName)

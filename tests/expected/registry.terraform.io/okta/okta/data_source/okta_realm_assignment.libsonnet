@@ -3,10 +3,9 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        terraformObject:: "okta_realm_assignment",
-        terraformType:: "data",
-        terraformPrefix:: "data",
-        terraformAttributes:: ["condition_expression", "id", "is_default", "name", "priority", "profile_source_id", "realm_id", "status"],
+        object:: "okta_realm_assignment",
+        type:: "data",
+        attributes:: ["condition_expression", "id", "is_default", "name", "priority", "profile_source_id", "realm_id", "status"],
       },
     }
     + block.withTerraformName(terraformName)
