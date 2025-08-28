@@ -3,9 +3,11 @@
   new(terraformName, senderId):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_email_sender_verification",
-        type:: "resource",
-        attributes:: ["id", "sender_id"],
+        terraform:: {
+          object:: "okta_email_sender_verification",
+          type:: "resource",
+          attributes:: ["id", "sender_id"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

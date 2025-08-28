@@ -3,9 +3,11 @@
   new(terraformName, brandId, name):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_email_template",
-        type:: "data",
-        attributes:: ["brand_id", "id", "links", "name"],
+        terraform:: {
+          object:: "okta_email_template",
+          type:: "data",
+          attributes:: ["brand_id", "id", "links", "name"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

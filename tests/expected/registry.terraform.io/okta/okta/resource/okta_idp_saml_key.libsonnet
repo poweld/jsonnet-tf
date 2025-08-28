@@ -3,9 +3,11 @@
   new(terraformName, x5c):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_idp_saml_key",
-        type:: "resource",
-        attributes:: ["created", "expires_at", "id", "kid", "kty", "use", "x5c", "x5t_s256"],
+        terraform:: {
+          object:: "okta_idp_saml_key",
+          type:: "resource",
+          attributes:: ["created", "expires_at", "id", "kid", "kty", "use", "x5c", "x5t_s256"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

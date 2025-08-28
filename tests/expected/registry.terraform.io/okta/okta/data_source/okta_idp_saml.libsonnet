@@ -3,9 +3,11 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_idp_saml",
-        type:: "data",
-        attributes:: ["acs_binding", "acs_type", "audience", "id", "issuer", "issuer_mode", "kid", "name", "sso_binding", "sso_destination", "sso_url", "subject_filter", "subject_format", "type"],
+        terraform:: {
+          object:: "okta_idp_saml",
+          type:: "data",
+          attributes:: ["acs_binding", "acs_type", "audience", "id", "issuer", "issuer_mode", "kid", "name", "sso_binding", "sso_destination", "sso_url", "subject_filter", "subject_format", "type"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

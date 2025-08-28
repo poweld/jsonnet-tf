@@ -3,9 +3,11 @@
   new(terraformName, name, type, version):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_inline_hook",
-        type:: "resource",
-        attributes:: ["auth", "channel", "channel_json", "id", "name", "status", "type", "version"],
+        terraform:: {
+          object:: "okta_inline_hook",
+          type:: "resource",
+          attributes:: ["auth", "channel", "channel_json", "id", "name", "status", "type", "version"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

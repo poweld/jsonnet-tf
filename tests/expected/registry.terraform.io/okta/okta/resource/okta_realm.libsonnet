@@ -3,9 +3,11 @@
   new(terraformName, name, realmType):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_realm",
-        type:: "resource",
-        attributes:: ["id", "is_default", "name", "realm_type"],
+        terraform:: {
+          object:: "okta_realm",
+          type:: "resource",
+          attributes:: ["id", "is_default", "name", "realm_type"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

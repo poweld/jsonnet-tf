@@ -3,9 +3,11 @@
   new(terraformName, companyName):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_org_configuration",
-        type:: "resource",
-        attributes:: ["address_1", "address_2", "billing_contact_user", "city", "company_name", "country", "end_user_support_help_url", "expires_at", "id", "logo", "opt_out_communication_emails", "phone_number", "postal_code", "state", "subdomain", "support_phone_number", "technical_contact_user", "website"],
+        terraform:: {
+          object:: "okta_org_configuration",
+          type:: "resource",
+          attributes:: ["address_1", "address_2", "billing_contact_user", "city", "company_name", "country", "end_user_support_help_url", "expires_at", "id", "logo", "opt_out_communication_emails", "phone_number", "postal_code", "state", "subdomain", "support_phone_number", "technical_contact_user", "website"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

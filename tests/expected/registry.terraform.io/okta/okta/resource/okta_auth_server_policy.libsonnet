@@ -3,9 +3,11 @@
   new(terraformName, authServerId, clientWhitelist, description, name, priority):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_auth_server_policy",
-        type:: "resource",
-        attributes:: ["auth_server_id", "client_whitelist", "description", "id", "name", "priority", "status"],
+        terraform:: {
+          object:: "okta_auth_server_policy",
+          type:: "resource",
+          attributes:: ["auth_server_id", "client_whitelist", "description", "id", "name", "priority", "status"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

@@ -3,9 +3,11 @@
   new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_policy_device_assurance_ios",
-        type:: "resource",
-        attributes:: ["created_by", "created_date", "id", "jailbreak", "last_update", "last_updated_by", "name", "os_version", "platform", "screenlock_type"],
+        terraform:: {
+          object:: "okta_policy_device_assurance_ios",
+          type:: "resource",
+          attributes:: ["created_by", "created_date", "id", "jailbreak", "last_update", "last_updated_by", "name", "os_version", "platform", "screenlock_type"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

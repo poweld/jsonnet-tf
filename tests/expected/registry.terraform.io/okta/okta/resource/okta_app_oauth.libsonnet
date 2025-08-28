@@ -3,9 +3,11 @@
   new(terraformName, label, type):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_app_oauth",
-        type:: "resource",
-        attributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "admin_note", "app_links_json", "app_settings_json", "authentication_policy", "auto_key_rotation", "auto_submit_toolbar", "client_basic_secret", "client_id", "client_secret", "client_uri", "consent_method", "enduser_note", "grant_types", "hide_ios", "hide_web", "id", "implicit_assignment", "issuer_mode", "jwks_uri", "label", "login_mode", "login_scopes", "login_uri", "logo", "logo_uri", "logo_url", "name", "omit_secret", "pkce_required", "policy_uri", "post_logout_redirect_uris", "profile", "redirect_uris", "refresh_token_leeway", "refresh_token_rotation", "response_types", "sign_on_mode", "status", "token_endpoint_auth_method", "tos_uri", "type", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type", "wildcard_redirect"],
+        terraform:: {
+          object:: "okta_app_oauth",
+          type:: "resource",
+          attributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "admin_note", "app_links_json", "app_settings_json", "authentication_policy", "auto_key_rotation", "auto_submit_toolbar", "client_basic_secret", "client_id", "client_secret", "client_uri", "consent_method", "enduser_note", "grant_types", "hide_ios", "hide_web", "id", "implicit_assignment", "issuer_mode", "jwks_uri", "label", "login_mode", "login_scopes", "login_uri", "logo", "logo_uri", "logo_url", "name", "omit_secret", "pkce_required", "policy_uri", "post_logout_redirect_uris", "profile", "redirect_uris", "refresh_token_leeway", "refresh_token_rotation", "response_types", "sign_on_mode", "status", "token_endpoint_auth_method", "tos_uri", "type", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type", "wildcard_redirect"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

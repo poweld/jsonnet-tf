@@ -3,9 +3,11 @@
   new(terraformName, brandId, pageContent, widgetVersion):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_preview_signin_page",
-        type:: "resource",
-        attributes:: ["brand_id", "id", "page_content", "widget_version"],
+        terraform:: {
+          object:: "okta_preview_signin_page",
+          type:: "resource",
+          attributes:: ["brand_id", "id", "page_content", "widget_version"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

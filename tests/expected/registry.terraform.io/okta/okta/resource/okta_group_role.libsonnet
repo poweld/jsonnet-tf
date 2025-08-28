@@ -3,9 +3,11 @@
   new(terraformName, groupId, roleType):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_group_role",
-        type:: "resource",
-        attributes:: ["disable_notifications", "group_id", "id", "resource_set_id", "role_id", "role_type", "target_app_list", "target_group_list"],
+        terraform:: {
+          object:: "okta_group_role",
+          type:: "resource",
+          attributes:: ["disable_notifications", "group_id", "id", "resource_set_id", "role_id", "role_type", "target_app_list", "target_group_list"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

@@ -3,9 +3,11 @@
   new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_factor_totp",
-        type:: "resource",
-        attributes:: ["clock_drift_interval", "hmac_algorithm", "id", "name", "otp_length", "shared_secret_encoding", "time_step"],
+        terraform:: {
+          object:: "okta_factor_totp",
+          type:: "resource",
+          attributes:: ["clock_drift_interval", "hmac_algorithm", "id", "name", "otp_length", "shared_secret_encoding", "time_step"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

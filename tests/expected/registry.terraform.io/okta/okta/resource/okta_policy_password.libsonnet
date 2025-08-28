@@ -3,9 +3,11 @@
   new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_policy_password",
-        type:: "resource",
-        attributes:: ["auth_provider", "call_recovery", "description", "email_recovery", "groups_included", "id", "name", "password_auto_unlock_minutes", "password_dictionary_lookup", "password_exclude_first_name", "password_exclude_last_name", "password_exclude_username", "password_expire_warn_days", "password_history_count", "password_lockout_notification_channels", "password_max_age_days", "password_max_lockout_attempts", "password_min_age_minutes", "password_min_length", "password_min_lowercase", "password_min_number", "password_min_symbol", "password_min_uppercase", "password_show_lockout_failures", "priority", "question_min_length", "question_recovery", "recovery_email_token", "skip_unlock", "sms_recovery", "status"],
+        terraform:: {
+          object:: "okta_policy_password",
+          type:: "resource",
+          attributes:: ["auth_provider", "call_recovery", "description", "email_recovery", "groups_included", "id", "name", "password_auto_unlock_minutes", "password_dictionary_lookup", "password_exclude_first_name", "password_exclude_last_name", "password_exclude_username", "password_expire_warn_days", "password_history_count", "password_lockout_notification_channels", "password_max_age_days", "password_max_lockout_attempts", "password_min_age_minutes", "password_min_length", "password_min_lowercase", "password_min_number", "password_min_symbol", "password_min_uppercase", "password_show_lockout_failures", "priority", "question_min_length", "question_recovery", "recovery_email_token", "skip_unlock", "sms_recovery", "status"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

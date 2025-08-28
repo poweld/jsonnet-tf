@@ -3,9 +3,11 @@
   new(terraformName, index, title, type):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_user_schema_property",
-        type:: "resource",
-        attributes:: ["array_enum", "array_type", "description", "enum", "external_name", "external_namespace", "id", "index", "master", "max_length", "min_length", "pattern", "permissions", "required", "scope", "title", "type", "unique", "user_type"],
+        terraform:: {
+          object:: "okta_user_schema_property",
+          type:: "resource",
+          attributes:: ["array_enum", "array_type", "description", "enum", "external_name", "external_namespace", "id", "index", "master", "max_length", "min_length", "pattern", "permissions", "required", "scope", "title", "type", "unique", "user_type"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

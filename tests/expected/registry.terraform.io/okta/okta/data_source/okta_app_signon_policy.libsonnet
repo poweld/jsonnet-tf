@@ -3,9 +3,11 @@
   new(terraformName, appId):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_app_signon_policy",
-        type:: "data",
-        attributes:: ["app_id", "id", "name"],
+        terraform:: {
+          object:: "okta_app_signon_policy",
+          type:: "data",
+          attributes:: ["app_id", "id", "name"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

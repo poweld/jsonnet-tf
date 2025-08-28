@@ -3,9 +3,11 @@
   new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_policy_device_assurance_chromeos",
-        type:: "resource",
-        attributes:: ["created_by", "created_date", "id", "last_update", "last_updated_by", "name", "platform", "tpsp_allow_screen_lock", "tpsp_browser_version", "tpsp_builtin_dns_client_enabled", "tpsp_chrome_remote_desktop_app_blocked", "tpsp_device_enrollment_domain", "tpsp_disk_encrypted", "tpsp_key_trust_level", "tpsp_os_firewall", "tpsp_os_version", "tpsp_password_proctection_warning_trigger", "tpsp_realtime_url_check_mode", "tpsp_safe_browsing_protection_level", "tpsp_screen_lock_secured", "tpsp_site_isolation_enabled"],
+        terraform:: {
+          object:: "okta_policy_device_assurance_chromeos",
+          type:: "resource",
+          attributes:: ["created_by", "created_date", "id", "last_update", "last_updated_by", "name", "platform", "tpsp_allow_screen_lock", "tpsp_browser_version", "tpsp_builtin_dns_client_enabled", "tpsp_chrome_remote_desktop_app_blocked", "tpsp_device_enrollment_domain", "tpsp_disk_encrypted", "tpsp_key_trust_level", "tpsp_os_firewall", "tpsp_os_version", "tpsp_password_proctection_warning_trigger", "tpsp_realtime_url_check_mode", "tpsp_safe_browsing_protection_level", "tpsp_screen_lock_secured", "tpsp_site_isolation_enabled"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

@@ -3,9 +3,11 @@
   new(terraformName, groups, userId):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_user_group_memberships",
-        type:: "resource",
-        attributes:: ["groups", "id", "user_id"],
+        terraform:: {
+          object:: "okta_user_group_memberships",
+          type:: "resource",
+          attributes:: ["groups", "id", "user_id"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

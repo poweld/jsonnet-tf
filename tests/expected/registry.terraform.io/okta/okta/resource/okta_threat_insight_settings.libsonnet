@@ -3,9 +3,11 @@
   new(terraformName, action):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_threat_insight_settings",
-        type:: "resource",
-        attributes:: ["action", "id", "network_excludes"],
+        terraform:: {
+          object:: "okta_threat_insight_settings",
+          type:: "resource",
+          attributes:: ["action", "id", "network_excludes"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

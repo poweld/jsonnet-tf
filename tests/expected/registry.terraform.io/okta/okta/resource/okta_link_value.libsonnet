@@ -3,9 +3,11 @@
   new(terraformName, primaryName, primaryUserId):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_link_value",
-        type:: "resource",
-        attributes:: ["associated_user_ids", "id", "primary_name", "primary_user_id"],
+        terraform:: {
+          object:: "okta_link_value",
+          type:: "resource",
+          attributes:: ["associated_user_ids", "id", "primary_name", "primary_user_id"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

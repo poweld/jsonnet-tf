@@ -3,9 +3,11 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_trusted_origins",
-        type:: "data",
-        attributes:: ["filter", "id", "trusted_origins"],
+        terraform:: {
+          object:: "okta_trusted_origins",
+          type:: "data",
+          attributes:: ["filter", "id", "trusted_origins"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

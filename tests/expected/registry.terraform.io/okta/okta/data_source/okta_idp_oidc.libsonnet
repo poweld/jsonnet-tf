@@ -3,9 +3,11 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_idp_oidc",
-        type:: "data",
-        attributes:: ["authorization_binding", "authorization_url", "client_id", "client_secret", "id", "issuer_mode", "issuer_url", "jwks_binding", "jwks_url", "max_clock_skew", "name", "protocol_type", "scopes", "token_binding", "token_url", "type", "user_info_binding", "user_info_url"],
+        terraform:: {
+          object:: "okta_idp_oidc",
+          type:: "data",
+          attributes:: ["authorization_binding", "authorization_url", "client_id", "client_secret", "id", "issuer_mode", "issuer_url", "jwks_binding", "jwks_url", "max_clock_skew", "name", "protocol_type", "scopes", "token_binding", "token_url", "type", "user_info_binding", "user_info_url"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

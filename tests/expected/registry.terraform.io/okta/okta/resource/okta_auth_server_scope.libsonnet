@@ -3,9 +3,11 @@
   new(terraformName, authServerId, name):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_auth_server_scope",
-        type:: "resource",
-        attributes:: ["auth_server_id", "consent", "default", "description", "display_name", "id", "metadata_publish", "name", "optional", "system"],
+        terraform:: {
+          object:: "okta_auth_server_scope",
+          type:: "resource",
+          attributes:: ["auth_server_id", "consent", "default", "description", "display_name", "id", "metadata_publish", "name", "optional", "system"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

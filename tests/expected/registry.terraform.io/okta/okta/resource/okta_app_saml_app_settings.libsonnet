@@ -3,9 +3,11 @@
   new(terraformName, appId, settings):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_app_saml_app_settings",
-        type:: "resource",
-        attributes:: ["app_id", "id", "settings"],
+        terraform:: {
+          object:: "okta_app_saml_app_settings",
+          type:: "resource",
+          attributes:: ["app_id", "id", "settings"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

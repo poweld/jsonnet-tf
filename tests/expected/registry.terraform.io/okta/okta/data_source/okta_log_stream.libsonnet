@@ -3,9 +3,11 @@
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_log_stream",
-        type:: "data",
-        attributes:: ["id", "name", "status", "type"],
+        terraform:: {
+          object:: "okta_log_stream",
+          type:: "data",
+          attributes:: ["id", "name", "status", "type"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

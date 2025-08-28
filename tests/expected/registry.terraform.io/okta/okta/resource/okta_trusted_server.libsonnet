@@ -3,9 +3,11 @@
   new(terraformName, authServerId, trusted):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_trusted_server",
-        type:: "resource",
-        attributes:: ["auth_server_id", "id", "trusted"],
+        terraform:: {
+          object:: "okta_trusted_server",
+          type:: "resource",
+          attributes:: ["auth_server_id", "id", "trusted"],
+        },
       },
     }
     + block.withTerraformName(terraformName)

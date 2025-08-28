@@ -3,9 +3,11 @@
   new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
-        object:: "okta_policy_rule_mfa",
-        type:: "resource",
-        attributes:: ["enroll", "id", "name", "network_connection", "network_excludes", "network_includes", "policy_id", "priority", "status", "users_excluded"],
+        terraform:: {
+          object:: "okta_policy_rule_mfa",
+          type:: "resource",
+          attributes:: ["enroll", "id", "name", "network_connection", "network_excludes", "network_includes", "policy_id", "priority", "status", "users_excluded"],
+        },
       },
     }
     + block.withTerraformName(terraformName)
