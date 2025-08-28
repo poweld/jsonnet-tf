@@ -161,6 +161,7 @@ def description(attribute: Any, fn_name: str) -> Optional[str]:
 
 def jsonnet_with_terraform_name() -> str:
     """Generate the withTerraformName function code.
+
     Returns:
         Jsonnet code for the withTerraformName function
     """
