@@ -201,11 +201,7 @@
   withTerraformName(value):: {
     jsonnetTfMetadata+:: {
       terraform+:: {
-<<<<<<< HEAD
         name:: value,
-=======
-        type: value,
->>>>>>> fa00a8f (update test expected output)
       },
     },
   },
