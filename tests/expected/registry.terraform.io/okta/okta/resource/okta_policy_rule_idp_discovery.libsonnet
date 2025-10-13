@@ -115,7 +115,7 @@
       },
     },
   },
-  app_exclude:: {
+  appExclude:: {
     local block = self,
     new(type):: (
       {}
@@ -143,7 +143,7 @@
       }
     ),
   },
-  app_include:: {
+  appInclude:: {
     local block = self,
     new(type):: (
       {}
@@ -171,7 +171,7 @@
       }
     ),
   },
-  idp_providers:: {
+  idpProviders:: {
     local block = self,
     new():: (
       {}
@@ -193,7 +193,7 @@
       }
     ),
   },
-  platform_include:: {
+  platformInclude:: {
     local block = self,
     new():: (
       {}
@@ -221,7 +221,7 @@
       }
     ),
   },
-  user_identifier_patterns:: {
+  userIdentifierPatterns:: {
     local block = self,
     new():: (
       {}

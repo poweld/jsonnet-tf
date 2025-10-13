@@ -198,7 +198,7 @@
       },
     },
   },
-  array_one_of:: {
+  arrayOneOf:: {
     local block = self,
     new(const, title):: (
       {}
@@ -222,7 +222,7 @@
       }
     ),
   },
-  one_of:: {
+  oneOf:: {
     local block = self,
     new(const, title):: (
       {}

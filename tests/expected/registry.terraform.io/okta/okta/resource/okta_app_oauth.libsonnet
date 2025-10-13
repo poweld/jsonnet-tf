@@ -420,7 +420,7 @@
       },
     },
   },
-  groups_claim:: {
+  groupsClaim:: {
     local block = self,
     new(name, type, value):: (
       {}

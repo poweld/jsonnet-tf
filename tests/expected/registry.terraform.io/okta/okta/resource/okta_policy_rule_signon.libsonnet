@@ -251,7 +251,7 @@
       },
     },
   },
-  factor_sequence:: {
+  factorSequence:: {
     local block = self,
     new(primaryCriteriaFactorType, primaryCriteriaProvider):: (
       {}
@@ -274,7 +274,7 @@
         primary_criteria_provider: converted,
       }
     ),
-    secondary_criteria:: {
+    secondaryCriteria:: {
       local block = self,
       new(factorType, provider):: (
         {}

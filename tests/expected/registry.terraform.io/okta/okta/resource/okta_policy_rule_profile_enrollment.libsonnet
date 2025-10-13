@@ -108,7 +108,7 @@
       },
     },
   },
-  profile_attributes:: {
+  profileAttributes:: {
     local block = self,
     new(label, name):: (
       {}

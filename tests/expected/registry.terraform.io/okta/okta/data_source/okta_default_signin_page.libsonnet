@@ -28,13 +28,13 @@
       },
     },
   },
-  content_security_policy_setting:: {
+  contentSecurityPolicySetting:: {
     local block = self,
     new():: (
       {}
     ),
   },
-  widget_customizations:: {
+  widgetCustomizations:: {
     local block = self,
     new():: (
       {}

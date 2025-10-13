@@ -42,7 +42,7 @@ RESERVED = set(
         "true",
     ]
 )
-SYMBOLS = set("{}[],.();")
+JSONNET_SYMBOLS = set("{}[],.();")
 METADATA_FIELD = "jsonnetTfMetadata"
 TERRAFORM_NAME_PARAM = "terraformName"
 WITH_TERRAFORM_NAME_FN_NAME = "withTerraformName"
@@ -85,7 +85,7 @@ def jsonnet_with_fn_mixin_name(name: str) -> str:
 
 
 def auto_conversion(
-    type_spec: Union[str, List[str]], from_localvar: str, to_localvar: str
+    type_spec: Optional[Union[str, List[str]]], from_localvar: str, to_localvar: str
 ) -> str:
     """Generate Jsonnet code to convert values based on type.
 
@@ -108,7 +108,9 @@ def auto_conversion(
     return f"local {to_localvar} = {from_localvar};"
 
 
-def assertion(type_spec: Union[str, List[str]], name: str, localvar: str) -> str:
+def assertion(
+    type_spec: Optional[Union[str, List[str]]], name: str, localvar: str
+) -> str:
     """Generate Jsonnet code to assert a value is of the correct type.
 
     Args:
@@ -238,10 +240,36 @@ class BlockType(JSONWizard):
 
 
 @dataclass
+class NestedAttribute(JSONWizard):
+    """Represents a Terraform nested attribute."""
+
+    nesting_mode: str
+    attributes: Optional[Dict[str, Attribute]] = None
+    min_items: Optional[int] = None
+    max_items: Optional[int] = None
+
+    def to_jsonnet(self, name: str, library_name: str, terraform_type: str) -> str:
+        """Generate Jsonnet code for this nested attribute type.
+
+        Args:
+            name: Name for the generated code
+            library_name: Name of the library
+            terraform_type: Type of terraform resource (provider, resource, data)
+
+        Returns:
+            Generated Jsonnet code
+        """
+        block = Block(self.attributes, None)
+        block_type = BlockType(self.nesting_mode, block, self.min_items, self.max_items)
+        return block_type.to_jsonnet(name, library_name, terraform_type)
+
+
+@dataclass
 class Attribute(JSONWizard):
     """Represents a Terraform attribute."""
 
-    type: Union[str, List[str]]
+    type: Optional[Union[str, List[str]]] = None
+    nested_type: Optional[NestedAttribute] = None
     description: Optional[str] = None
     required: Optional[bool] = None
     optional: Optional[bool] = None
@@ -256,7 +284,7 @@ class Attribute(JSONWizard):
         """
         return bool(self.computed and not (self.optional or self.required))
 
-    def to_jsonnet(self, name: str) -> str:
+    def to_jsonnet(self, name: str, library_name: str, terraform_type: str) -> str:
         """Generate Jsonnet code for this attribute.
 
         Args:
@@ -418,9 +446,9 @@ class Block(JSONWizard):
 
         # Generate attribute functions
         attributes_code = [new_fn] + [
-            attribute.to_jsonnet(name)
+            attribute.to_jsonnet(name, library_name, terraform_type)
             for name, attribute in attributes.items()
-            if not attribute.is_readonly()
+            if not attribute.is_readonly() and attribute.nested_type is None
         ]
 
         # Add withTerraformName function for top-level blocks
@@ -436,7 +464,7 @@ class Block(JSONWizard):
 
             # Process block types
             for block_name, block_type in self.block_types.items():
-                output_name = block_name
+                output_name = camel_case(block_name)
 
                 # Use the mapped name for output
                 block_type_fns.append(
@@ -470,12 +498,62 @@ class Block(JSONWizard):
 
             block_types_code = ",\n".join(block_type_fns)
 
+        # Generate nested type functions
+        # TODO this is very similar to the above block type generation, could probably DRY out
+        nested_type_code = ""
+        nested_types = {
+            name: attribute.nested_type
+            for name, attribute in attributes.items()
+            if not attribute.is_readonly() and attribute.nested_type is not None
+        }
+
+        if len(nested_types.keys()) > 0:
+            nested_type_fns = []
+
+            # Process nested types
+            for nested_name, nested_type in nested_types.items():
+                output_name = camel_case(nested_name)
+
+                # Use the mapped name for output
+                nested_type_fns.append(
+                    nested_type.to_jsonnet(output_name, library_name, terraform_type)
+                )
+
+            # Add with functions
+            for nested_name, nested_type in nested_types.items():
+                output_name = nested_name
+
+                conversion = auto_conversion(
+                    nested_type.nesting_mode,
+                    from_localvar="value",
+                    to_localvar="converted",
+                )
+                nested_type_fns.append(jsonnet_with_fn(output_name, conversion))
+
+            # Add mixin functions for lists and sets
+            for nested_name, nested_type in nested_types.items():
+                if nested_type.nesting_mode in ("set", "list"):
+                    output_name = nested_name
+
+                    conversion = auto_conversion(
+                        nested_type.nesting_mode,
+                        from_localvar="value",
+                        to_localvar="converted",
+                    )
+                    nested_type_fns.append(
+                        jsonnet_with_fn_mixin(output_name, conversion)
+                    )
+
+            nested_type_code = ",\n".join(nested_type_fns)
+
         # Assemble the complete block code
         body_parts = ["local block = self"]
         if attributes_str:
             body_parts.append(attributes_str)
         if block_types_code:
             body_parts.append(block_types_code)
+        if nested_type_code:
+            body_parts.append(nested_type_code)
 
         body = ",\n".join(body_parts)
 
@@ -483,8 +561,8 @@ class Block(JSONWizard):
         if is_library_top_level:
             return body
         else:
-            # Quote field name if it contains symbols
-            if any(c in SYMBOLS for c in name):
+            # Quote field name if it contains jsonnet symbols
+            if any(c in JSONNET_SYMBOLS for c in name):
                 return f"'{name}':: {{\n{body}\n}}"
             else:
                 return f"{name}:: {{\n{body}\n}}"
