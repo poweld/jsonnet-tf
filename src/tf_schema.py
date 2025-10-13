@@ -499,6 +499,7 @@ class Block(JSONWizard):
             block_types_code = ",\n".join(block_type_fns)
 
         # Generate nested type functions
+        # TODO this is very similar to the above block type generation, could probably DRY out
         nested_type_code = ""
         nested_types = {
             name: attribute.nested_type
