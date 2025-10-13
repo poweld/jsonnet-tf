@@ -108,7 +108,9 @@ def auto_conversion(
     return f"local {to_localvar} = {from_localvar};"
 
 
-def assertion(type_spec: Optional[Union[str, List[str]]], name: str, localvar: str) -> str:
+def assertion(
+    type_spec: Optional[Union[str, List[str]]], name: str, localvar: str
+) -> str:
     """Generate Jsonnet code to assert a value is of the correct type.
 
     Args:
