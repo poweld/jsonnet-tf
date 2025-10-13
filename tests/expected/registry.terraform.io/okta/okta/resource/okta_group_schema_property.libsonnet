@@ -172,7 +172,7 @@
       },
     },
   },
-  array_one_of:: {
+  arrayOneOf:: {
     local block = self,
     new(const, title):: (
       {}
@@ -196,7 +196,7 @@
       }
     ),
   },
-  master_override_priority:: {
+  masterOverridePriority:: {
     local block = self,
     new(value):: (
       {}
@@ -217,7 +217,7 @@
       }
     ),
   },
-  one_of:: {
+  oneOf:: {
     local block = self,
     new(const, title):: (
       {}

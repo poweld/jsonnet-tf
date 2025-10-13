@@ -366,7 +366,7 @@
       },
     },
   },
-  password_hash:: {
+  passwordHash:: {
     local block = self,
     new(algorithm, value):: (
       {}

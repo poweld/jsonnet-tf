@@ -85,7 +85,7 @@ def jsonnet_with_fn_mixin_name(name: str) -> str:
 
 
 def auto_conversion(
-    type_spec: Union[str, List[str]], from_localvar: str, to_localvar: str
+    type_spec: Optional[Union[str, List[str]]], from_localvar: str, to_localvar: str
 ) -> str:
     """Generate Jsonnet code to convert values based on type.
 
@@ -108,7 +108,7 @@ def auto_conversion(
     return f"local {to_localvar} = {from_localvar};"
 
 
-def assertion(type_spec: Union[str, List[str]], name: str, localvar: str) -> str:
+def assertion(type_spec: Optional[Union[str, List[str]]], name: str, localvar: str) -> str:
     """Generate Jsonnet code to assert a value is of the correct type.
 
     Args:

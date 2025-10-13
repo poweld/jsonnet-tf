@@ -123,7 +123,7 @@
       },
     },
   },
-  app_exclude:: {
+  appExclude:: {
     local block = self,
     new(type):: (
       {}
@@ -151,7 +151,7 @@
       }
     ),
   },
-  app_include:: {
+  appInclude:: {
     local block = self,
     new(type):: (
       {}

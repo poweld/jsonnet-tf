@@ -316,7 +316,7 @@
       },
     },
   },
-  platform_include:: {
+  platformInclude:: {
     local block = self,
     new():: (
       {}

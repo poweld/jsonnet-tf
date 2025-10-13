@@ -395,7 +395,7 @@
       },
     },
   },
-  acs_endpoints_indices:: {
+  acsEndpointsIndices:: {
     local block = self,
     new(index, url):: (
       {}
@@ -417,7 +417,7 @@
       }
     ),
   },
-  attribute_statements:: {
+  attributeStatements:: {
     local block = self,
     new(name):: (
       {}
