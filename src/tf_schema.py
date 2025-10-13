@@ -293,10 +293,6 @@ class Attribute(JSONWizard):
         Returns:
             Generated Jsonnet code
         """
-        # TODO working on nested_type
-        if self.nested_type is not None:
-            return self.nested_type.to_jsonnet(name, library_name, terraform_type)
-
         _conversion = auto_conversion(
             self.type, from_localvar="value", to_localvar="converted"
         )
