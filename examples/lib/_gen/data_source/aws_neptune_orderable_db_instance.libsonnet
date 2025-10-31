@@ -1,0 +1,86 @@
+{
+  local block = self,
+  new(terraformName):: (
+    {
+      jsonnetTfMetadata:: {
+        terraform:: {
+          name:: terraformName,
+          object:: "aws_neptune_orderable_db_instance",
+          type:: "data",
+          attributes:: ["availability_zones", "engine", "engine_version", "id", "instance_class", "license_model", "max_iops_per_db_instance", "max_iops_per_gib", "max_storage_size", "min_iops_per_db_instance", "min_iops_per_gib", "min_storage_size", "multi_az_capable", "preferred_instance_classes", "read_replica_capable", "region", "storage_type", "supports_enhanced_monitoring", "supports_iam_database_authentication", "supports_iops", "supports_performance_insights", "supports_storage_encryption", "vpc"],
+        },
+      },
+    }
+  ),
+  withEngine(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"engine" expected to be of type "string"';
+    {
+      engine: converted,
+    }
+  ),
+  withEngineVersion(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"engine_version" expected to be of type "string"';
+    {
+      engine_version: converted,
+    }
+  ),
+  withId(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"id" expected to be of type "string"';
+    {
+      id: converted,
+    }
+  ),
+  withInstanceClass(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"instance_class" expected to be of type "string"';
+    {
+      instance_class: converted,
+    }
+  ),
+  withLicenseModel(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"license_model" expected to be of type "string"';
+    {
+      license_model: converted,
+    }
+  ),
+  withPreferredInstanceClasses(value):: (
+    local converted = if std.isArray(value) then value else [value];
+    assert std.isArray(converted) : '"preferred_instance_classes" expected to be of type "list"';
+    {
+      preferred_instance_classes: converted,
+    }
+  ),
+  withPreferredInstanceClassesMixin(value):: (
+    local converted = if std.isArray(value) then value else [value];
+    assert std.isArray(converted) : '"preferred_instance_classes" expected to be of type "list"';
+    {
+      preferred_instance_classes+: converted,
+    }
+  ),
+  "#withRegion":: "Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the [provider configuration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#aws-configuration-reference).",
+  withRegion(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"region" expected to be of type "string"';
+    {
+      region: converted,
+    }
+  ),
+  withVpc(value):: (
+    local converted = value;
+    assert std.isBoolean(converted) : '"vpc" expected to be of type "bool"';
+    {
+      vpc: converted,
+    }
+  ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
+}

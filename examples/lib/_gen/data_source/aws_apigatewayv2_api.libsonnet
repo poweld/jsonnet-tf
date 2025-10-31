@@ -1,0 +1,52 @@
+{
+  local block = self,
+  new(terraformName, apiId):: (
+    {
+      jsonnetTfMetadata:: {
+        terraform:: {
+          name:: terraformName,
+          object:: "aws_apigatewayv2_api",
+          type:: "data",
+          attributes:: ["api_endpoint", "api_id", "api_key_selection_expression", "arn", "cors_configuration", "description", "disable_execute_api_endpoint", "execution_arn", "id", "ip_address_type", "name", "protocol_type", "region", "route_selection_expression", "tags", "version"],
+        },
+      },
+    }
+    + block.withApiId(apiId)
+  ),
+  withApiId(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"api_id" expected to be of type "string"';
+    {
+      api_id: converted,
+    }
+  ),
+  withId(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"id" expected to be of type "string"';
+    {
+      id: converted,
+    }
+  ),
+  "#withRegion":: "Region where this resource will be [managed](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints). Defaults to the Region set in the [provider configuration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#aws-configuration-reference).",
+  withRegion(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"region" expected to be of type "string"';
+    {
+      region: converted,
+    }
+  ),
+  withTags(value):: (
+    local converted = value;
+    assert std.isObject(converted) : '"tags" expected to be of type "map"';
+    {
+      tags: converted,
+    }
+  ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
+}

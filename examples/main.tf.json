@@ -1,0 +1,57 @@
+{
+   "data": {
+      "aws_iam_policy_document": {
+         "dice-roller": {
+            "statement": {
+               "actions": [
+                  "sts:AssumeRole"
+               ],
+               "effect": "Allow",
+               "principals": {
+                  "identifiers": [
+                     "lambda.amazonaws.com"
+                  ],
+                  "type": "Service"
+               }
+            }
+         }
+      }
+   },
+   "provider": {
+      "aws": {
+         "region": "us-east-1"
+      }
+   },
+   "resource": {
+      "aws_iam_role": {
+         "dice-roller": {
+            "assume_role_policy": "${data.aws_iam_policy_document.dice-roller.json}",
+            "name": "dice-roller"
+         }
+      },
+      "aws_lambda_function": {
+         "dice-roller": {
+            "function_name": "dice-roller",
+            "role": "${aws_iam_role.dice-roller.id}"
+         }
+      },
+      "aws_vpc": {
+         "dice-roller": {
+            "cidr_block": "10.100.0.0/16",
+            "tags": {
+               "Name": "dice-roller"
+            }
+         }
+      }
+   },
+   "terraform": {
+      "backend": {
+         "s3": {
+            "bucket": "turingtest-terraform-state",
+            "key": "dice-roller",
+            "region": "us-east-1"
+         }
+      },
+      "required_version": ">= 0.12.1"
+   }
+}

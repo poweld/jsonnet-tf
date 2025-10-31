@@ -1,0 +1,86 @@
+{
+  local block = self,
+  new(terraformName, deviceId, globalNetworkId, transitGatewayConnectPeerArn):: (
+    {
+      jsonnetTfMetadata:: {
+        terraform:: {
+          name:: terraformName,
+          object:: "aws_networkmanager_transit_gateway_connect_peer_association",
+          type:: "resource",
+          attributes:: ["device_id", "global_network_id", "id", "link_id", "transit_gateway_connect_peer_arn"],
+        },
+      },
+    }
+    + block.withDeviceId(deviceId)
+    + block.withGlobalNetworkId(globalNetworkId)
+    + block.withTransitGatewayConnectPeerArn(transitGatewayConnectPeerArn)
+  ),
+  withDeviceId(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"device_id" expected to be of type "string"';
+    {
+      device_id: converted,
+    }
+  ),
+  withGlobalNetworkId(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"global_network_id" expected to be of type "string"';
+    {
+      global_network_id: converted,
+    }
+  ),
+  withId(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"id" expected to be of type "string"';
+    {
+      id: converted,
+    }
+  ),
+  withLinkId(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"link_id" expected to be of type "string"';
+    {
+      link_id: converted,
+    }
+  ),
+  withTransitGatewayConnectPeerArn(value):: (
+    local converted = value;
+    assert std.isString(converted) : '"transit_gateway_connect_peer_arn" expected to be of type "string"';
+    {
+      transit_gateway_connect_peer_arn: converted,
+    }
+  ),
+  withTerraformName(value):: {
+    jsonnetTfMetadata+:: {
+      terraform+:: {
+        name:: value,
+      },
+    },
+  },
+  timeouts:: {
+    local block = self,
+    new():: (
+      {}
+    ),
+    withCreate(value):: (
+      local converted = value;
+      assert std.isString(converted) : '"create" expected to be of type "string"';
+      {
+        create: converted,
+      }
+    ),
+    withDelete(value):: (
+      local converted = value;
+      assert std.isString(converted) : '"delete" expected to be of type "string"';
+      {
+        delete: converted,
+      }
+    ),
+  },
+  withTimeouts(value):: (
+    local converted = value;
+    {
+      timeouts: value,
+    }
+  ),
+}
