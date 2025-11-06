@@ -187,6 +187,9 @@ def jsonnet_with_fn(name: str, conversion: str) -> str:
         Jsonnet code for the 'with' function
     """
     fn_name = jsonnet_with_fn_name(name)
+    # Quote the name if it is reserved or contains jsonnet symbols
+    if name in RESERVED or any(c in JSONNET_SYMBOLS for c in name):
+        name = f"'{name}'"
 
     return f"""{fn_name}(value):: (
     {conversion}
@@ -561,8 +564,8 @@ class Block(JSONWizard):
         if is_library_top_level:
             return body
         else:
-            # Quote field name if it contains jsonnet symbols
-            if any(c in JSONNET_SYMBOLS for c in name):
+            # Quote field name if it is reserved or contains jsonnet symbols
+            if name in RESERVED or any(c in JSONNET_SYMBOLS for c in name):
                 return f"'{name}':: {{\n{body}\n}}"
             else:
                 return f"{name}:: {{\n{body}\n}}"
