@@ -156,7 +156,7 @@ def description(attribute: Any, fn_name: str) -> Optional[str]:
         Jsonnet code for the description comment or None if no description
     """
     if attribute.description is not None:
-        _description = attribute.description.replace("\n", " ").replace('"', "'")
+        _description = attribute.description.replace("\n", " ").replace('"', "'").replace("\\", "")
         return f'"#{fn_name}":: "{_description}"'
     return None
 
