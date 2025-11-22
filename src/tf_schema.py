@@ -211,6 +211,9 @@ def jsonnet_with_fn_mixin(name: str, conversion: str) -> str:
         Jsonnet code for the 'with' mixin function
     """
     fn_name = jsonnet_with_fn_mixin_name(name)
+    # Quote the name if it is reserved or contains jsonnet symbols
+    if name in RESERVED or any(c in JSONNET_SYMBOLS for c in name):
+        name = f"'{name}'"
 
     return f"""{fn_name}(value):: (
     {conversion}
