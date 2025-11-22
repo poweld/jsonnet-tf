@@ -136,6 +136,7 @@ def assertion(
         "set": f"assert (std.isArray({localvar}) && std.length(std.set({localvar})) == std.length({localvar})) : {error_message};",
         "map": f"assert std.isObject({localvar}) : {error_message};",
         "object": f"assert std.isObject({localvar}) : {error_message};",
+        "dynamic": "",  # dynamic type can store any value
     }
 
     if type_spec in type_assertions:
