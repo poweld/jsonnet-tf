@@ -86,7 +86,7 @@ def jsonnet_with_fn_mixin_name(name: str) -> str:
 
 def auto_conversion(
     type_spec: Optional[Union[str, List[str]]], from_localvar: str, to_localvar: str
-) -> str:
+) -> str | None:
     """Generate Jsonnet code to convert values based on type.
 
     Args:
@@ -105,7 +105,7 @@ def auto_conversion(
     if type_spec in ("list", "set"):
         return f"local {to_localvar} = if std.isArray({from_localvar}) then {from_localvar} else [{from_localvar}];"
 
-    return f"local {to_localvar} = {from_localvar};"
+    return None
 
 
 def assertion(
@@ -157,7 +157,9 @@ def description(attribute: Any, fn_name: str) -> Optional[str]:
         Jsonnet code for the description comment or None if no description
     """
     if attribute.description is not None:
-        _description = attribute.description.replace("\n", " ").replace('"', "'").replace("\\", "")
+        _description = (
+            attribute.description.replace("\n", " ").replace('"', "'").replace("\\", "")
+        )
         return f'"#{fn_name}":: "{_description}"'
     return None
 
@@ -177,7 +179,7 @@ def jsonnet_with_terraform_name() -> str:
   }}"""
 
 
-def jsonnet_with_fn(name: str, conversion: str) -> str:
+def jsonnet_with_fn(name: str, conversion: str | None = None) -> str:
     """Generate a standard 'with' function for a field.
 
     Args:
@@ -193,14 +195,13 @@ def jsonnet_with_fn(name: str, conversion: str) -> str:
         name = f"'{name}'"
 
     return f"""{fn_name}(value):: (
-    {conversion}
-    {{
-      {name}: value,
+    {f"{conversion}\n" if conversion else ""}{{
+      {name}: {"converted" if conversion else "value"},
     }}
   )"""
 
 
-def jsonnet_with_fn_mixin(name: str, conversion: str) -> str:
+def jsonnet_with_fn_mixin(name: str, conversion: str | None = None) -> str:
     """Generate a 'with' mixin function for a field.
 
     Args:
@@ -216,9 +217,8 @@ def jsonnet_with_fn_mixin(name: str, conversion: str) -> str:
         name = f"'{name}'"
 
     return f"""{fn_name}(value):: (
-    {conversion}
-    {{
-      {name}+: converted,
+    {f"{conversion}\n" if conversion else ""}{{
+      {name}+:  {"converted" if conversion else "value"},
     }}
   )"""
 
@@ -303,9 +303,16 @@ class Attribute(JSONWizard):
         _conversion = auto_conversion(
             self.type, from_localvar="value", to_localvar="converted"
         )
-        _assertion = assertion(self.type, name, "converted")
+        field_value_localvar = "value" if _conversion is None else "converted"
+        _assertion = assertion(self.type, name, field_value_localvar)
         fn_name = jsonnet_with_fn_name(name)
         _description = description(self, fn_name)
+        fn_prelude = "\n" + (f"{_description},\n" if _description else "")
+        fn_body_prelude = (
+            f"{_assertion}\n"
+            if _conversion is None
+            else f"{_conversion}\n{_assertion}\n"
+        )
 
         # Handle reserved keywords
         if name in RESERVED:
@@ -314,14 +321,10 @@ class Attribute(JSONWizard):
             field = name
 
         fns = []
-        if _description is not None:
-            fns.append(_description)
-
-        fns.append(f"""{fn_name}(value):: (
-      {_conversion}
-      {_assertion}
+        fns.append(f"""{fn_prelude}{fn_name}(value):: (
+      {fn_body_prelude}
       {{
-        {field}: converted,
+        {field}: {field_value_localvar},
       }}
     )""")
 
@@ -330,14 +333,12 @@ class Attribute(JSONWizard):
             if self.type[0] in ("list", "set"):
                 fn_name = jsonnet_with_fn_mixin_name(name)
                 _description = description(self, fn_name)
-                if _description is not None:
-                    fns.append(_description)
+                fn_prelude = f"{_description},\n" if _description else ""
 
-                fns.append(f"""{fn_name}(value):: (
-                  {_conversion}
-                  {_assertion}
+                fns.append(f"""{fn_prelude}{fn_name}(value):: (
+                  {fn_body_prelude}
                   {{
-                    {field}+: converted,
+                    {field}+: {field_value_localvar},
                   }}
                 )""")
 
