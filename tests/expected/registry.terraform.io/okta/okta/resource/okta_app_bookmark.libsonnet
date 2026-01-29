@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, label, url):: (
     {
       jsonnetTfMetadata:: {
@@ -14,131 +15,147 @@
     + block.withLabel(label)
     + block.withUrl(url)
   ),
+
   "#withAccessibilityErrorRedirectUrl":: "Custom error page URL",
   withAccessibilityErrorRedirectUrl(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"accessibility_error_redirect_url" expected to be of type "string"';
+    assert std.isString(value) : '"accessibility_error_redirect_url" expected to be of type "string"';
+
     {
-      accessibility_error_redirect_url: converted,
+      accessibility_error_redirect_url: value,
     }
   ),
+
   "#withAccessibilityLoginRedirectUrl":: "Custom login page URL",
   withAccessibilityLoginRedirectUrl(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"accessibility_login_redirect_url" expected to be of type "string"';
+    assert std.isString(value) : '"accessibility_login_redirect_url" expected to be of type "string"';
+
     {
-      accessibility_login_redirect_url: converted,
+      accessibility_login_redirect_url: value,
     }
   ),
+
   "#withAccessibilitySelfService":: "Enable self service. Default is `false`",
   withAccessibilitySelfService(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"accessibility_self_service" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"accessibility_self_service" expected to be of type "bool"';
+
     {
-      accessibility_self_service: converted,
+      accessibility_self_service: value,
     }
   ),
+
   "#withAdminNote":: "Application notes for admins.",
   withAdminNote(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"admin_note" expected to be of type "string"';
+    assert std.isString(value) : '"admin_note" expected to be of type "string"';
+
     {
-      admin_note: converted,
+      admin_note: value,
     }
   ),
+
   "#withAppLinksJson":: "Displays specific appLinks for the app. The value for each application link should be boolean.",
   withAppLinksJson(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"app_links_json" expected to be of type "string"';
+    assert std.isString(value) : '"app_links_json" expected to be of type "string"';
+
     {
-      app_links_json: converted,
+      app_links_json: value,
     }
   ),
+
   "#withAuthenticationPolicy":: "The ID of the associated app_signon_policy. If this property is removed from the application the default sign-on-policy will be associated with this application.",
   withAuthenticationPolicy(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"authentication_policy" expected to be of type "string"';
+    assert std.isString(value) : '"authentication_policy" expected to be of type "string"';
+
     {
-      authentication_policy: converted,
+      authentication_policy: value,
     }
   ),
+
   "#withAutoSubmitToolbar":: "Display auto submit toolbar",
   withAutoSubmitToolbar(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"auto_submit_toolbar" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"auto_submit_toolbar" expected to be of type "bool"';
+
     {
-      auto_submit_toolbar: converted,
+      auto_submit_toolbar: value,
     }
   ),
+
   "#withEnduserNote":: "Application notes for end users.",
   withEnduserNote(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"enduser_note" expected to be of type "string"';
+    assert std.isString(value) : '"enduser_note" expected to be of type "string"';
+
     {
-      enduser_note: converted,
+      enduser_note: value,
     }
   ),
+
   "#withHideIos":: "Do not display application icon on mobile app",
   withHideIos(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"hide_ios" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"hide_ios" expected to be of type "bool"';
+
     {
-      hide_ios: converted,
+      hide_ios: value,
     }
   ),
+
   "#withHideWeb":: "Do not display application icon to users",
   withHideWeb(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"hide_web" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"hide_web" expected to be of type "bool"';
+
     {
-      hide_web: converted,
+      hide_web: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withLabel":: "The Application's display name.",
   withLabel(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"label" expected to be of type "string"';
+    assert std.isString(value) : '"label" expected to be of type "string"';
+
     {
-      label: converted,
+      label: value,
     }
   ),
+
   "#withLogo":: "Local file path to the logo. The file must be in PNG, JPG, or GIF format, and less than 1 MB in size.",
   withLogo(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"logo" expected to be of type "string"';
+    assert std.isString(value) : '"logo" expected to be of type "string"';
+
     {
-      logo: converted,
+      logo: value,
     }
   ),
+
   "#withRequestIntegration":: "Would you like Okta to add an integration for this app?",
   withRequestIntegration(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"request_integration" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"request_integration" expected to be of type "bool"';
+
     {
-      request_integration: converted,
+      request_integration: value,
     }
   ),
+
   "#withStatus":: "Status of application. By default, it is `ACTIVE`",
   withStatus(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"status" expected to be of type "string"';
+    assert std.isString(value) : '"status" expected to be of type "string"';
+
     {
-      status: converted,
+      status: value,
     }
   ),
+
   "#withUrl":: "The URL of the bookmark.",
   withUrl(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"url" expected to be of type "string"';
+    assert std.isString(value) : '"url" expected to be of type "string"';
+
     {
-      url: converted,
+      url: value,
     }
   ),
   withTerraformName(value):: {
@@ -148,35 +165,39 @@
       },
     },
   },
+
   timeouts:: {
     local block = self,
+
     new():: (
       {}
     ),
+
     withCreate(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"create" expected to be of type "string"';
+      assert std.isString(value) : '"create" expected to be of type "string"';
+
       {
-        create: converted,
+        create: value,
       }
     ),
+
     withRead(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"read" expected to be of type "string"';
+      assert std.isString(value) : '"read" expected to be of type "string"';
+
       {
-        read: converted,
+        read: value,
       }
     ),
+
     withUpdate(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"update" expected to be of type "string"';
+      assert std.isString(value) : '"update" expected to be of type "string"';
+
       {
-        update: converted,
+        update: value,
       }
     ),
   },
   withTimeouts(value):: (
-    local converted = value;
     {
       timeouts: value,
     }

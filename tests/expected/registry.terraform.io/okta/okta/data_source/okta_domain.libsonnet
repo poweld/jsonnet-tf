@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, domainIdOrName):: (
     {
       jsonnetTfMetadata:: {
@@ -13,12 +14,13 @@
     }
     + block.withDomainIdOrName(domainIdOrName)
   ),
+
   "#withDomainIdOrName":: "Brand ID",
   withDomainIdOrName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"domain_id_or_name" expected to be of type "string"';
+    assert std.isString(value) : '"domain_id_or_name" expected to be of type "string"';
+
     {
-      domain_id_or_name: converted,
+      domain_id_or_name: value,
     }
   ),
   withTerraformName(value):: {

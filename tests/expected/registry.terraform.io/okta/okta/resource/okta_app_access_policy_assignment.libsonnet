@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, appId, policyId):: (
     {
       jsonnetTfMetadata:: {
@@ -14,20 +15,22 @@
     + block.withAppId(appId)
     + block.withPolicyId(policyId)
   ),
+
   "#withAppId":: "The application ID; this value is immutable and can not be updated.",
   withAppId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"app_id" expected to be of type "string"';
+    assert std.isString(value) : '"app_id" expected to be of type "string"';
+
     {
-      app_id: converted,
+      app_id: value,
     }
   ),
+
   "#withPolicyId":: "The access policy ID.",
   withPolicyId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"policy_id" expected to be of type "string"';
+    assert std.isString(value) : '"policy_id" expected to be of type "string"';
+
     {
-      policy_id: converted,
+      policy_id: value,
     }
   ),
   withTerraformName(value):: {

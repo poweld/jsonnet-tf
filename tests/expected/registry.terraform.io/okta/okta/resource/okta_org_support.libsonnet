@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
@@ -12,19 +13,21 @@
       },
     }
   ),
+
   "#withExtendBy":: "Number of days the support should be extended by",
   withExtendBy(value):: (
-    local converted = value;
-    assert std.isNumber(converted) : '"extend_by" expected to be of type "number"';
+    assert std.isNumber(value) : '"extend_by" expected to be of type "number"';
+
     {
-      extend_by: converted,
+      extend_by: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
   withTerraformName(value):: {

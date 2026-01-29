@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, alias, host, password, port, username):: (
     {
       jsonnetTfMetadata:: {
@@ -17,59 +18,66 @@
     + block.withPort(port)
     + block.withUsername(username)
   ),
+
   "#withAlias":: "Human-readable name for your SMTP server.",
   withAlias(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"alias" expected to be of type "string"';
+    assert std.isString(value) : '"alias" expected to be of type "string"';
+
     {
-      alias: converted,
+      alias: value,
     }
   ),
+
   "#withEnabled":: "If true, routes all email traffic through your SMTP server.",
   withEnabled(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"enabled" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"enabled" expected to be of type "bool"';
+
     {
-      enabled: converted,
+      enabled: value,
     }
   ),
+
   "#withHost":: "Hostname or IP address of your SMTP server.",
   withHost(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"host" expected to be of type "string"';
+    assert std.isString(value) : '"host" expected to be of type "string"';
+
     {
-      host: converted,
+      host: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withPassword":: "User name of the email domain.",
   withPassword(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"password" expected to be of type "string"';
+    assert std.isString(value) : '"password" expected to be of type "string"';
+
     {
-      password: converted,
+      password: value,
     }
   ),
+
   "#withPort":: "Port number of your SMTP server.",
   withPort(value):: (
-    local converted = value;
-    assert std.isNumber(converted) : '"port" expected to be of type "number"';
+    assert std.isNumber(value) : '"port" expected to be of type "number"';
+
     {
-      port: converted,
+      port: value,
     }
   ),
+
   "#withUsername":: "Display name of the email domain.",
   withUsername(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"username" expected to be of type "string"';
+    assert std.isString(value) : '"username" expected to be of type "string"';
+
     {
-      username: converted,
+      username: value,
     }
   ),
   withTerraformName(value):: {

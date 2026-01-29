@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, appId):: (
     {
       jsonnetTfMetadata:: {
@@ -13,27 +14,30 @@
     }
     + block.withAppId(appId)
   ),
+
   "#withAppId":: "The application ID.",
   withAppId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"app_id" expected to be of type "string"';
+    assert std.isString(value) : '"app_id" expected to be of type "string"';
+
     {
-      app_id: converted,
+      app_id: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withKeyId":: "Certificate Key ID.",
   withKeyId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"key_id" expected to be of type "string"';
+    assert std.isString(value) : '"key_id" expected to be of type "string"';
+
     {
-      key_id: converted,
+      key_id: value,
     }
   ),
   withTerraformName(value):: {

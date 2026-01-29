@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
@@ -12,19 +13,21 @@
       },
     }
   ),
+
   "#withFilter":: "Filter criteria. Filter value will be URL-encoded by the provider",
   withFilter(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"filter" expected to be of type "string"';
+    assert std.isString(value) : '"filter" expected to be of type "string"';
+
     {
-      filter: converted,
+      filter: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
   withTerraformName(value):: {

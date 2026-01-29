@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, type):: (
     {
       jsonnetTfMetadata:: {
@@ -13,19 +14,21 @@
     }
     + block.withType(type)
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withType":: "Policy type: OKTA_SIGN_ON, PASSWORD, MFA_ENROLL, or IDP_DISCOVERY",
   withType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"type" expected to be of type "string"';
+    assert std.isString(value) : '"type" expected to be of type "string"';
+
     {
-      type: converted,
+      type: value,
     }
   ),
   withTerraformName(value):: {

@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
@@ -12,44 +13,49 @@
       },
     }
   ),
+
   "#withDelayReadSeconds":: "Force delay of the group read by N seconds. Useful when eventual consistency of group information needs to be allowed for; for instance, when group rules are known to have been applied.",
   withDelayReadSeconds(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"delay_read_seconds" expected to be of type "string"';
+    assert std.isString(value) : '"delay_read_seconds" expected to be of type "string"';
+
     {
-      delay_read_seconds: converted,
+      delay_read_seconds: value,
     }
   ),
+
   "#withId":: "ID of group.",
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withIncludeUsers":: "Fetch group users, having default off cuts down on API calls.",
   withIncludeUsers(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"include_users" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"include_users" expected to be of type "bool"';
+
     {
-      include_users: converted,
+      include_users: value,
     }
   ),
+
   "#withName":: "Name of group.",
   withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
+    assert std.isString(value) : '"name" expected to be of type "string"';
+
     {
-      name: converted,
+      name: value,
     }
   ),
+
   "#withType":: "Type of the group. When specified in the terraform resource, will act as a filter when searching for the group",
   withType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"type" expected to be of type "string"';
+    assert std.isString(value) : '"type" expected to be of type "string"';
+
     {
-      type: converted,
+      type: value,
     }
   ),
   withTerraformName(value):: {

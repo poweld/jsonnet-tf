@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
@@ -12,19 +13,21 @@
       },
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withQ":: "Searches the name property of behaviors for matching value",
   withQ(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"q" expected to be of type "string"';
+    assert std.isString(value) : '"q" expected to be of type "string"';
+
     {
-      q: converted,
+      q: value,
     }
   ),
   withTerraformName(value):: {

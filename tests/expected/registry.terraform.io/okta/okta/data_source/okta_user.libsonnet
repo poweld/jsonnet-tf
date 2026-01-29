@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
@@ -12,51 +13,57 @@
       },
     }
   ),
+
   "#withCompoundSearchOperator":: "Search operator used when joining multiple search clauses",
   withCompoundSearchOperator(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"compound_search_operator" expected to be of type "string"';
+    assert std.isString(value) : '"compound_search_operator" expected to be of type "string"';
+
     {
-      compound_search_operator: converted,
+      compound_search_operator: value,
     }
   ),
+
   "#withDelayReadSeconds":: "Force delay of the user read by N seconds. Useful when eventual consistency of user information needs to be allowed for.",
   withDelayReadSeconds(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"delay_read_seconds" expected to be of type "string"';
+    assert std.isString(value) : '"delay_read_seconds" expected to be of type "string"';
+
     {
-      delay_read_seconds: converted,
+      delay_read_seconds: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withSkipGroups":: "Do not populate user groups information (prevents additional API call)",
   withSkipGroups(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"skip_groups" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"skip_groups" expected to be of type "bool"';
+
     {
-      skip_groups: converted,
+      skip_groups: value,
     }
   ),
+
   "#withSkipRoles":: "Do not populate user roles information (prevents additional API call)",
   withSkipRoles(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"skip_roles" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"skip_roles" expected to be of type "bool"';
+
     {
-      skip_roles: converted,
+      skip_roles: value,
     }
   ),
+
   "#withUserId":: "Retrieve a single user based on their id",
   withUserId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"user_id" expected to be of type "string"';
+    assert std.isString(value) : '"user_id" expected to be of type "string"';
+
     {
-      user_id: converted,
+      user_id: value,
     }
   ),
   withTerraformName(value):: {
@@ -66,46 +73,52 @@
       },
     },
   },
+
   search:: {
     local block = self,
+
     new():: (
       {}
     ),
+
     withComparison(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"comparison" expected to be of type "string"';
+      assert std.isString(value) : '"comparison" expected to be of type "string"';
+
       {
-        comparison: converted,
+        comparison: value,
       }
     ),
+
     "#withExpression":: "A raw search expression string. This requires the search feature be on. Please see Okta documentation on their filter API for users. https://developer.okta.com/docs/api/resources/users#list-users-with-search",
     withExpression(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"expression" expected to be of type "string"';
+      assert std.isString(value) : '"expression" expected to be of type "string"';
+
       {
-        expression: converted,
+        expression: value,
       }
     ),
+
     "#withName":: "Property name to search for. This requires the search feature be on. Please see Okta documentation on their filter API for users. https://developer.okta.com/docs/api/resources/users#list-users-with-search",
     withName(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"name" expected to be of type "string"';
+      assert std.isString(value) : '"name" expected to be of type "string"';
+
       {
-        name: converted,
+        name: value,
       }
     ),
+
     withValue(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"value" expected to be of type "string"';
+      assert std.isString(value) : '"value" expected to be of type "string"';
+
       {
-        value: converted,
+        value: value,
       }
     ),
   },
   withSearch(value):: (
     local converted = if std.isArray(value) then value else [value];
     {
-      search: value,
+      search: converted,
     }
   ),
   withSearchMixin(value):: (

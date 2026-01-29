@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, name, type):: (
     {
       jsonnetTfMetadata:: {
@@ -14,28 +15,31 @@
     + block.withName(name)
     + block.withType(type)
   ),
+
   "#withName":: "Unique name for the Log Stream object",
   withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
+    assert std.isString(value) : '"name" expected to be of type "string"';
+
     {
-      name: converted,
+      name: value,
     }
   ),
+
   "#withStatus":: "Stream status",
   withStatus(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"status" expected to be of type "string"';
+    assert std.isString(value) : '"status" expected to be of type "string"';
+
     {
-      status: converted,
+      status: value,
     }
   ),
+
   "#withType":: "Streaming provider used - 'aws_eventbridge' or 'splunk_cloud_logstreaming'",
   withType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"type" expected to be of type "string"';
+    assert std.isString(value) : '"type" expected to be of type "string"';
+
     {
-      type: converted,
+      type: value,
     }
   ),
   withTerraformName(value):: {
@@ -45,62 +49,69 @@
       },
     },
   },
+
   settings:: {
     local block = self,
+
     new():: (
       {}
     ),
+
     "#withAccountId":: "AWS account ID. Required only for 'aws_eventbridge' type",
     withAccountId(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"account_id" expected to be of type "string"';
+      assert std.isString(value) : '"account_id" expected to be of type "string"';
+
       {
-        account_id: converted,
+        account_id: value,
       }
     ),
+
     "#withEdition":: "Edition of the Splunk Cloud instance. Could be one of: 'aws', 'aws_govcloud', 'gcp'. Required only for 'splunk_cloud_logstreaming' type",
     withEdition(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"edition" expected to be of type "string"';
+      assert std.isString(value) : '"edition" expected to be of type "string"';
+
       {
-        edition: converted,
+        edition: value,
       }
     ),
+
     "#withEventSourceName":: "An alphanumeric name (no spaces) to identify this event source in AWS EventBridge. Required only for 'aws_eventbridge' type",
     withEventSourceName(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"event_source_name" expected to be of type "string"';
+      assert std.isString(value) : '"event_source_name" expected to be of type "string"';
+
       {
-        event_source_name: converted,
+        event_source_name: value,
       }
     ),
+
     "#withHost":: "The domain name for Splunk Cloud instance. Don't include http or https in the string. For example: 'acme.splunkcloud.com'. Required only for 'splunk_cloud_logstreaming' type",
     withHost(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"host" expected to be of type "string"';
+      assert std.isString(value) : '"host" expected to be of type "string"';
+
       {
-        host: converted,
+        host: value,
       }
     ),
+
     "#withRegion":: "The destination AWS region where event source is located. Required only for 'aws_eventbridge' type",
     withRegion(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"region" expected to be of type "string"';
+      assert std.isString(value) : '"region" expected to be of type "string"';
+
       {
-        region: converted,
+        region: value,
       }
     ),
+
     "#withToken":: "The HEC token for your Splunk Cloud HTTP Event Collector. Required only for 'splunk_cloud_logstreaming' type",
     withToken(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"token" expected to be of type "string"';
+      assert std.isString(value) : '"token" expected to be of type "string"';
+
       {
-        token: converted,
+        token: value,
       }
     ),
   },
   withSettings(value):: (
-    local converted = value;
     {
       settings: value,
     }

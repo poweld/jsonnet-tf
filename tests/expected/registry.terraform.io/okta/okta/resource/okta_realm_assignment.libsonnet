@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, name, profileSourceId, realmId):: (
     {
       jsonnetTfMetadata:: {
@@ -15,52 +16,58 @@
     + block.withProfileSourceId(profileSourceId)
     + block.withRealmId(realmId)
   ),
+
   "#withConditionExpression":: "Condition expression for the Realm Assignment in Okta Expression Language. Example: `user.profile.role =='Manager'` or `user.profile.state.contains('example')`.",
   withConditionExpression(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"condition_expression" expected to be of type "string"';
+    assert std.isString(value) : '"condition_expression" expected to be of type "string"';
+
     {
-      condition_expression: converted,
+      condition_expression: value,
     }
   ),
+
   "#withName":: "The name of the Okta Realm Assignment.",
   withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
+    assert std.isString(value) : '"name" expected to be of type "string"';
+
     {
-      name: converted,
+      name: value,
     }
   ),
+
   "#withPriority":: "The Priority of the Realm Assignment. The lower the number, the higher the priority.",
   withPriority(value):: (
-    local converted = value;
-    assert std.isNumber(converted) : '"priority" expected to be of type "number"';
+    assert std.isNumber(value) : '"priority" expected to be of type "number"';
+
     {
-      priority: converted,
+      priority: value,
     }
   ),
+
   "#withProfileSourceId":: "The ID of the Profile Source.",
   withProfileSourceId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"profile_source_id" expected to be of type "string"';
+    assert std.isString(value) : '"profile_source_id" expected to be of type "string"';
+
     {
-      profile_source_id: converted,
+      profile_source_id: value,
     }
   ),
+
   "#withRealmId":: "The ID of the Realm asscociated with the Realm Assignment.",
   withRealmId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"realm_id" expected to be of type "string"';
+    assert std.isString(value) : '"realm_id" expected to be of type "string"';
+
     {
-      realm_id: converted,
+      realm_id: value,
     }
   ),
+
   "#withStatus":: "Defines whether the Realm Assignment is active or not. Valid values: `ACTIVE` and `INACTIVE`.",
   withStatus(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"status" expected to be of type "string"';
+    assert std.isString(value) : '"status" expected to be of type "string"';
+
     {
-      status: converted,
+      status: value,
     }
   ),
   withTerraformName(value):: {

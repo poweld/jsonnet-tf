@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, groupId, idOfGroupOwner, type):: (
     {
       jsonnetTfMetadata:: {
@@ -15,28 +16,31 @@
     + block.withIdOfGroupOwner(idOfGroupOwner)
     + block.withType(type)
   ),
+
   "#withGroupId":: "The id of the group",
   withGroupId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"group_id" expected to be of type "string"';
+    assert std.isString(value) : '"group_id" expected to be of type "string"';
+
     {
-      group_id: converted,
+      group_id: value,
     }
   ),
+
   "#withIdOfGroupOwner":: "The user id of the group owner",
   withIdOfGroupOwner(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id_of_group_owner" expected to be of type "string"';
+    assert std.isString(value) : '"id_of_group_owner" expected to be of type "string"';
+
     {
-      id_of_group_owner: converted,
+      id_of_group_owner: value,
     }
   ),
+
   "#withType":: "The entity type of the owner. Enum: 'GROUP' 'USER'",
   withType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"type" expected to be of type "string"';
+    assert std.isString(value) : '"type" expected to be of type "string"';
+
     {
-      type: converted,
+      type: value,
     }
   ),
   withTerraformName(value):: {

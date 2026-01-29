@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, featureId):: (
     {
       jsonnetTfMetadata:: {
@@ -13,28 +14,31 @@
     }
     + block.withFeatureId(featureId)
   ),
+
   "#withFeatureId":: "Okta API for feature only reads and updates therefore the okta_feature resource needs to act as a quasi data source. Do this by setting feature_id",
   withFeatureId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"feature_id" expected to be of type "string"';
+    assert std.isString(value) : '"feature_id" expected to be of type "string"';
+
     {
-      feature_id: converted,
+      feature_id: value,
     }
   ),
+
   "#withLifeCycle":: "Whether to `ENABLE` or `DISABLE` the feature",
   withLifeCycle(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"life_cycle" expected to be of type "string"';
+    assert std.isString(value) : '"life_cycle" expected to be of type "string"';
+
     {
-      life_cycle: converted,
+      life_cycle: value,
     }
   ),
+
   "#withMode":: "Indicates if you want to force enable or disable a feature. Value is `true` meaning force",
   withMode(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"mode" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"mode" expected to be of type "bool"';
+
     {
-      mode: converted,
+      mode: value,
     }
   ),
   withTerraformName(value):: {

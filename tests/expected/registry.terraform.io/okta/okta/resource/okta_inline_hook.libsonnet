@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, name, type, version):: (
     {
       jsonnetTfMetadata:: {
@@ -15,65 +16,73 @@
     + block.withType(type)
     + block.withVersion(version)
   ),
+
   withAuth(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"auth" expected to be of type "map"';
+    assert std.isObject(value) : '"auth" expected to be of type "map"';
+
     {
-      auth: converted,
+      auth: value,
     }
   ),
+
   withChannel(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"channel" expected to be of type "map"';
+    assert std.isObject(value) : '"channel" expected to be of type "map"';
+
     {
-      channel: converted,
+      channel: value,
     }
   ),
+
   "#withChannelJson":: "true channel object for the inline hook API contract",
   withChannelJson(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"channel_json" expected to be of type "string"';
+    assert std.isString(value) : '"channel_json" expected to be of type "string"';
+
     {
-      channel_json: converted,
+      channel_json: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withName":: "The inline hook display name.",
   withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
+    assert std.isString(value) : '"name" expected to be of type "string"';
+
     {
-      name: converted,
+      name: value,
     }
   ),
+
   "#withStatus":: "Default to `ACTIVE`",
   withStatus(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"status" expected to be of type "string"';
+    assert std.isString(value) : '"status" expected to be of type "string"';
+
     {
-      status: converted,
+      status: value,
     }
   ),
+
   "#withType":: "The type of hook to create. [See here for supported types](https://developer.okta.com/docs/reference/api/inline-hooks/#supported-inline-hook-types).",
   withType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"type" expected to be of type "string"';
+    assert std.isString(value) : '"type" expected to be of type "string"';
+
     {
-      type: converted,
+      type: value,
     }
   ),
+
   "#withVersion":: "The version of the hook. The currently-supported version is `1.0.0`.",
   withVersion(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"version" expected to be of type "string"';
+    assert std.isString(value) : '"version" expected to be of type "string"';
+
     {
-      version: converted,
+      version: value,
     }
   ),
   withTerraformName(value):: {
@@ -83,30 +92,34 @@
       },
     },
   },
+
   headers:: {
     local block = self,
+
     new():: (
       {}
     ),
+
     withKey(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"key" expected to be of type "string"';
+      assert std.isString(value) : '"key" expected to be of type "string"';
+
       {
-        key: converted,
+        key: value,
       }
     ),
+
     withValue(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"value" expected to be of type "string"';
+      assert std.isString(value) : '"value" expected to be of type "string"';
+
       {
-        value: converted,
+        value: value,
       }
     ),
   },
   withHeaders(value):: (
     local converted = if std.isArray(value) then value else [value];
     {
-      headers: value,
+      headers: converted,
     }
   ),
   withHeadersMixin(value):: (

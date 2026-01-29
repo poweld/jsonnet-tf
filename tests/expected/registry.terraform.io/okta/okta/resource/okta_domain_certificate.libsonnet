@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, certificate, certificateChain, domainId, privateKey):: (
     {
       jsonnetTfMetadata:: {
@@ -16,51 +17,57 @@
     + block.withDomainId(domainId)
     + block.withPrivateKey(privateKey)
   ),
+
   "#withCertificate":: "Certificate content",
   withCertificate(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"certificate" expected to be of type "string"';
+    assert std.isString(value) : '"certificate" expected to be of type "string"';
+
     {
-      certificate: converted,
+      certificate: value,
     }
   ),
+
   "#withCertificateChain":: "Certificate chain",
   withCertificateChain(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"certificate_chain" expected to be of type "string"';
+    assert std.isString(value) : '"certificate_chain" expected to be of type "string"';
+
     {
-      certificate_chain: converted,
+      certificate_chain: value,
     }
   ),
+
   "#withDomainId":: "Domain's ID",
   withDomainId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"domain_id" expected to be of type "string"';
+    assert std.isString(value) : '"domain_id" expected to be of type "string"';
+
     {
-      domain_id: converted,
+      domain_id: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withPrivateKey":: "Certificate private key",
   withPrivateKey(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"private_key" expected to be of type "string"';
+    assert std.isString(value) : '"private_key" expected to be of type "string"';
+
     {
-      private_key: converted,
+      private_key: value,
     }
   ),
+
   "#withType":: "Certificate type. Valid value is `PEM`",
   withType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"type" expected to be of type "string"';
+    assert std.isString(value) : '"type" expected to be of type "string"';
+
     {
-      type: converted,
+      type: value,
     }
   ),
   withTerraformName(value):: {

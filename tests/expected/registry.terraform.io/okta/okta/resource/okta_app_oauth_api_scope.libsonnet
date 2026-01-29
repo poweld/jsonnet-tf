@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, appId, issuer, scopes):: (
     {
       jsonnetTfMetadata:: {
@@ -15,41 +16,48 @@
     + block.withIssuer(issuer)
     + block.withScopes(scopes)
   ),
+
   "#withAppId":: "ID of the application.",
   withAppId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"app_id" expected to be of type "string"';
+    assert std.isString(value) : '"app_id" expected to be of type "string"';
+
     {
-      app_id: converted,
+      app_id: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withIssuer":: "The issuer of your Org Authorization Server, your Org URL.",
   withIssuer(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"issuer" expected to be of type "string"';
+    assert std.isString(value) : '"issuer" expected to be of type "string"';
+
     {
-      issuer: converted,
+      issuer: value,
     }
   ),
+
   "#withScopes":: "Scopes of the application for which consent is granted.",
   withScopes(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"scopes" expected to be of type "set"';
+
     {
       scopes: converted,
     }
   ),
+
   "#withScopesMixin":: "Scopes of the application for which consent is granted.",
   withScopesMixin(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"scopes" expected to be of type "set"';
+
     {
       scopes+: converted,
     }

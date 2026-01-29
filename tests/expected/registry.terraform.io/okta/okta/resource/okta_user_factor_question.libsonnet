@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, answer, key, userId):: (
     {
       jsonnetTfMetadata:: {
@@ -15,35 +16,39 @@
     + block.withKey(key)
     + block.withUserId(userId)
   ),
+
   "#withAnswer":: "Security question answer. Note here that answer won't be set during the resource import.",
   withAnswer(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"answer" expected to be of type "string"';
+    assert std.isString(value) : '"answer" expected to be of type "string"';
+
     {
-      answer: converted,
+      answer: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withKey":: "Security question unique key. ",
   withKey(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"key" expected to be of type "string"';
+    assert std.isString(value) : '"key" expected to be of type "string"';
+
     {
-      key: converted,
+      key: value,
     }
   ),
+
   "#withUserId":: "ID of the user. Resource will be recreated when `user_id` changes.",
   withUserId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"user_id" expected to be of type "string"';
+    assert std.isString(value) : '"user_id" expected to be of type "string"';
+
     {
-      user_id: converted,
+      user_id: value,
     }
   ),
   withTerraformName(value):: {

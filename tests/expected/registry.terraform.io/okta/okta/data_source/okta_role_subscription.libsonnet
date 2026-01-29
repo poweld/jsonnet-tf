@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, notificationType, roleType):: (
     {
       jsonnetTfMetadata:: {
@@ -14,27 +15,30 @@
     + block.withNotificationType(notificationType)
     + block.withRoleType(roleType)
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withNotificationType":: "Type of the notification",
   withNotificationType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"notification_type" expected to be of type "string"';
+    assert std.isString(value) : '"notification_type" expected to be of type "string"';
+
     {
-      notification_type: converted,
+      notification_type: value,
     }
   ),
+
   "#withRoleType":: "Type of the role",
   withRoleType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"role_type" expected to be of type "string"';
+    assert std.isString(value) : '"role_type" expected to be of type "string"';
+
     {
-      role_type: converted,
+      role_type: value,
     }
   ),
   withTerraformName(value):: {

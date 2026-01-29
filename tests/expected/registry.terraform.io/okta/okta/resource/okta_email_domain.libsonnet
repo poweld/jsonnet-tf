@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, brandId, displayName, domain, userName):: (
     {
       jsonnetTfMetadata:: {
@@ -16,43 +17,48 @@
     + block.withDomain(domain)
     + block.withUserName(userName)
   ),
+
   "#withBrandId":: "Brand id of the email domain.",
   withBrandId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"brand_id" expected to be of type "string"';
+    assert std.isString(value) : '"brand_id" expected to be of type "string"';
+
     {
-      brand_id: converted,
+      brand_id: value,
     }
   ),
+
   "#withDisplayName":: "Display name of the email domain.",
   withDisplayName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"display_name" expected to be of type "string"';
+    assert std.isString(value) : '"display_name" expected to be of type "string"';
+
     {
-      display_name: converted,
+      display_name: value,
     }
   ),
+
   "#withDomain":: "Mail domain to send from.",
   withDomain(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"domain" expected to be of type "string"';
+    assert std.isString(value) : '"domain" expected to be of type "string"';
+
     {
-      domain: converted,
+      domain: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withUserName":: "User name of the email domain.",
   withUserName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"user_name" expected to be of type "string"';
+    assert std.isString(value) : '"user_name" expected to be of type "string"';
+
     {
-      user_name: converted,
+      user_name: value,
     }
   ),
   withTerraformName(value):: {

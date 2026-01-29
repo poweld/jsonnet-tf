@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, fromAddress, fromName, subdomain):: (
     {
       jsonnetTfMetadata:: {
@@ -15,35 +16,39 @@
     + block.withFromName(fromName)
     + block.withSubdomain(subdomain)
   ),
+
   "#withFromAddress":: "Email address to send from ",
   withFromAddress(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"from_address" expected to be of type "string"';
+    assert std.isString(value) : '"from_address" expected to be of type "string"';
+
     {
-      from_address: converted,
+      from_address: value,
     }
   ),
+
   "#withFromName":: "Name of sender",
   withFromName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"from_name" expected to be of type "string"';
+    assert std.isString(value) : '"from_name" expected to be of type "string"';
+
     {
-      from_name: converted,
+      from_name: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withSubdomain":: "Mail domain to send from",
   withSubdomain(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"subdomain" expected to be of type "string"';
+    assert std.isString(value) : '"subdomain" expected to be of type "string"';
+
     {
-      subdomain: converted,
+      subdomain: value,
     }
   ),
   withTerraformName(value):: {

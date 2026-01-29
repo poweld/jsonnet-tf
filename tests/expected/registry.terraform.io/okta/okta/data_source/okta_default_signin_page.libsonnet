@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, brandId):: (
     {
       jsonnetTfMetadata:: {
@@ -13,12 +14,13 @@
     }
     + block.withBrandId(brandId)
   ),
+
   "#withBrandId":: "brand id of the preview signin page",
   withBrandId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"brand_id" expected to be of type "string"';
+    assert std.isString(value) : '"brand_id" expected to be of type "string"';
+
     {
-      brand_id: converted,
+      brand_id: value,
     }
   ),
   withTerraformName(value):: {
@@ -28,26 +30,27 @@
       },
     },
   },
+
   contentSecurityPolicySetting:: {
     local block = self,
+
     new():: (
       {}
     ),
   },
   widgetCustomizations:: {
     local block = self,
+
     new():: (
       {}
     ),
   },
   withContentSecurityPolicySetting(value):: (
-    local converted = value;
     {
       content_security_policy_setting: value,
     }
   ),
   withWidgetCustomizations(value):: (
-    local converted = value;
     {
       widget_customizations: value,
     }
