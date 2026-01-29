@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, appId, userId):: (
     {
       jsonnetTfMetadata:: {
@@ -14,59 +15,66 @@
     + block.withAppId(appId)
     + block.withUserId(userId)
   ),
+
   "#withAppId":: "App to associate user with",
   withAppId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"app_id" expected to be of type "string"';
+    assert std.isString(value) : '"app_id" expected to be of type "string"';
+
     {
-      app_id: converted,
+      app_id: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withPassword":: "The password to use.",
   withPassword(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"password" expected to be of type "string"';
+    assert std.isString(value) : '"password" expected to be of type "string"';
+
     {
-      password: converted,
+      password: value,
     }
   ),
+
   "#withProfile":: "The JSON profile of the App User.",
   withProfile(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"profile" expected to be of type "string"';
+    assert std.isString(value) : '"profile" expected to be of type "string"';
+
     {
-      profile: converted,
+      profile: value,
     }
   ),
+
   "#withRetainAssignment":: "Retain the user assignment on destroy. If set to true, the resource will be removed from state but not from the Okta app.",
   withRetainAssignment(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"retain_assignment" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"retain_assignment" expected to be of type "bool"';
+
     {
-      retain_assignment: converted,
+      retain_assignment: value,
     }
   ),
+
   "#withUserId":: "User associated with the application",
   withUserId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"user_id" expected to be of type "string"';
+    assert std.isString(value) : '"user_id" expected to be of type "string"';
+
     {
-      user_id: converted,
+      user_id: value,
     }
   ),
+
   "#withUsername":: "The username to use for the app user. In case the user is assigned to the app with `SHARED_USERNAME_AND_PASSWORD` credentials scheme, this field will be computed and should not be set.",
   withUsername(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"username" expected to be of type "string"';
+    assert std.isString(value) : '"username" expected to be of type "string"';
+
     {
-      username: converted,
+      username: value,
     }
   ),
   withTerraformName(value):: {

@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, appId):: (
     {
       jsonnetTfMetadata:: {
@@ -13,19 +14,21 @@
     }
     + block.withAppId(appId)
   ),
+
   "#withAppId":: "The ID of the application to assign a group to.",
   withAppId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"app_id" expected to be of type "string"';
+    assert std.isString(value) : '"app_id" expected to be of type "string"';
+
     {
-      app_id: converted,
+      app_id: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
   withTerraformName(value):: {
@@ -35,72 +38,80 @@
       },
     },
   },
+
   group:: {
     local block = self,
+
     new(id):: (
       {}
       + block.withId(id)
     ),
+
     "#withId":: "A group to associate with the application",
     withId(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"id" expected to be of type "string"';
+      assert std.isString(value) : '"id" expected to be of type "string"';
+
       {
-        id: converted,
+        id: value,
       }
     ),
+
     "#withPriority":: "Priority of group assignment",
     withPriority(value):: (
-      local converted = value;
-      assert std.isNumber(converted) : '"priority" expected to be of type "number"';
+      assert std.isNumber(value) : '"priority" expected to be of type "number"';
+
       {
-        priority: converted,
+        priority: value,
       }
     ),
+
     "#withProfile":: "JSON document containing [application profile](https://developer.okta.com/docs/reference/api/apps/#profile-object)",
     withProfile(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"profile" expected to be of type "string"';
+      assert std.isString(value) : '"profile" expected to be of type "string"';
+
       {
-        profile: converted,
+        profile: value,
       }
     ),
   },
   timeouts:: {
     local block = self,
+
     new():: (
       {}
     ),
+
     withCreate(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"create" expected to be of type "string"';
+      assert std.isString(value) : '"create" expected to be of type "string"';
+
       {
-        create: converted,
+        create: value,
       }
     ),
+
     withRead(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"read" expected to be of type "string"';
+      assert std.isString(value) : '"read" expected to be of type "string"';
+
       {
-        read: converted,
+        read: value,
       }
     ),
+
     withUpdate(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"update" expected to be of type "string"';
+      assert std.isString(value) : '"update" expected to be of type "string"';
+
       {
-        update: converted,
+        update: value,
       }
     ),
   },
   withGroup(value):: (
     local converted = if std.isArray(value) then value else [value];
     {
-      group: value,
+      group: converted,
     }
   ),
   withTimeouts(value):: (
-    local converted = value;
     {
       timeouts: value,
     }

@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, brandId, templateName):: (
     {
       jsonnetTfMetadata:: {
@@ -14,27 +15,30 @@
     + block.withBrandId(brandId)
     + block.withTemplateName(templateName)
   ),
+
   "#withBrandId":: "Brand ID",
   withBrandId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"brand_id" expected to be of type "string"';
+    assert std.isString(value) : '"brand_id" expected to be of type "string"';
+
     {
-      brand_id: converted,
+      brand_id: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withTemplateName":: "Template Name",
   withTemplateName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"template_name" expected to be of type "string"';
+    assert std.isString(value) : '"template_name" expected to be of type "string"';
+
     {
-      template_name: converted,
+      template_name: value,
     }
   ),
   withTerraformName(value):: {

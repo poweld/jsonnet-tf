@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, description, displayName, name):: (
     {
       jsonnetTfMetadata:: {
@@ -15,35 +16,39 @@
     + block.withDisplayName(displayName)
     + block.withName(name)
   ),
+
   "#withDescription":: "Description of the User Type.",
   withDescription(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"description" expected to be of type "string"';
+    assert std.isString(value) : '"description" expected to be of type "string"';
+
     {
-      description: converted,
+      description: value,
     }
   ),
+
   "#withDisplayName":: "Display Name of the User Type.",
   withDisplayName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"display_name" expected to be of type "string"';
+    assert std.isString(value) : '"display_name" expected to be of type "string"';
+
     {
-      display_name: converted,
+      display_name: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withName":: "Name of the User Type.",
   withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
+    assert std.isString(value) : '"name" expected to be of type "string"';
+
     {
-      name: converted,
+      name: value,
     }
   ),
   withTerraformName(value):: {

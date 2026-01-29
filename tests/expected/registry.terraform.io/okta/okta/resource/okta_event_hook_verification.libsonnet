@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, eventHookId):: (
     {
       jsonnetTfMetadata:: {
@@ -13,19 +14,21 @@
     }
     + block.withEventHookId(eventHookId)
   ),
+
   "#withEventHookId":: "Event hook ID",
   withEventHookId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"event_hook_id" expected to be of type "string"';
+    assert std.isString(value) : '"event_hook_id" expected to be of type "string"';
+
     {
-      event_hook_id: converted,
+      event_hook_id: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
   withTerraformName(value):: {

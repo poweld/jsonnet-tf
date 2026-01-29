@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
@@ -12,28 +13,31 @@
       },
     }
   ),
+
   "#withId":: "ID of the authenticator.",
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withKey":: "A human-readable string that identifies the authenticator.",
   withKey(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"key" expected to be of type "string"';
+    assert std.isString(value) : '"key" expected to be of type "string"';
+
     {
-      key: converted,
+      key: value,
     }
   ),
+
   "#withName":: "Name of the authenticator.",
   withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
+    assert std.isString(value) : '"name" expected to be of type "string"';
+
     {
-      name: converted,
+      name: value,
     }
   ),
   withTerraformName(value):: {

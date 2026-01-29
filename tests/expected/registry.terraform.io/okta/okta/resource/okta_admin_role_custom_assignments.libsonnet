@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, customRoleId, resourceSetId):: (
     {
       jsonnetTfMetadata:: {
@@ -14,43 +15,50 @@
     + block.withCustomRoleId(customRoleId)
     + block.withResourceSetId(resourceSetId)
   ),
+
   "#withCustomRoleId":: "ID of the Custom Role",
   withCustomRoleId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"custom_role_id" expected to be of type "string"';
+    assert std.isString(value) : '"custom_role_id" expected to be of type "string"';
+
     {
-      custom_role_id: converted,
+      custom_role_id: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withMembers":: "The hrefs that point to User(s) and/or Group(s) that receive the Role",
   withMembers(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"members" expected to be of type "set"';
+
     {
       members: converted,
     }
   ),
+
   "#withMembersMixin":: "The hrefs that point to User(s) and/or Group(s) that receive the Role",
   withMembersMixin(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"members" expected to be of type "set"';
+
     {
       members+: converted,
     }
   ),
+
   "#withResourceSetId":: "ID of the target Resource Set",
   withResourceSetId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"resource_set_id" expected to be of type "string"';
+    assert std.isString(value) : '"resource_set_id" expected to be of type "string"';
+
     {
-      resource_set_id: converted,
+      resource_set_id: value,
     }
   ),
   withTerraformName(value):: {

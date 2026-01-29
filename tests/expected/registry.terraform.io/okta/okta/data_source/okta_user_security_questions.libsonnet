@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, userId):: (
     {
       jsonnetTfMetadata:: {
@@ -13,19 +14,21 @@
     }
     + block.withUserId(userId)
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withUserId":: "ID of a Okta User",
   withUserId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"user_id" expected to be of type "string"';
+    assert std.isString(value) : '"user_id" expected to be of type "string"';
+
     {
-      user_id: converted,
+      user_id: value,
     }
   ),
   withTerraformName(value):: {

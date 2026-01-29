@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, name, secretKey, siteKey, type):: (
     {
       jsonnetTfMetadata:: {
@@ -16,43 +17,48 @@
     + block.withSiteKey(siteKey)
     + block.withType(type)
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withName":: "Name of the CAPTCHA",
   withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
+    assert std.isString(value) : '"name" expected to be of type "string"';
+
     {
-      name: converted,
+      name: value,
     }
   ),
+
   "#withSecretKey":: "Secret key issued from the CAPTCHA vendor to perform server-side validation for a CAPTCHA token",
   withSecretKey(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"secret_key" expected to be of type "string"';
+    assert std.isString(value) : '"secret_key" expected to be of type "string"';
+
     {
-      secret_key: converted,
+      secret_key: value,
     }
   ),
+
   "#withSiteKey":: "Site key issued from the CAPTCHA vendor to render a CAPTCHA on a page",
   withSiteKey(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"site_key" expected to be of type "string"';
+    assert std.isString(value) : '"site_key" expected to be of type "string"';
+
     {
-      site_key: converted,
+      site_key: value,
     }
   ),
+
   "#withType":: "Type of the captcha. Valid values: `HCAPTCHA`, `RECAPTCHA_V2`",
   withType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"type" expected to be of type "string"';
+    assert std.isString(value) : '"type" expected to be of type "string"';
+
     {
-      type: converted,
+      type: value,
     }
   ),
   withTerraformName(value):: {

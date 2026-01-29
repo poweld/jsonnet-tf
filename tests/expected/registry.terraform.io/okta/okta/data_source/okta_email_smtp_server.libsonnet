@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, id):: (
     {
       jsonnetTfMetadata:: {
@@ -13,12 +14,13 @@
     }
     + block.withId(id)
   ),
+
   "#withId":: "The ID of the SMTP server.",
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
   withTerraformName(value):: {

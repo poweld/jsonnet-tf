@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
@@ -12,19 +13,21 @@
       },
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withIncludeUsers":: "Fetch group users, having default off cuts down on API calls.",
   withIncludeUsers(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"include_users" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"include_users" expected to be of type "bool"';
+
     {
-      include_users: converted,
+      include_users: value,
     }
   ),
   withTerraformName(value):: {

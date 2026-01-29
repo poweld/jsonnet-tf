@@ -342,7 +342,7 @@ class Attribute(JSONWizard):
                   }}
                 )""")
 
-        return ",\n".join(fns)
+        return ",\n\n".join(fns)
 
 
 @dataclass
@@ -563,7 +563,7 @@ class Block(JSONWizard):
         if nested_type_code:
             body_parts.append(nested_type_code)
 
-        body = ",\n".join(body_parts)
+        body = ",\n\n".join(body_parts)
 
         # Return appropriately formatted code
         if is_library_top_level:

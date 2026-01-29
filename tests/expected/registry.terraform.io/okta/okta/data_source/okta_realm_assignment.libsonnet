@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName):: (
     {
       jsonnetTfMetadata:: {
@@ -12,12 +13,13 @@
       },
     }
   ),
+
   "#withName":: "The name of the Okta Realm Assignment.",
   withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
+    assert std.isString(value) : '"name" expected to be of type "string"';
+
     {
-      name: converted,
+      name: value,
     }
   ),
   withTerraformName(value):: {

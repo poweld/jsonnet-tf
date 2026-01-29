@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, name):: (
     {
       jsonnetTfMetadata:: {
@@ -13,235 +14,271 @@
     }
     + block.withName(name)
   ),
+
   "#withDescription":: "Policy Description",
   withDescription(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"description" expected to be of type "string"';
+    assert std.isString(value) : '"description" expected to be of type "string"';
+
     {
-      description: converted,
+      description: value,
     }
   ),
+
   withDuo(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"duo" expected to be of type "map"';
+    assert std.isObject(value) : '"duo" expected to be of type "map"';
+
     {
-      duo: converted,
+      duo: value,
     }
   ),
+
   withExternalIdp(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"external_idp" expected to be of type "map"';
+    assert std.isObject(value) : '"external_idp" expected to be of type "map"';
+
     {
-      external_idp: converted,
+      external_idp: value,
     }
   ),
+
   withExternalIdps(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"external_idps" expected to be of type "set"';
+
     {
       external_idps: converted,
     }
   ),
+
   withExternalIdpsMixin(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"external_idps" expected to be of type "set"';
+
     {
       external_idps+: converted,
     }
   ),
+
   withFidoU2f(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"fido_u2f" expected to be of type "map"';
+    assert std.isObject(value) : '"fido_u2f" expected to be of type "map"';
+
     {
-      fido_u2f: converted,
+      fido_u2f: value,
     }
   ),
+
   withFidoWebauthn(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"fido_webauthn" expected to be of type "map"';
+    assert std.isObject(value) : '"fido_webauthn" expected to be of type "map"';
+
     {
-      fido_webauthn: converted,
+      fido_webauthn: value,
     }
   ),
+
   withGoogleOtp(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"google_otp" expected to be of type "map"';
+    assert std.isObject(value) : '"google_otp" expected to be of type "map"';
+
     {
-      google_otp: converted,
+      google_otp: value,
     }
   ),
+
   "#withGroupsIncluded":: "List of Group IDs to Include",
   withGroupsIncluded(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"groups_included" expected to be of type "set"';
+
     {
       groups_included: converted,
     }
   ),
+
   "#withGroupsIncludedMixin":: "List of Group IDs to Include",
   withGroupsIncludedMixin(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"groups_included" expected to be of type "set"';
+
     {
       groups_included+: converted,
     }
   ),
+
   withHotp(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"hotp" expected to be of type "map"';
+    assert std.isObject(value) : '"hotp" expected to be of type "map"';
+
     {
-      hotp: converted,
+      hotp: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withIsOie":: "Is the policy using Okta Identity Engine (OIE) with authenticators instead of factors?",
   withIsOie(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"is_oie" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"is_oie" expected to be of type "bool"';
+
     {
-      is_oie: converted,
+      is_oie: value,
     }
   ),
+
   "#withName":: "Policy Name",
   withName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"name" expected to be of type "string"';
+    assert std.isString(value) : '"name" expected to be of type "string"';
+
     {
-      name: converted,
+      name: value,
     }
   ),
+
   withOktaCall(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"okta_call" expected to be of type "map"';
+    assert std.isObject(value) : '"okta_call" expected to be of type "map"';
+
     {
-      okta_call: converted,
+      okta_call: value,
     }
   ),
+
   withOktaEmail(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"okta_email" expected to be of type "map"';
+    assert std.isObject(value) : '"okta_email" expected to be of type "map"';
+
     {
-      okta_email: converted,
+      okta_email: value,
     }
   ),
+
   withOktaOtp(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"okta_otp" expected to be of type "map"';
+    assert std.isObject(value) : '"okta_otp" expected to be of type "map"';
+
     {
-      okta_otp: converted,
+      okta_otp: value,
     }
   ),
+
   withOktaPassword(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"okta_password" expected to be of type "map"';
+    assert std.isObject(value) : '"okta_password" expected to be of type "map"';
+
     {
-      okta_password: converted,
+      okta_password: value,
     }
   ),
+
   withOktaPush(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"okta_push" expected to be of type "map"';
+    assert std.isObject(value) : '"okta_push" expected to be of type "map"';
+
     {
-      okta_push: converted,
+      okta_push: value,
     }
   ),
+
   withOktaQuestion(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"okta_question" expected to be of type "map"';
+    assert std.isObject(value) : '"okta_question" expected to be of type "map"';
+
     {
-      okta_question: converted,
+      okta_question: value,
     }
   ),
+
   withOktaSms(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"okta_sms" expected to be of type "map"';
+    assert std.isObject(value) : '"okta_sms" expected to be of type "map"';
+
     {
-      okta_sms: converted,
+      okta_sms: value,
     }
   ),
+
   withOktaVerify(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"okta_verify" expected to be of type "map"';
+    assert std.isObject(value) : '"okta_verify" expected to be of type "map"';
+
     {
-      okta_verify: converted,
+      okta_verify: value,
     }
   ),
+
   withOnpremMfa(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"onprem_mfa" expected to be of type "map"';
+    assert std.isObject(value) : '"onprem_mfa" expected to be of type "map"';
+
     {
-      onprem_mfa: converted,
+      onprem_mfa: value,
     }
   ),
+
   withPhoneNumber(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"phone_number" expected to be of type "map"';
+    assert std.isObject(value) : '"phone_number" expected to be of type "map"';
+
     {
-      phone_number: converted,
+      phone_number: value,
     }
   ),
+
   "#withPriority":: "Policy Priority, this attribute can be set to a valid priority. To avoid endless diff situation we error if an invalid priority is provided. API defaults it to the last (lowest) if not there.",
   withPriority(value):: (
-    local converted = value;
-    assert std.isNumber(converted) : '"priority" expected to be of type "number"';
+    assert std.isNumber(value) : '"priority" expected to be of type "number"';
+
     {
-      priority: converted,
+      priority: value,
     }
   ),
+
   withRsaToken(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"rsa_token" expected to be of type "map"';
+    assert std.isObject(value) : '"rsa_token" expected to be of type "map"';
+
     {
-      rsa_token: converted,
+      rsa_token: value,
     }
   ),
+
   withSecurityQuestion(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"security_question" expected to be of type "map"';
+    assert std.isObject(value) : '"security_question" expected to be of type "map"';
+
     {
-      security_question: converted,
+      security_question: value,
     }
   ),
+
   withSmartCardIdp(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"smart_card_idp" expected to be of type "map"';
+    assert std.isObject(value) : '"smart_card_idp" expected to be of type "map"';
+
     {
-      smart_card_idp: converted,
+      smart_card_idp: value,
     }
   ),
+
   "#withStatus":: "Policy Status: `ACTIVE` or `INACTIVE`. Default: `ACTIVE`",
   withStatus(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"status" expected to be of type "string"';
+    assert std.isString(value) : '"status" expected to be of type "string"';
+
     {
-      status: converted,
+      status: value,
     }
   ),
+
   withSymantecVip(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"symantec_vip" expected to be of type "map"';
+    assert std.isObject(value) : '"symantec_vip" expected to be of type "map"';
+
     {
-      symantec_vip: converted,
+      symantec_vip: value,
     }
   ),
+
   withWebauthn(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"webauthn" expected to be of type "map"';
+    assert std.isObject(value) : '"webauthn" expected to be of type "map"';
+
     {
-      webauthn: converted,
+      webauthn: value,
     }
   ),
+
   withYubikeyToken(value):: (
-    local converted = value;
-    assert std.isObject(converted) : '"yubikey_token" expected to be of type "map"';
+    assert std.isObject(value) : '"yubikey_token" expected to be of type "map"';
+
     {
-      yubikey_token: converted,
+      yubikey_token: value,
     }
   ),
   withTerraformName(value):: {

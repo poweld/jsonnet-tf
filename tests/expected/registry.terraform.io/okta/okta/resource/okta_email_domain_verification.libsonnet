@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, emailDomainId):: (
     {
       jsonnetTfMetadata:: {
@@ -13,19 +14,21 @@
     }
     + block.withEmailDomainId(emailDomainId)
   ),
+
   "#withEmailDomainId":: "Email domain ID",
   withEmailDomainId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"email_domain_id" expected to be of type "string"';
+    assert std.isString(value) : '"email_domain_id" expected to be of type "string"';
+
     {
-      email_domain_id: converted,
+      email_domain_id: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
   withTerraformName(value):: {

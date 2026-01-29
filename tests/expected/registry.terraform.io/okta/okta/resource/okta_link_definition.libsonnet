@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, associatedDescription, associatedName, associatedTitle, primaryDescription, primaryName, primaryTitle):: (
     {
       jsonnetTfMetadata:: {
@@ -18,59 +19,66 @@
     + block.withPrimaryName(primaryName)
     + block.withPrimaryTitle(primaryTitle)
   ),
+
   "#withAssociatedDescription":: "Description of the associated relationship.",
   withAssociatedDescription(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"associated_description" expected to be of type "string"';
+    assert std.isString(value) : '"associated_description" expected to be of type "string"';
+
     {
-      associated_description: converted,
+      associated_description: value,
     }
   ),
+
   "#withAssociatedName":: "API name of the associated link.",
   withAssociatedName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"associated_name" expected to be of type "string"';
+    assert std.isString(value) : '"associated_name" expected to be of type "string"';
+
     {
-      associated_name: converted,
+      associated_name: value,
     }
   ),
+
   "#withAssociatedTitle":: "Display name of the associated link.",
   withAssociatedTitle(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"associated_title" expected to be of type "string"';
+    assert std.isString(value) : '"associated_title" expected to be of type "string"';
+
     {
-      associated_title: converted,
+      associated_title: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withPrimaryDescription":: "Description of the primary relationship.",
   withPrimaryDescription(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"primary_description" expected to be of type "string"';
+    assert std.isString(value) : '"primary_description" expected to be of type "string"';
+
     {
-      primary_description: converted,
+      primary_description: value,
     }
   ),
+
   "#withPrimaryName":: "API name of the primary link.",
   withPrimaryName(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"primary_name" expected to be of type "string"';
+    assert std.isString(value) : '"primary_name" expected to be of type "string"';
+
     {
-      primary_name: converted,
+      primary_name: value,
     }
   ),
+
   "#withPrimaryTitle":: "Display name of the primary link.",
   withPrimaryTitle(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"primary_title" expected to be of type "string"';
+    assert std.isString(value) : '"primary_title" expected to be of type "string"';
+
     {
-      primary_title: converted,
+      primary_title: value,
     }
   ),
   withTerraformName(value):: {

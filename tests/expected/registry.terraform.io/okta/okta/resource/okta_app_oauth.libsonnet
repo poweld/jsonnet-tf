@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, label, type):: (
     {
       jsonnetTfMetadata:: {
@@ -14,403 +15,463 @@
     + block.withLabel(label)
     + block.withType(type)
   ),
+
   "#withAccessibilityErrorRedirectUrl":: "Custom error page URL",
   withAccessibilityErrorRedirectUrl(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"accessibility_error_redirect_url" expected to be of type "string"';
+    assert std.isString(value) : '"accessibility_error_redirect_url" expected to be of type "string"';
+
     {
-      accessibility_error_redirect_url: converted,
+      accessibility_error_redirect_url: value,
     }
   ),
+
   "#withAccessibilityLoginRedirectUrl":: "Custom login page URL",
   withAccessibilityLoginRedirectUrl(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"accessibility_login_redirect_url" expected to be of type "string"';
+    assert std.isString(value) : '"accessibility_login_redirect_url" expected to be of type "string"';
+
     {
-      accessibility_login_redirect_url: converted,
+      accessibility_login_redirect_url: value,
     }
   ),
+
   "#withAccessibilitySelfService":: "Enable self service. Default is `false`",
   withAccessibilitySelfService(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"accessibility_self_service" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"accessibility_self_service" expected to be of type "bool"';
+
     {
-      accessibility_self_service: converted,
+      accessibility_self_service: value,
     }
   ),
+
   "#withAdminNote":: "Application notes for admins.",
   withAdminNote(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"admin_note" expected to be of type "string"';
+    assert std.isString(value) : '"admin_note" expected to be of type "string"';
+
     {
-      admin_note: converted,
+      admin_note: value,
     }
   ),
+
   "#withAppLinksJson":: "Displays specific appLinks for the app. The value for each application link should be boolean.",
   withAppLinksJson(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"app_links_json" expected to be of type "string"';
+    assert std.isString(value) : '"app_links_json" expected to be of type "string"';
+
     {
-      app_links_json: converted,
+      app_links_json: value,
     }
   ),
+
   "#withAppSettingsJson":: "Application settings in JSON format",
   withAppSettingsJson(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"app_settings_json" expected to be of type "string"';
+    assert std.isString(value) : '"app_settings_json" expected to be of type "string"';
+
     {
-      app_settings_json: converted,
+      app_settings_json: value,
     }
   ),
+
   "#withAuthenticationPolicy":: "The ID of the associated app_signon_policy. If this property is removed from the application, the default sign-on-policy will be associated with this application. From now on, there is no need to attach authentication_policy for applications of type SERVICE",
   withAuthenticationPolicy(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"authentication_policy" expected to be of type "string"';
+    assert std.isString(value) : '"authentication_policy" expected to be of type "string"';
+
     {
-      authentication_policy: converted,
+      authentication_policy: value,
     }
   ),
+
   "#withAutoKeyRotation":: "Requested key rotation mode. If \t\t\t\tauto_key_rotation isn't specified, the client automatically opts in for Okta's \t\t\t\tkey rotation. You can update this property via the API or via the administrator \t\t\t\tUI. \t\t\t\tSee: https://developer.okta.com/docs/reference/api/apps/#oauth-credential-object'",
   withAutoKeyRotation(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"auto_key_rotation" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"auto_key_rotation" expected to be of type "bool"';
+
     {
-      auto_key_rotation: converted,
+      auto_key_rotation: value,
     }
   ),
+
   "#withAutoSubmitToolbar":: "Display auto submit toolbar",
   withAutoSubmitToolbar(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"auto_submit_toolbar" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"auto_submit_toolbar" expected to be of type "bool"';
+
     {
-      auto_submit_toolbar: converted,
+      auto_submit_toolbar: value,
     }
   ),
+
   "#withClientBasicSecret":: "The user provided OAuth client secret key value, this can be set when token_endpoint_auth_method is client_secret_basic. This does nothing when `omit_secret is set to true.",
   withClientBasicSecret(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"client_basic_secret" expected to be of type "string"';
+    assert std.isString(value) : '"client_basic_secret" expected to be of type "string"';
+
     {
-      client_basic_secret: converted,
+      client_basic_secret: value,
     }
   ),
+
   "#withClientId":: "OAuth client ID. If set during creation, app is created with this id.",
   withClientId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"client_id" expected to be of type "string"';
+    assert std.isString(value) : '"client_id" expected to be of type "string"';
+
     {
-      client_id: converted,
+      client_id: value,
     }
   ),
+
   "#withClientUri":: "URI to a web page providing information about the client.",
   withClientUri(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"client_uri" expected to be of type "string"';
+    assert std.isString(value) : '"client_uri" expected to be of type "string"';
+
     {
-      client_uri: converted,
+      client_uri: value,
     }
   ),
+
   "#withConsentMethod":: "*Early Access Property*. Indicates whether user consent is required or implicit. Valid values: REQUIRED, TRUSTED. Default value is TRUSTED",
   withConsentMethod(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"consent_method" expected to be of type "string"';
+    assert std.isString(value) : '"consent_method" expected to be of type "string"';
+
     {
-      consent_method: converted,
+      consent_method: value,
     }
   ),
+
   "#withEnduserNote":: "Application notes for end users.",
   withEnduserNote(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"enduser_note" expected to be of type "string"';
+    assert std.isString(value) : '"enduser_note" expected to be of type "string"';
+
     {
-      enduser_note: converted,
+      enduser_note: value,
     }
   ),
+
   "#withGrantTypes":: "List of OAuth 2.0 grant types. Conditional validation params found here https://developer.okta.com/docs/api/resources/apps#credentials-settings-details. Defaults to minimum requirements per app type.",
   withGrantTypes(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"grant_types" expected to be of type "set"';
+
     {
       grant_types: converted,
     }
   ),
+
   "#withGrantTypesMixin":: "List of OAuth 2.0 grant types. Conditional validation params found here https://developer.okta.com/docs/api/resources/apps#credentials-settings-details. Defaults to minimum requirements per app type.",
   withGrantTypesMixin(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"grant_types" expected to be of type "set"';
+
     {
       grant_types+: converted,
     }
   ),
+
   "#withHideIos":: "Do not display application icon on mobile app",
   withHideIos(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"hide_ios" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"hide_ios" expected to be of type "bool"';
+
     {
-      hide_ios: converted,
+      hide_ios: value,
     }
   ),
+
   "#withHideWeb":: "Do not display application icon to users",
   withHideWeb(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"hide_web" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"hide_web" expected to be of type "bool"';
+
     {
-      hide_web: converted,
+      hide_web: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withImplicitAssignment":: "*Early Access Property*. Enable Federation Broker Mode.",
   withImplicitAssignment(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"implicit_assignment" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"implicit_assignment" expected to be of type "bool"';
+
     {
-      implicit_assignment: converted,
+      implicit_assignment: value,
     }
   ),
+
   "#withIssuerMode":: "*Early Access Property*. Indicates whether the Okta Authorization Server uses the original Okta org domain URL or a custom domain URL as the issuer of ID token for this client.",
   withIssuerMode(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"issuer_mode" expected to be of type "string"';
+    assert std.isString(value) : '"issuer_mode" expected to be of type "string"';
+
     {
-      issuer_mode: converted,
+      issuer_mode: value,
     }
   ),
+
   "#withJwksUri":: "URL reference to JWKS",
   withJwksUri(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"jwks_uri" expected to be of type "string"';
+    assert std.isString(value) : '"jwks_uri" expected to be of type "string"';
+
     {
-      jwks_uri: converted,
+      jwks_uri: value,
     }
   ),
+
   "#withLabel":: "The Application's display name.",
   withLabel(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"label" expected to be of type "string"';
+    assert std.isString(value) : '"label" expected to be of type "string"';
+
     {
-      label: converted,
+      label: value,
     }
   ),
+
   "#withLoginMode":: "The type of Idp-Initiated login that the client supports, if any",
   withLoginMode(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"login_mode" expected to be of type "string"';
+    assert std.isString(value) : '"login_mode" expected to be of type "string"';
+
     {
-      login_mode: converted,
+      login_mode: value,
     }
   ),
+
   "#withLoginScopes":: "List of scopes to use for the request",
   withLoginScopes(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"login_scopes" expected to be of type "set"';
+
     {
       login_scopes: converted,
     }
   ),
+
   "#withLoginScopesMixin":: "List of scopes to use for the request",
   withLoginScopesMixin(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"login_scopes" expected to be of type "set"';
+
     {
       login_scopes+: converted,
     }
   ),
+
   "#withLoginUri":: "URI that initiates login.",
   withLoginUri(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"login_uri" expected to be of type "string"';
+    assert std.isString(value) : '"login_uri" expected to be of type "string"';
+
     {
-      login_uri: converted,
+      login_uri: value,
     }
   ),
+
   "#withLogo":: "Local file path to the logo. The file must be in PNG, JPG, or GIF format, and less than 1 MB in size.",
   withLogo(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"logo" expected to be of type "string"';
+    assert std.isString(value) : '"logo" expected to be of type "string"';
+
     {
-      logo: converted,
+      logo: value,
     }
   ),
+
   "#withLogoUri":: "URI that references a logo for the client.",
   withLogoUri(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"logo_uri" expected to be of type "string"';
+    assert std.isString(value) : '"logo_uri" expected to be of type "string"';
+
     {
-      logo_uri: converted,
+      logo_uri: value,
     }
   ),
+
   "#withOmitSecret":: "This tells the provider not manage the client_secret value in state. When this is false (the default), it will cause the auto-generated client_secret to be persisted in the client_secret attribute in state. This also means that every time an update to this app is run, this value is also set on the API. If this changes from false => true, the `client_secret` is dropped from state and the secret at the time of the apply is what remains. If this is ever changes from true => false your app will be recreated, due to the need to regenerate a secret we can store in state.",
   withOmitSecret(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"omit_secret" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"omit_secret" expected to be of type "bool"';
+
     {
-      omit_secret: converted,
+      omit_secret: value,
     }
   ),
+
   "#withPkceRequired":: "Require Proof Key for Code Exchange (PKCE) for additional verification key rotation mode. See: https://developer.okta.com/docs/reference/api/apps/#oauth-credential-object",
   withPkceRequired(value):: (
-    local converted = value;
-    assert std.isBoolean(converted) : '"pkce_required" expected to be of type "bool"';
+    assert std.isBoolean(value) : '"pkce_required" expected to be of type "bool"';
+
     {
-      pkce_required: converted,
+      pkce_required: value,
     }
   ),
+
   "#withPolicyUri":: "URI to web page providing client policy document.",
   withPolicyUri(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"policy_uri" expected to be of type "string"';
+    assert std.isString(value) : '"policy_uri" expected to be of type "string"';
+
     {
-      policy_uri: converted,
+      policy_uri: value,
     }
   ),
+
   "#withPostLogoutRedirectUris":: "List of URIs for redirection after logout. Note: see okta_app_oauth_post_logout_redirect_uri for appending to this list in a decentralized way.",
   withPostLogoutRedirectUris(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"post_logout_redirect_uris" expected to be of type "set"';
+
     {
       post_logout_redirect_uris: converted,
     }
   ),
+
   "#withPostLogoutRedirectUrisMixin":: "List of URIs for redirection after logout. Note: see okta_app_oauth_post_logout_redirect_uri for appending to this list in a decentralized way.",
   withPostLogoutRedirectUrisMixin(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"post_logout_redirect_uris" expected to be of type "set"';
+
     {
       post_logout_redirect_uris+: converted,
     }
   ),
+
   "#withProfile":: "Custom JSON that represents an OAuth application's profile",
   withProfile(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"profile" expected to be of type "string"';
+    assert std.isString(value) : '"profile" expected to be of type "string"';
+
     {
-      profile: converted,
+      profile: value,
     }
   ),
+
   "#withRedirectUris":: "List of URIs for use in the redirect-based flow. This is required for all application types except service. Note: see okta_app_oauth_redirect_uri for appending to this list in a decentralized way.",
   withRedirectUris(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert std.isArray(converted) : '"redirect_uris" expected to be of type "list"';
+
     {
       redirect_uris: converted,
     }
   ),
+
   "#withRedirectUrisMixin":: "List of URIs for use in the redirect-based flow. This is required for all application types except service. Note: see okta_app_oauth_redirect_uri for appending to this list in a decentralized way.",
   withRedirectUrisMixin(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert std.isArray(converted) : '"redirect_uris" expected to be of type "list"';
+
     {
       redirect_uris+: converted,
     }
   ),
+
   "#withRefreshTokenLeeway":: "*Early Access Property* Grace period for token rotation, required with grant types refresh_token",
   withRefreshTokenLeeway(value):: (
-    local converted = value;
-    assert std.isNumber(converted) : '"refresh_token_leeway" expected to be of type "number"';
+    assert std.isNumber(value) : '"refresh_token_leeway" expected to be of type "number"';
+
     {
-      refresh_token_leeway: converted,
+      refresh_token_leeway: value,
     }
   ),
+
   "#withRefreshTokenRotation":: "*Early Access Property* Refresh token rotation behavior, required with grant types refresh_token",
   withRefreshTokenRotation(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"refresh_token_rotation" expected to be of type "string"';
+    assert std.isString(value) : '"refresh_token_rotation" expected to be of type "string"';
+
     {
-      refresh_token_rotation: converted,
+      refresh_token_rotation: value,
     }
   ),
+
   "#withResponseTypes":: "List of OAuth 2.0 response type strings. Valid values are any combination of: `code`, `token`, and `id_token`.",
   withResponseTypes(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"response_types" expected to be of type "set"';
+
     {
       response_types: converted,
     }
   ),
+
   "#withResponseTypesMixin":: "List of OAuth 2.0 response type strings. Valid values are any combination of: `code`, `token`, and `id_token`.",
   withResponseTypesMixin(value):: (
     local converted = if std.isArray(value) then value else [value];
     assert (std.isArray(converted) && std.length(std.set(converted)) == std.length(converted)) : '"response_types" expected to be of type "set"';
+
     {
       response_types+: converted,
     }
   ),
+
   "#withStatus":: "Status of application. By default, it is `ACTIVE`",
   withStatus(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"status" expected to be of type "string"';
+    assert std.isString(value) : '"status" expected to be of type "string"';
+
     {
-      status: converted,
+      status: value,
     }
   ),
+
   "#withTokenEndpointAuthMethod":: "Requested authentication method for the token endpoint, valid values include:  'client_secret_basic', 'client_secret_post', 'client_secret_jwt', 'private_key_jwt', 'none', etc.",
   withTokenEndpointAuthMethod(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"token_endpoint_auth_method" expected to be of type "string"';
+    assert std.isString(value) : '"token_endpoint_auth_method" expected to be of type "string"';
+
     {
-      token_endpoint_auth_method: converted,
+      token_endpoint_auth_method: value,
     }
   ),
+
   "#withTosUri":: "URI to web page providing client tos (terms of service).",
   withTosUri(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"tos_uri" expected to be of type "string"';
+    assert std.isString(value) : '"tos_uri" expected to be of type "string"';
+
     {
-      tos_uri: converted,
+      tos_uri: value,
     }
   ),
+
   "#withType":: "The type of client application.",
   withType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"type" expected to be of type "string"';
+    assert std.isString(value) : '"type" expected to be of type "string"';
+
     {
-      type: converted,
+      type: value,
     }
   ),
+
   "#withUserNameTemplate":: "Username template. Default: `${source.login}`",
   withUserNameTemplate(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"user_name_template" expected to be of type "string"';
+    assert std.isString(value) : '"user_name_template" expected to be of type "string"';
+
     {
-      user_name_template: converted,
+      user_name_template: value,
     }
   ),
+
   "#withUserNameTemplatePushStatus":: "Push username on update. Valid values: `PUSH` and `DONT_PUSH`",
   withUserNameTemplatePushStatus(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"user_name_template_push_status" expected to be of type "string"';
+    assert std.isString(value) : '"user_name_template_push_status" expected to be of type "string"';
+
     {
-      user_name_template_push_status: converted,
+      user_name_template_push_status: value,
     }
   ),
+
   "#withUserNameTemplateSuffix":: "Username template suffix",
   withUserNameTemplateSuffix(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"user_name_template_suffix" expected to be of type "string"';
+    assert std.isString(value) : '"user_name_template_suffix" expected to be of type "string"';
+
     {
-      user_name_template_suffix: converted,
+      user_name_template_suffix: value,
     }
   ),
+
   "#withUserNameTemplateType":: "Username template type. Default: `BUILT_IN`",
   withUserNameTemplateType(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"user_name_template_type" expected to be of type "string"';
+    assert std.isString(value) : '"user_name_template_type" expected to be of type "string"';
+
     {
-      user_name_template_type: converted,
+      user_name_template_type: value,
     }
   ),
+
   "#withWildcardRedirect":: "*Early Access Property*. Indicates if the client is allowed to use wildcard matching of redirect_uris",
   withWildcardRedirect(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"wildcard_redirect" expected to be of type "string"';
+    assert std.isString(value) : '"wildcard_redirect" expected to be of type "string"';
+
     {
-      wildcard_redirect: converted,
+      wildcard_redirect: value,
     }
   ),
   withTerraformName(value):: {
@@ -420,144 +481,160 @@
       },
     },
   },
+
   groupsClaim:: {
     local block = self,
+
     new(name, type, value):: (
       {}
       + block.withName(name)
       + block.withType(type)
       + block.withValue(value)
     ),
+
     "#withFilterType":: "Groups claim filter. Can only be set if type is FILTER.",
     withFilterType(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"filter_type" expected to be of type "string"';
+      assert std.isString(value) : '"filter_type" expected to be of type "string"';
+
       {
-        filter_type: converted,
+        filter_type: value,
       }
     ),
+
     "#withName":: "Name of the claim that will be used in the token.",
     withName(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"name" expected to be of type "string"';
+      assert std.isString(value) : '"name" expected to be of type "string"';
+
       {
-        name: converted,
+        name: value,
       }
     ),
+
     "#withType":: "Groups claim type.",
     withType(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"type" expected to be of type "string"';
+      assert std.isString(value) : '"type" expected to be of type "string"';
+
       {
-        type: converted,
+        type: value,
       }
     ),
+
     "#withValue":: "Value of the claim. Can be an Okta Expression Language statement that evaluates at the time the token is minted.",
     withValue(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"value" expected to be of type "string"';
+      assert std.isString(value) : '"value" expected to be of type "string"';
+
       {
-        value: converted,
+        value: value,
       }
     ),
   },
   jwks:: {
     local block = self,
+
     new(kid, kty):: (
       {}
       + block.withKid(kid)
       + block.withKty(kty)
     ),
+
     "#withE":: "RSA Exponent",
     withE(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"e" expected to be of type "string"';
+      assert std.isString(value) : '"e" expected to be of type "string"';
+
       {
-        e: converted,
+        e: value,
       }
     ),
+
     "#withKid":: "Key ID",
     withKid(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"kid" expected to be of type "string"';
+      assert std.isString(value) : '"kid" expected to be of type "string"';
+
       {
-        kid: converted,
+        kid: value,
       }
     ),
+
     "#withKty":: "Key type",
     withKty(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"kty" expected to be of type "string"';
+      assert std.isString(value) : '"kty" expected to be of type "string"';
+
       {
-        kty: converted,
+        kty: value,
       }
     ),
+
     "#withN":: "RSA Modulus",
     withN(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"n" expected to be of type "string"';
+      assert std.isString(value) : '"n" expected to be of type "string"';
+
       {
-        n: converted,
+        n: value,
       }
     ),
+
     "#withX":: "X coordinate of the elliptic curve point",
     withX(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"x" expected to be of type "string"';
+      assert std.isString(value) : '"x" expected to be of type "string"';
+
       {
-        x: converted,
+        x: value,
       }
     ),
+
     "#withY":: "Y coordinate of the elliptic curve point",
     withY(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"y" expected to be of type "string"';
+      assert std.isString(value) : '"y" expected to be of type "string"';
+
       {
-        y: converted,
+        y: value,
       }
     ),
   },
   timeouts:: {
     local block = self,
+
     new():: (
       {}
     ),
+
     withCreate(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"create" expected to be of type "string"';
+      assert std.isString(value) : '"create" expected to be of type "string"';
+
       {
-        create: converted,
+        create: value,
       }
     ),
+
     withRead(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"read" expected to be of type "string"';
+      assert std.isString(value) : '"read" expected to be of type "string"';
+
       {
-        read: converted,
+        read: value,
       }
     ),
+
     withUpdate(value):: (
-      local converted = value;
-      assert std.isString(converted) : '"update" expected to be of type "string"';
+      assert std.isString(value) : '"update" expected to be of type "string"';
+
       {
-        update: converted,
+        update: value,
       }
     ),
   },
   withGroupsClaim(value):: (
     local converted = if std.isArray(value) then value else [value];
     {
-      groups_claim: value,
+      groups_claim: converted,
     }
   ),
   withJwks(value):: (
     local converted = if std.isArray(value) then value else [value];
     {
-      jwks: value,
+      jwks: converted,
     }
   ),
   withTimeouts(value):: (
-    local converted = value;
     {
       timeouts: value,
     }

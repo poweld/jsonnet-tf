@@ -1,5 +1,6 @@
 {
   local block = self,
+
   new(terraformName, appId, uri):: (
     {
       jsonnetTfMetadata:: {
@@ -14,27 +15,30 @@
     + block.withAppId(appId)
     + block.withUri(uri)
   ),
+
   "#withAppId":: "OAuth application ID.",
   withAppId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"app_id" expected to be of type "string"';
+    assert std.isString(value) : '"app_id" expected to be of type "string"';
+
     {
-      app_id: converted,
+      app_id: value,
     }
   ),
+
   withId(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"id" expected to be of type "string"';
+    assert std.isString(value) : '"id" expected to be of type "string"';
+
     {
-      id: converted,
+      id: value,
     }
   ),
+
   "#withUri":: "Redirect URI to append to Okta OIDC application.",
   withUri(value):: (
-    local converted = value;
-    assert std.isString(converted) : '"uri" expected to be of type "string"';
+    assert std.isString(value) : '"uri" expected to be of type "string"';
+
     {
-      uri: converted,
+      uri: value,
     }
   ),
   withTerraformName(value):: {
