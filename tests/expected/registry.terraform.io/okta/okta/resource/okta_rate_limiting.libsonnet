@@ -1,53 +1,25 @@
 {
   local block = self,
 
-  new(terraformName, authorize, login):: (
+  new(terraformName, defaultMode):: (
     {
       jsonnetTfMetadata:: {
         terraform:: {
           name:: terraformName,
           object:: "okta_rate_limiting",
           type:: "resource",
-          attributes:: ["authorize", "communications_enabled", "id", "login"],
+          attributes:: ["default_mode", "id"],
         },
       },
     }
-    + block.withAuthorize(authorize)
-    + block.withLogin(login)
+    + block.withDefaultMode(defaultMode)
   ),
 
-  "#withAuthorize":: "Called during authentication. Valid values: `ENFORCE` _(Enforce limit and log per client (recommended))_, `DISABLE` _(Do nothing (not recommended))_, `PREVIEW` _(Log per client)_.",
-  withAuthorize(value):: (
-    assert std.isString(value) : '"authorize" expected to be of type "string"';
+  withDefaultMode(value):: (
+    assert std.isString(value) : '"default_mode" expected to be of type "string"';
 
     {
-      authorize: value,
-    }
-  ),
-
-  "#withCommunicationsEnabled":: "Enable or disable rate limiting communications. By default, it is `true`.",
-  withCommunicationsEnabled(value):: (
-    assert std.isBoolean(value) : '"communications_enabled" expected to be of type "bool"';
-
-    {
-      communications_enabled: value,
-    }
-  ),
-
-  withId(value):: (
-    assert std.isString(value) : '"id" expected to be of type "string"';
-
-    {
-      id: value,
-    }
-  ),
-
-  "#withLogin":: "Called when accessing the Okta hosted login page. Valid values: `ENFORCE` _(Enforce limit and log per client (recommended))_, `DISABLE` _(Do nothing (not recommended))_, `PREVIEW` _(Log per client)_.",
-  withLogin(value):: (
-    assert std.isString(value) : '"login" expected to be of type "string"';
-
-    {
-      login: value,
+      default_mode: value,
     }
   ),
   withTerraformName(value):: {
@@ -57,4 +29,41 @@
       },
     },
   },
+
+  useCaseModeOverrides:: {
+    local block = self,
+
+    new():: (
+      {}
+    ),
+
+    withLoginPage(value):: (
+      assert std.isString(value) : '"login_page" expected to be of type "string"';
+
+      {
+        login_page: value,
+      }
+    ),
+
+    withOauth2Authorize(value):: (
+      assert std.isString(value) : '"oauth2_authorize" expected to be of type "string"';
+
+      {
+        oauth2_authorize: value,
+      }
+    ),
+
+    withOieAppIntent(value):: (
+      assert std.isString(value) : '"oie_app_intent" expected to be of type "string"';
+
+      {
+        oie_app_intent: value,
+      }
+    ),
+  },
+  withUseCaseModeOverrides(value):: (
+    {
+      use_case_mode_overrides: value,
+    }
+  ),
 }

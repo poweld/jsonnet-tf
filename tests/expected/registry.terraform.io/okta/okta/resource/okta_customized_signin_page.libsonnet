@@ -1,7 +1,7 @@
 {
   local block = self,
 
-  new(terraformName, brandId, pageContent, widgetVersion):: (
+  new(terraformName, brandId):: (
     {
       jsonnetTfMetadata:: {
         terraform:: {
@@ -13,8 +13,6 @@
       },
     }
     + block.withBrandId(brandId)
-    + block.withPageContent(pageContent)
-    + block.withWidgetVersion(widgetVersion)
   ),
 
   "#withBrandId":: "brand id of the preview signin page",

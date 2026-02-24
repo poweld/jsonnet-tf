@@ -6,30 +6,21 @@
       jsonnetTfMetadata:: {
         terraform:: {
           name:: terraformName,
-          object:: "okta_realm",
+          object:: "okta_hook_key",
           type:: "resource",
-          attributes:: ["id", "is_default", "name", "realm_type"],
+          attributes:: ["created", "id", "is_used", "key_id", "last_updated", "name"],
         },
       },
     }
     + block.withName(name)
   ),
 
-  "#withName":: "The name of the Okta Realm.",
+  "#withName":: "Display name for the key.",
   withName(value):: (
     assert std.isString(value) : '"name" expected to be of type "string"';
 
     {
       name: value,
-    }
-  ),
-
-  "#withRealmType":: "The realm type. Valid values: `PARTNER` and `DEFAULT`",
-  withRealmType(value):: (
-    assert std.isString(value) : '"realm_type" expected to be of type "string"';
-
-    {
-      realm_type: value,
     }
   ),
   withTerraformName(value):: {

@@ -8,11 +8,31 @@
           name:: terraformName,
           object:: "okta_policy_mfa",
           type:: "resource",
-          attributes:: ["description", "duo", "external_idp", "external_idps", "fido_u2f", "fido_webauthn", "google_otp", "groups_included", "hotp", "id", "is_oie", "name", "okta_call", "okta_email", "okta_otp", "okta_password", "okta_push", "okta_question", "okta_sms", "okta_verify", "onprem_mfa", "phone_number", "priority", "rsa_token", "security_question", "smart_card_idp", "status", "symantec_vip", "webauthn", "yubikey_token"],
+          attributes:: ["custom_app", "description", "duo", "external_idp", "external_idps", "fido_u2f", "fido_webauthn", "google_otp", "groups_included", "hotp", "id", "is_oie", "name", "okta_call", "okta_email", "okta_otp", "okta_password", "okta_push", "okta_question", "okta_sms", "okta_verify", "onprem_mfa", "phone_number", "priority", "rsa_token", "security_question", "smart_card_idp", "status", "symantec_vip", "webauthn", "yubikey_token"],
         },
       },
     }
     + block.withName(name)
+  ),
+
+  "#withCustomApp":: "List of custom authenticators, specify entry like {'enroll': 'OPTIONAL', 'id': '<id_of_custom_app>'} to mark specific custom app optional, list must contain at least 1 entry.",
+  withCustomApp(value):: (
+    local converted = if std.isArray(value) then value else [value];
+    assert std.isArray(converted) : '"custom_app" expected to be of type "list"';
+
+    {
+      custom_app: converted,
+    }
+  ),
+
+  "#withCustomAppMixin":: "List of custom authenticators, specify entry like {'enroll': 'OPTIONAL', 'id': '<id_of_custom_app>'} to mark specific custom app optional, list must contain at least 1 entry.",
+  withCustomAppMixin(value):: (
+    local converted = if std.isArray(value) then value else [value];
+    assert std.isArray(converted) : '"custom_app" expected to be of type "list"';
+
+    {
+      custom_app+: converted,
+    }
   ),
 
   "#withDescription":: "Policy Description",
