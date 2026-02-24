@@ -8,12 +8,21 @@
           name:: terraformName,
           object:: "okta_authenticator",
           type:: "resource",
-          attributes:: ["id", "key", "legacy_ignore_name", "name", "provider_auth_port", "provider_host", "provider_hostname", "provider_instance_id", "provider_integration_key", "provider_json", "provider_secret_key", "provider_shared_secret", "provider_type", "provider_user_name_template", "settings", "status", "type"],
+          attributes:: ["agree_to_terms", "id", "key", "legacy_ignore_name", "name", "provider_auth_port", "provider_host", "provider_hostname", "provider_instance_id", "provider_integration_key", "provider_json", "provider_secret_key", "provider_shared_secret", "provider_type", "provider_user_name_template", "settings", "status", "type"],
         },
       },
     }
     + block.withKey(key)
     + block.withName(name)
+  ),
+
+  "#withAgreeToTerms":: "A value of true indicates that the administrator accepts the terms for creating a new authenticator. Okta requires that you accept the terms when creating a new custom_app authenticator. Other authenticators don't require this field.",
+  withAgreeToTerms(value):: (
+    assert std.isBoolean(value) : '"agree_to_terms" expected to be of type "bool"';
+
+    {
+      agree_to_terms: value,
+    }
   ),
 
   withId(value):: (

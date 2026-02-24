@@ -8,7 +8,7 @@
           name:: terraformName,
           object:: "okta_app_oauth",
           type:: "resource",
-          attributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "admin_note", "app_links_json", "app_settings_json", "authentication_policy", "auto_key_rotation", "auto_submit_toolbar", "client_basic_secret", "client_id", "client_secret", "client_uri", "consent_method", "enduser_note", "grant_types", "hide_ios", "hide_web", "id", "implicit_assignment", "issuer_mode", "jwks_uri", "label", "login_mode", "login_scopes", "login_uri", "logo", "logo_uri", "logo_url", "name", "omit_secret", "pkce_required", "policy_uri", "post_logout_redirect_uris", "profile", "redirect_uris", "refresh_token_leeway", "refresh_token_rotation", "response_types", "sign_on_mode", "status", "token_endpoint_auth_method", "tos_uri", "type", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type", "wildcard_redirect"],
+          attributes:: ["accessibility_error_redirect_url", "accessibility_login_redirect_url", "accessibility_self_service", "admin_note", "app_links_json", "app_settings_json", "authentication_policy", "auto_key_rotation", "auto_submit_toolbar", "client_basic_secret", "client_id", "client_secret", "client_uri", "consent_method", "enduser_note", "frontchannel_logout_session_required", "frontchannel_logout_uri", "grant_types", "hide_ios", "hide_web", "id", "implicit_assignment", "issuer_mode", "jwks_uri", "label", "login_mode", "login_scopes", "login_uri", "logo", "logo_uri", "logo_url", "name", "omit_secret", "participate_slo", "pkce_required", "policy_uri", "post_logout_redirect_uris", "profile", "redirect_uris", "refresh_token_leeway", "refresh_token_rotation", "response_types", "sign_on_mode", "status", "token_endpoint_auth_method", "tos_uri", "type", "user_name_template", "user_name_template_push_status", "user_name_template_suffix", "user_name_template_type", "wildcard_redirect"],
         },
       },
     }
@@ -124,7 +124,7 @@
     }
   ),
 
-  "#withConsentMethod":: "*Early Access Property*. Indicates whether user consent is required or implicit. Valid values: REQUIRED, TRUSTED. Default value is TRUSTED",
+  "#withConsentMethod":: "*Early Access Property*. Indicates whether user consent is required or implicit. Valid values: REQUIRED, TRUSTED. Default value is TRUSTED. Note: Enable `API_ACCESS_MANAGEMENT`, `API_ACCESS_MANAGEMENT_CONSENT` feature flags in your org to use this property.",
   withConsentMethod(value):: (
     assert std.isString(value) : '"consent_method" expected to be of type "string"';
 
@@ -139,6 +139,24 @@
 
     {
       enduser_note: value,
+    }
+  ),
+
+  "#withFrontchannelLogoutSessionRequired":: "*Early Access Property*. Determines whether Okta sends sid and iss in the logout request.",
+  withFrontchannelLogoutSessionRequired(value):: (
+    assert std.isBoolean(value) : '"frontchannel_logout_session_required" expected to be of type "bool"';
+
+    {
+      frontchannel_logout_session_required: value,
+    }
+  ),
+
+  "#withFrontchannelLogoutUri":: "*Early Access Property*. URL where Okta sends the logout request. Required when participate_slo is true.",
+  withFrontchannelLogoutUri(value):: (
+    assert std.isString(value) : '"frontchannel_logout_uri" expected to be of type "string"';
+
+    {
+      frontchannel_logout_uri: value,
     }
   ),
 
@@ -286,6 +304,15 @@
 
     {
       omit_secret: value,
+    }
+  ),
+
+  "#withParticipateSlo":: "*Early Access Property*. Allows the app to participate in front-channel Single Logout. Note: You can only enable participate_slo for web and browser application types. When set to true, frontchannel_logout_uri must also be provided. Enable `SINGLE_LOGOUT_SUPPORT` feature flag in your org to use this property.",
+  withParticipateSlo(value):: (
+    assert std.isBoolean(value) : '"participate_slo" expected to be of type "bool"';
+
+    {
+      participate_slo: value,
     }
   ),
 

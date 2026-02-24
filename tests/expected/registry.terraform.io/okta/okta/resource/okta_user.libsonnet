@@ -8,7 +8,7 @@
           name:: terraformName,
           object:: "okta_user",
           type:: "resource",
-          attributes:: ["city", "cost_center", "country_code", "custom_profile_attributes", "custom_profile_attributes_to_ignore", "department", "display_name", "division", "email", "employee_number", "expire_password_on_create", "first_name", "honorific_prefix", "honorific_suffix", "id", "last_name", "locale", "login", "manager", "manager_id", "middle_name", "mobile_phone", "nick_name", "old_password", "organization", "password", "password_inline_hook", "postal_address", "preferred_language", "primary_phone", "profile_url", "raw_status", "recovery_answer", "recovery_question", "second_email", "skip_roles", "state", "status", "street_address", "timezone", "title", "user_type", "zip_code"],
+          attributes:: ["city", "cost_center", "country_code", "custom_profile_attributes", "custom_profile_attributes_to_ignore", "department", "display_name", "division", "email", "employee_number", "expire_password_on_create", "first_name", "honorific_prefix", "honorific_suffix", "id", "last_name", "locale", "login", "manager", "manager_id", "middle_name", "mobile_phone", "nick_name", "old_password", "organization", "password", "password_inline_hook", "postal_address", "preferred_language", "primary_phone", "profile_url", "raw_status", "realm_id", "recovery_answer", "recovery_question", "second_email", "skip_roles", "state", "status", "street_address", "timezone", "title", "user_type", "zip_code"],
         },
       },
     }
@@ -304,6 +304,15 @@
 
     {
       profile_url: value,
+    }
+  ),
+
+  "#withRealmId":: "The Realm ID to associate the user with",
+  withRealmId(value):: (
+    assert std.isString(value) : '"realm_id" expected to be of type "string"';
+
+    {
+      realm_id: value,
     }
   ),
 
