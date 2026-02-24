@@ -2,7 +2,7 @@
 
 # Generate libraries
 generate:
-    ./jsonnet-tf --provider okta/okta --provider-version "~> 5.3.0" --terraform-version ">= 1.12.1" --force
+    ./jsonnet-tf --provider okta/okta --provider-version "~> 6.5.5" --terraform-version ">= 1.12.2" --force
 
 # Run type checking
 type-check:
